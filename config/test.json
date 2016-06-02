@@ -5,7 +5,7 @@
         "db": "cloudwork",
         "port": 3306,
         "charset": "utf8",
-        "host": "cloudwork.yunzujia.net"
+        "host": "127.0.0.1"
     },
     "debug": true,
     "qiniu_key": {

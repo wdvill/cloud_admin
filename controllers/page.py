@@ -16,3 +16,6 @@ class Index(Base):
 
         return self.render("index.html")
 
+class NotFound(Base):
+    def get(self, u):
+        return self.render("404.html")

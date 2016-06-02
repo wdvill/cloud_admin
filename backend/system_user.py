@@ -228,11 +228,8 @@ def password_change(user, params):
     return logout(user)
 
 def user_all_info(cls):
+    return;
     if cls.user:
-        try:
-            _ = cls.user.profile.id
-        except:
-            cls.user.profile = cls.user.profile.first()
         cls.user.profile.avatar = widget.avatar(cls.user.profile.avatar)
         teams = Team.select(Team.id, Team.name, Team.uuid, Team.logo).where(Team.user == cls.user, Team.status=="normal")
         cls.user.current_team = None

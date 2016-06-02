@@ -10,7 +10,7 @@ from tornado.httpclient import HTTPError
 from config.settings import database, template, debug
 from common.utils import dumps, now, md5
 from models.session import Session
-from backend.user import user_all_info
+from backend.system_user import user_all_info
 
 logger = logging.getLogger(__name__)
 

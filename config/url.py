@@ -11,6 +11,12 @@ urls=[
     ("/", page.Index),
     ("/signin", user.Signin),
     ("/signout", user.Signout),
+    ("/api/user/signup", user.Register),
+    ("/api/user/signin", user.Login),
+    ("/api/user/signout", user.Logout),
+    ("/api/user/password/reset", user.PasswordReset),
+    ("/api/user/password/change", user.PasswordChange),
+    ("/api/user/password/verify", user.PasswordVerify),
     
     
     #before url
@@ -145,12 +151,6 @@ urls=[
     ("/legal/privacy", page.Privacy),
 
     ("/api/device/version", page.AppVersion),
-    ("/api/user/signup", user.Register),
-    ("/api/user/signin", user.Login),
-    ("/api/user/signout", user.Logout),
-    ("/api/user/password/reset", user.PasswordReset),
-    ("/api/user/password/change", user.PasswordChange),
-    ("/api/user/password/verify", user.PasswordVerify),
 
     ("/api/user/category", user.FreelancerCategory),
     ("/api/user/profile", user.UserProfile),

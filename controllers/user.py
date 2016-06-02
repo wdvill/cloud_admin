@@ -66,23 +66,11 @@ class Login(Base):
     def post(self):
         uname = self.params.get("username", None)
         password = self.params.get("password", None)
-        remember = self.params.get("remember", "false")
 
-        ua = self.request.headers.get("User-Agent", "")[:2]
-        if ua == "a/":
-            device = "android"
-        elif ua == "i/":
-            device = "ios"
-        elif ua == "d/":
-            device = "desktop"
-        else:
-            device = "web"
-
-        result = user.login(uname, password, remember, device)
+        result = user.login(uname, password)
         if result['error_code'] == 0:
             domain = utils.get_domain(self.request.host)
             self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
-            self.set_cookie("cuid", result['identify'][0], expires=result['expire_at'], path="/")
         return self.send(result)
 
 class Signout(Base):

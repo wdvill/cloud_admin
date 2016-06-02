@@ -29,7 +29,7 @@ logger = logging.getLogger(__name__)
 def generate_token():
     return utils.rand_str(24) + utils.md5(str(utils.now()))[8:24]
 
-def login(uname, password, remember, device):
+def login(uname, password):
     if not uname or not password:
         return {"error_code":20001, "msg":"parameters required"}
 
@@ -39,30 +39,16 @@ def login(uname, password, remember, device):
     if not check_password(password, user.password, user.salt):
         return {"error_code":20003, "msg":"username or password invalid"}
 
-    if device == "desktop":
-        qs = Session.delete().where(Session.user==user, Session.device==device)
-        qs.execute()
-
     res = {"error_code":0, "msg":"ok"}
     res['session_token'] = generate_token()
     sess = Session()
     sess.user = user
-    sess.device = device
     sess.session_key = res['session_token']
-    if remember == "true":
-        sess.expire_at = utils.timedelta(utils.now(), days=30)
-        res['expire_at'] = time.mktime(sess.expire_at.timetuple())
-    else:
-        sess.expire_at = utils.timedelta(utils.now(), days=1)
-        res['expire_at'] = 0
+
+    sess.expire_at = utils.timedelta(utils.now(), days=1)
+    res['expire_at'] = 0
     sess.save()
-    if user.app_identify == "":
-        user.app_identify = user.identify
-        user.save()
-    if device in ("ios", "android"):
-        res['identify'] = user.app_identify
-    else:
-        res['identify'] = user.identify
+
     return res
 
 

@@ -6,6 +6,7 @@ from __future__ import absolute_import, division, print_function, with_statement
 from controllers.base import Base, EncryptBase
 from controllers.decorator import signin_check, freelancer_check, client_check
 from backend import user, client
+from backend import system_user
 from config.settings import all_skills, all_languages
 from common import utils
 
@@ -67,7 +68,7 @@ class Login(Base):
         uname = self.params.get("username", None)
         password = self.params.get("password", None)
 
-        result = user.login(uname, password)
+        result = system_user.login(uname, password)
         if result['error_code'] == 0:
             domain = utils.get_domain(self.request.host)
             self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)

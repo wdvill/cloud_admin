@@ -41,9 +41,6 @@ class MyRetryDB(RetryOperationalError, MySQLDatabase):
 database = MyRetryDB(mysql.db, host = mysql.host, user = mysql.user,
         passwd = mysql.passwd, charset = mysql.charset, port = mysql.port)
 
-tpl_filter.TR_CN = json.loads(open(BASE_DIR + "/common/locale-zh-cn.json", "rb").read())
-tpl_filter.TR_EN = json.loads(open(BASE_DIR + "/common/locale-en.json", "rb").read())
-
 template = Environment(loader=FileSystemLoader('templates'), cache_size=-1, trim_blocks=True)
 template.filters["timediff_format"] = tpl_filter.timediff_format
 template.globals.update(_=tpl_filter.trans)

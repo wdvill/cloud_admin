@@ -9,12 +9,15 @@ from controllers import (
 
 urls=[
     ("/", page.Index),
+    ("/signin", user.Signin),
+    ("/signout", user.Signout),
+    
+    
+    #before url
     ("/find-work-home", job.JobHome),
     ("/signup", user.Signup),
     ("/signup-client", user.SignupClient),
     ("/signup-role", user.SignupRole),
-    ("/signin", user.Signin),
-    ("/signout", user.Signout),
     ("/forgotpassword",  user.ForgotPassword),
     ("/forgotpassword/success",  user.ForgotPasswordSuccess),
     ("/about", page.About),

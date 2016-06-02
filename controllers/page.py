@@ -11,11 +11,8 @@ from common import utils
 
 class Index(Base):
     def get(self):
-        if self.user:
-            if self.user.identify[0] == "f":
-                return self.redirect("/find-work-home")
-            else:
-                return self.redirect("/clients/jobs")
+        if not self.user:
+            return self.redirect("/signin")
 
         return self.render("index.html", categorys=category.get_index_category())
 

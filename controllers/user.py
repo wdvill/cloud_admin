@@ -59,9 +59,7 @@ class SignupRole(Base):
 class Signin(Base):
     def get(self):
         if self.user:
-            if self.user.identify[0] == "f":
-                return self.redirect("/find-work-home")
-            return self.redirect("/clients/jobs")
+            return self.redirect("/")
         return self.render("signin.html")
 
 class Login(Base):

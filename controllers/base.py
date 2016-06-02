@@ -16,31 +16,17 @@ logger = logging.getLogger(__name__)
 
 class Base(tornado.web.RequestHandler):
     def initialize(self):
-        token = self.request.arguments.get("session_token", None)
-        if not token:
-            token = self.get_cookie("session_token")
-
-        #if not self.request.arguments.has_key('_xsrf'):
-        #    self.request.arguments['_xsrf'] = [self.get_cookie("_xsrf", "")]
+        token = self.get_cookie("session_token")
 
         self.is_mobile, self.is_desktop = False, False
-        ua = self.request.headers.get("User-Agent", "")[:2]
-        if ua in ("a/","i/","w/", "d/"):
-            self.is_mobile = True
-            if ua == "d/":
-                self.is_desktop = True
 
         self.user = None
         if token:
             session = Session.select().where(Session.session_key==token, Session.expire_at>now()).first()
             if session:
                 self.user = session.user
-                if session.device in ("ios", "android") or self.is_mobile:
-                    self.user.identify = self.user.app_identify
 
-        self.lang = self.get_cookie("_lang", "zh_CN")
         self.params = {key: value[-1] for key, value in self.request.arguments.items()}
-
 
     def send(self, result):
         if type(result) == dict:

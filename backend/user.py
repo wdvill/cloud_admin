@@ -18,10 +18,8 @@ from models.guid import GUID
 from models.favorite import Favorite
 from backend.password import check_password, generate_password
 from backend.sms import verify_code
-from backend import misc, widget
 from common import utils, validate, queue
 from config.settings import database, all_skills, all_languages
-from backend.verity import id_verify_remote
 
 logger = logging.getLogger(__name__)
 

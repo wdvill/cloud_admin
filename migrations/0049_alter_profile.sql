@@ -1,1 +1,0 @@
-ALTER TABLE `profile` ADD COLUMN `alipay` VARCHAR(50) NOT NULL DEFAULT "";

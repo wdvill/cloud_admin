@@ -1,1 +1,0 @@
-ALTER TABLE `job` ADD COLUMN `last_view_time` DATETIME NULL;

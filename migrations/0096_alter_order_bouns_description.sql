@@ -1,1 +1,0 @@
-ALTER TABLE `order_bonus` ADD COLUMN `description` VARCHAR(200) NOT NULL DEFAULT '';

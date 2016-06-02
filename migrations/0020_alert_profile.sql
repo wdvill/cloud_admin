@@ -1,1 +1,0 @@
-alter table `profile` add `category` varchar(100) NOT NULL DEFAULT '';

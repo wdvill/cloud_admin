@@ -1,1 +1,0 @@
-ALTER TABLE `portfolio` change COLUMN `end_at` `end_at` datetime NULL;

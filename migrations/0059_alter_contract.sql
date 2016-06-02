@@ -1,1 +1,0 @@
-ALTER TABLE `contract` ADD COLUMN `stone_status` VARCHAR(20) NOT NULL DEFAULT "";

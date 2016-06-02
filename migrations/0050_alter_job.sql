@@ -1,1 +1,0 @@
-ALTER TABLE `job` ADD COLUMN `skills_other` varchar(1000) NOT NULL DEFAULT '';

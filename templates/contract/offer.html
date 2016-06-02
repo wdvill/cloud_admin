@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>查看Offer</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+    <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+  <body>
+    <div>
+      <!--头部-->
+      <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% if user.identify[0] == "c" %}
+        {% include "header-my.html" %}
+      {% else %}
+        {% include "include/header/freelancer-myjobs.html" %}
+      {% endif %}
+      </nav>
+      </header>
+      <div id="offer" class="container yzj-top-distance50">
+      {% if user.identify[0] == "c" %}
+        <p class="yzj-size-14"><a class="text-warning" href="/clients/jobs/{[contract.job.id]}#hire">< 返回上一页</a></p>
+        <h4 class="text-muted yzj-top-distance20"><strong>查看offer</strong></h4>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'paid'"><span class="text-warning">待定</span><span class="text-muted">--过期时间 {[deadline]}</span></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'expire'"><span class="text-warning">已过期</span><span class="text-muted">--过期时间 {[contract.expire_at]}</span></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'refuse'"><span class="text-warning">已拒绝</span><span class="text-muted">--拒绝时间 {[contract.accept_at]}</span></p>
+        <p class="yzj-top-distance10 yzj-size-14" v-show="contract.status === 'refuse'"><strong class="text-muted">拒绝原因：</strong>{[contract.reason]}</p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'carry' || contract.status === 'pause' || contract.status === 'finish' || contract.status === 'dispute' || contract.status === 'service'"><span class="text-warning">已接受</span><span class="text-muted">--接受时间 {[contract.accept_at]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/freelancers/contracts/{[contract.id]}">查看合同</a></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'revoke'"><span class="text-warning">已撤销</span><span class="text-muted">--撤销时间 {[contract.accept_at]}</span></p>
+        <div class="col-xs-9 yzj-top-distance20 yzj-box">
+          <div class="show-contract-base yzj-size-16 yzj-height50">
+            <p><span>合同名称</span>{[contract.name]}</p>
+            <p><span>工作详情</span><a href="javascript:;" onclick="window.open('/jobs/{[contract.job.id]}')">{[contract.job.name]}</a></p>
+            <p v-if="contract.job.paymethod=='fixed'"><span>预算</span>¥ {[contract.amount]}</p>
+            <div v-if="contract.job.paymethod=='fixed'" style="margin-bottom:-50px">
+              <span>里程碑</span>
+              <div class="show-contract-table">
+                <table class="table work-sort">
+                  <thead>
+                    <tr>
+                      <td width="50%">名称</td>
+                      <td width="30%">金额</td>
+                      <td width="20%">结束日期</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in contract.stones">
+                      <td>{[item.name]}</td>
+                      <td>¥ {[item.amount]}</td>
+                      <td>{[item.end_at | year_month_day]}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p v-if="contract.job.paymethod=='hour'"><span>时薪</span>¥ {[contract.hourly]} / 小时</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>可工作时长</span>{[contract.workload]}小时 / 周</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>是否允许人工计时</span>
+              <span v-if="contract.manual == true">是</span>
+              <span v-else>否</span>
+            </p>
+            <p><span>合同发送日期</span>{[contract.create_at | year_month_day]}</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>项目开始日期</span>{[contract.start_at | year_month_day]}</p>
+            <p v-if="contract.job.paymethod=='fixed' && contract.stones.length <= 1"><span>项目结束日期</span>{[contract.end_at | year_month_day]}</p>
+            <div v-if="contract.message" style="margin-bottom:-50px">
+              <span>需求方消息</span>
+              <div class="show-contract-table">
+                <p class="">{[contract.message]}</p>
+              </div>
+            </div>
+            <p v-if="contract.attachment.name != undefined">
+              <span>附件</span>
+              <a href="{[contract.attachment.path]}" target="_blank"><img src="/static/images/link-icon.png"/> <span class="yzj-size-14">&nbsp;&nbsp;&nbsp;&nbsp;{[contract.attachment.name]}</span></a>
+            </p>
+          </div>
+          <div class="col-xs-offset-3 yzj-top-distance30" v-show="contract.status === 'paid'">
+            <div class="col-xs-4 clear-left">
+              <input type="button" value="撤销offer" class="btn btn-primary btn-block" data-toggle="modal" data-target="#cancel">
+            </div>
+          </div>
+        </div>
+        {% else %}
+        <h4 class="text-muted"><strong>{[contract.user.client.name]}-{[contract.job.name]}</strong></h4>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'paid'"><span class="text-warning">待定</span><span class="text-muted">--过期时间 {[deadline]}</span></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'expire'"><span class="text-warning">已过期</span><span class="text-muted">--过期时间 {[contract.expire_at]}</span></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'refuse'"><span class="text-warning">已拒绝</span><span class="text-muted">--拒绝时间 {[contract.accept_at]}</span></p>
+        <p class="yzj-top-distance10 yzj-size-14" v-show="contract.status === 'refuse'"><strong class="text-muted">拒绝原因：</strong>{[contract.reason]}</p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'carry' || contract.status === 'pause' || contract.status === 'finish' || contract.status === 'dispute' || contract.status === 'service'"><span class="text-warning">已接受</span><span class="text-muted">--接受时间 {[contract.accept_at]}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/freelancers/contracts/{[contract.id]}">查看合同</a></p>
+        <p class="yzj-top-distance20 yzj-size-14" v-show="contract.status === 'revoke'"><span class="text-warning">已撤销</span><span class="text-muted">--撤销时间 {[contract.accept_at]}</span></p>
+        <div class="col-xs-9 yzj-top-distance20 yzj-box">
+          <div class="show-contract-base yzj-size-16 yzj-height50">
+            <p><span>合同标题</span>{[contract.name]}</p>
+            <p><span>项目名称</span><a href="javascript:;" onclick="window.open('/jobs/{[contract.job.id]}')" class="text-warning">{[contract.job.name]}</a></p>
+            <p v-if="contract.job.paymethod=='fixed'"><span>预算</span>¥ {[contract.amount]}</p>
+            <div v-if="contract.job.paymethod=='fixed'" style="margin-bottom:-50px">
+              <span>里程碑</span>
+              <div class="show-contract-table">
+                <table class="table work-sort">
+                  <thead>
+                    <tr>
+                      <td width="50%">名称</td>
+                      <td width="30%">金额</td>
+                      <td width="20%">结束日期</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="item in contract.stones">
+                      <td>{[item.name]}</td>
+                      <td>¥ {[item.amount]}</td>
+                      <td>{[item.end_at | year_month_day]}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <p v-if="contract.job.paymethod=='hour'"><span>时薪</span>¥ {[contract.hourly]} / 小时</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>可工作时长</span>{[contract.workload]}小时 / 周</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>是否允许人工计时</span>
+              <span v-if="contract.manual == true">是</span>
+              <span v-else>否</span>
+            </p>
+            <p><span>合同发送日期</span>{[contract.create_at | year_month_day]}</p>
+            <p v-if="contract.job.paymethod=='hour'"><span>开始日期</span>{[contract.start_at | year_month_day]}</p>
+            <p v-if="contract.job.paymethod=='fixed' && contract.stones.length <= 1"><span>项目结束日期</span>{[contract.end_at | year_month_day]}</p>
+            <div v-if="contract.message" style="margin-bottom:-50px">
+              <span>需求方消息</span>
+              <div class="show-contract-table">
+                <p class="">{[contract.message]}</p>
+              </div>
+            </div>
+            <p v-if="contract.attachment.name != undefined">
+              <span>附件</span>
+              <a href="{[contract.attachment.path]}" target="_blank"><img src="/static/images/link-icon.png"/> <span class="yzj-size-14">&nbsp;&nbsp;&nbsp;&nbsp;{[contract.attachment.name]}</span></a>
+            </p>
+          </div>
+          <div class="col-xs-offset-3 yzj-top-distance30" v-show="contract.status === 'paid'">
+            <div class="col-xs-4 clear-left">
+              <input type="button" value="接受offer" class="btn btn-primary btn-block" data-toggle="modal" data-target="#accept">
+            </div>
+            <div class="col-xs-4 clear-left">
+              <input type="button" value="拒绝offer" class="btn btn-default btn-block" data-toggle="modal" data-target="#cancel-contract">
+            </div>
+          </div>
+        </div>
+        {% endif %}
+        <div class="col-xs-3 yzj-top-distance20 yzj-box show-contract-right">
+          <h4 class="text-muted">合同方</h4>
+          <div class="line"></div>
+          <div class="yzj-top-distance20 yzj-size-16">
+            <p class="text-muted">合同发送人</p>
+            <div class="yzj-top-distance20">
+              <img width="69" height="69" class="img-circle navbar-header pull-left" v-bind:src="contract.user.client.avatar">
+              <div class="show-contract-photoinfo yzj-size-14 pull-left" style="width:110px;">
+                <p style="line-height:18px;">{[contract.user.client.name]}</p>
+                <p style="line-height:18px;" class="yzj-top-distance10">{[contract.user.client.name_private]}</p>
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance30 yzj-size-16">
+            <p class="text-muted">合同接收人</p>
+            <div class="yzj-top-distance20">
+              <img width="69" height="69" class="img-circle navbar-header pull-left" v-bind:src="contract.user.freelancer.avatar">
+              <div class="show-contract-photoinfo yzj-size-14 pull-left" style="width:110px;">
+                <p style="line-height:18px;">{[contract.user.freelancer.name]}</p>
+                <p style="line-height:18px;" class="yzj-top-distance10">{[contract.user.freelancer.title]}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      
+
+    <div class="modal fade bs-example-modal-lg choose-sort" id="cancel-contract" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+              <span aria-hidden="true" class="yzj-size-30">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10"> 
+            <h3 class="modal-title text-muted text-center">拒绝offer</h3> 
+            <div class="yzj-size-16 yzj-top-distance50" style="padding-left:100px"> 
+              <p>您确定要拒绝这个offer吗？</p>
+              <h4 class="text-info yzj-top-distance30"><strong>原因</strong></h4>
+              <div class="text-info yzj-size-14 yzj-top-distance30 yzj-height40">
+                <p v-for="item in questions"><input type="radio" name="reason" value="{[item.question_id]}" v-model="question_id">{[item.name]}</p>
+              </div>
+              <div class="yzj-top-distance30">
+                <p class="yzj-size-16"><span class="text-muted">给需求方留言</span>（可选）</p>
+                <textarea rows="4" class="bidTextarea yzj-top-distance20" style="width:600px" id="refuse-reason" v-model="reason" ></textarea>
+              </div>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" id="refuse-btn">拒绝offer</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+            <div class="modal-footer yzj-top-distance10"></div>
+        </div>
+      </div>
+    </div>       
+
+
+    <div class="modal fade bs-example-modal-lg choose-sort" id="accept" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+              <span aria-hidden="true" class="yzj-size-30">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance20"> 
+            <h3 class="modal-title text-muted text-center">接受offer</h3>
+            <div class="yzj-size-16 yzj-top-distance30 text-info" style="padding-left:100px"> 
+              <div class="yzj-top-distance15">
+                <p class="yzj-size-16"><span class="text-warning">*</span>&nbsp;&nbsp;<span class="text-muted">给需求方留言</span></p>
+                <textarea rows="4" class="bidTextarea yzj-top-distance15" style="width:600px" v-model="reason" id="reason"></textarea>
+              </div>
+              <div class="yzj-top-distance10 yzj-size-14">
+                <input type="checkbox" name="accept"/>
+                <span>我已经阅读并同意云沃客网站平台的<a href="javascript:;">【用户协议】</a>和<a href="javascript:;">【隐私条款】</a></span>
+              </div>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" id="accept-btn">确认</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+            <div class="modal-footer yzj-top-distance10"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 接受合同成功之后提示 -->
+    <div class="modal fade bs-example-modal-lg choose-sort" id="tishi" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance20"> 
+            <h3 class="modal-title text-muted text-center">合同生效</h3>
+            <div class="col-xs-10 col-xs-offset-1 yzj-size-16 yzj-top-distance30 text-info">
+              <p class="yzj-top-distance15 text-warning">恭喜您获得了一份新工作！</p>
+              <p class="yzj-top-distance15">如果您是一个新手，你可以进入【帮助中心】了解更多。在这里您将会获得一些建议、提示，和成为一名合格的云工作者的信息</p>
+            </div>
+            <div class="clearfix"></div>
+            <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-4">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" id="shut">关闭</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- 需求方撤销合同modal-->
+    <div class="modal fade bs-example-modal-lg choose-sort" id="cancel" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+              <span aria-hidden="true" class="yzj-size-30">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10"> 
+            <h3 class="modal-title text-muted text-center">撤销offer</h3> 
+            <div class="yzj-size-16 yzj-top-distance50" style="padding-left:100px"> 
+              <p>一旦撤销合同，服务方将不能接受并开始工作</p>
+              <h4 class="text-info yzj-top-distance30"><strong>选择一个撤销的原因</strong></h4>
+              <div class="text-info yzj-size-14 yzj-top-distance30 yzj-height40">
+                <p v-for="item in revoke"><input type="radio" name="reason" value="{[item.question_id]}" v-model="question_id">{[item.name]}</p>
+              </div>
+              <div class="yzj-top-distance30">
+                <p class="yzj-size-16"><span class="text-muted">具体原因可以发消息给服务方</span>（可选）</p>
+                <textarea rows="4" class="bidTextarea yzj-top-distance20" style="width:600px" id="revoke-reason" v-model="reason" ></textarea>
+              </div>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" id="revoke-btn">确认</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+            <div class="modal-footer yzj-top-distance10"></div>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+    <!-- 需求方给出新报价-->
+    <div class="modal fade bs-example-modal-lg choose-sort" id="new-quotes" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+              <span aria-hidden="true" class="yzj-size-30">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10"> 
+            <h3 class="modal-title text-muted text-center">给出一个新的报价</h3> 
+            <div class="yzj-size-16 yzj-top-distance50" style="padding-left:100px"> 
+              <p>您可以给服务方发送一个新的offer，但是我们将撤回之前已经发送的offer</p>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <a href="/clients/proposal/{[contract.id]}/offer/edit" class="btn btn-primary btn-block yzj-right-distance15" id="quote-confirm">确认</a>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+            <div class="modal-footer yzj-top-distance10"></div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+    {% include "footer.html" %}    
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/production/offer.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+</html>
+

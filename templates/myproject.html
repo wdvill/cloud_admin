@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>我的项目</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectize.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+
+  <div class="container">
+    
+    <!--弹框-->
+    <div class="alert alert-info yzj-top-distance5" role="alert" v-show="show_alert">正在删除...</div>
+    <div class="alert alert-success yzj-top-distance5" role="alert" v-show="show_alert">删除成功啦！</div>
+    <div class="alert alert-danger yzj-top-distance5" role="alert" v-show="show_alert">删除失败啦，再试一次吧！</div>
+    
+    <!--开放的项目-->
+    <div class="yzj-top-distance30" v-if="!jobs.length">
+      <h4 class="text-muted">
+        <strong>开放的项目</strong>
+      </h4>
+      <div class="yzj-box yzj-top-distance20">
+        <div class="yzj-height50 yzj-size-16 text-center">
+          开始
+          <a href="/jobs/new" class="text-warning">发布项目</a>
+          或者
+          <a href="#" class="text-warning">选择服务方</a>
+        </div>
+      </div>
+    </div>
+
+    <!--有开放项目-->
+    <div class="yzj-top-distance30 myproject" v-if="jobs.length > 0">
+      <h4 class="text-muted">
+        <span class="pull-left">
+          <strong>开放的项目</strong>
+        </span>
+        <a href="/clients/jobs/list" class="yzj-size-14 text-warning" style="padding-left:20px;">查看所有项目</a>
+        <span class="pull-right yzj-top-distance-20">
+          <a href="/jobs/new" class="btn btn-lg btn-primary">发布项目</a>
+        </span>
+      </h4>
+
+      <div class="clearfix"></div>
+
+      <div class="yzj-small-box yzj-top-distance20">
+        <div class="col-xs-12 clear-both" v-for="item in jobs">
+          <div class="col-xs-4 clear-left">
+            <p class="yzj-size-16">
+              <a href="/jobs/{[item.id]}">{[item.name]}</a>
+            </p>
+            <p class="yzj-size-14 yzj-top-distance20">
+              {[ global._paymethod[item.paymethod] ]}-{[item.created_at]}
+            </p>
+            <p class="yzj-size-14 yzj-top-distance20">
+              <a class="text-warning" href="/clients/jobs/{[item.id]}#recommend">查看推荐的服务方</a>
+            </p>
+          </div>
+          <div class="col-xs-8 clear-right">
+            <div class="col-xs-2 text-center yzj-top-distance20">
+              <p v-if="item.apply_num<=0">
+                <a href="/clients/jobs/{[item.id]}" class="text-warning">0</a>
+              </p>
+              <p v-if="item.apply_num>0">
+                <a href="/clients/jobs/{[item.id]}" class="text-warning" v-on:click="new_apply()">
+                  {[item.apply_num]}({[item.apply_new]}个新申请)
+                </a>
+              </p>
+              <p class="info-text">申请人</p>
+            </div>
+            <div class="col-xs-2 text-center yzj-top-distance20">
+              <p v-if="item.interview_num<=0">
+                <a href="/clients/jobs/{[item.id]}#interview" class="text-warning">0</a>
+              </p>
+              <p v-if="item.interview_num>0">
+                <a href="/clients/jobs/{[item.id]}#interview" class="text-warning">{[item.interview_num]}({[item.interview_num]}个新消息)</a>
+              </p>
+              <p class="info-text">沟通中</p>
+            </div>
+            <div class="col-xs-2 text-center yzj-top-distance20">
+              <p>
+                <a href="/clients/jobs/{[item.id]}#hire" class="text-warning">{[item.contract_num]}</a>
+              </p>
+              <p class="info-text">雇佣</p>
+            </div>
+            <div class="col-xs-2 text-center yzj-top-distance20">
+              <p class="yzj-top-distance10 yzj-size-16" v-if="item.status=='normal'">公开</p>
+              <p class="yzj-top-distance10 yzj-size-16" v-if="item.status=='private'">私有</p>
+            </div>
+            <div class="col-xs-1"></div>
+            <div class="col-xs-2 clear-right text-center yzj-top-distance20">
+              <a class="btn btn-default btn-lg" data-toggle="dropdown" 
+                  role="button" aria-haspopup="true" 
+                  aria-expanded="false">
+                操作
+              </a>
+              <p class="dropdown-menu Top-right-down handle-down">
+                <span class="d-list">
+                  <a href="/clients/jobs/{[item.id]}">
+                    <span class="col-xs-12">查看申请人</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a v-on:click="update_pro(item.id,'private')" v-if="item.status=='normal'">
+                    <span class="col-xs-12">转为私有状态</span>
+                  </a>
+                  <a v-on:click="update_pro(item.id,'normal')" v-if="item.status=='private'">
+                    <span class="col-xs-12">转为公开状态</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a href="/jobs/{[item.id]}">
+                    <span class="col-xs-12">查看项目详情</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a href="/jobs/{[item.id]}/edit">
+                    <span class="col-xs-12">编辑项目</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a href="javascript:;" v-on:click = "update_pro(item.id,'close')">
+                    <span class="col-xs-12">关闭项目</span>
+                  </a>
+                </span>
+              </p>
+            </div>
+          </div>
+          
+          <div class="clearfix"></div>
+          <div v-if="jobs.length > 1" class="line02"></div>
+
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <!--草稿-->
+    <div class="yzj-top-distance30">
+      <h4 class="text-muted"><strong>草稿</strong></h4>
+      <div v-if="drafts.length == 0">
+        <div class="yzj-box yzj-top-distance20">
+          <div class="yzj-height50 yzj-size-16 text-center text-muted">
+            暂无草稿
+          </div>
+        </div>
+      </div>
+
+      <div class="yzj-box yzj-top-distance20" v-for="item in drafts" v-if="drafts.length > 0">
+        <div class="pull-left">
+          <p class="yzj-size-16 text-muted">{[item.name]}</p>
+          <p class="yzj-top-distance20">保存于{[item.draft_time]}之前</p>
+        </div>
+        <div class="pull-right media-middle yzj-top-distance10">
+          <a data-toggle="modal" data-target="#draftTarget" @click="draftTarget={id:item.id, index:$index}; ">
+            <img src="/static/images/del-btn-icon.png" />
+          </a>
+        </div>
+
+        <div class="clearfix"></div>
+      </div>
+    </div>
+
+    <!--合同-->
+    <div class="yzj-top-distance30" v-if="contracts.length>0">
+      <div>
+        <h4 class="text-muted pull-left">
+          <strong>合同</strong>
+        </h4>
+        <p class="yzj-size-16 text-muted pull-right">
+          本周交易金额<strong>￥{[ actual_amount ]}</strong>
+        </p>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-box yzj-top-distance20">
+        <ul class="nav nav-tabs-full" role="tablist">
+          <li role="presentation" class="active">
+            <a href="#home" aria-controls="home" role="tab" data-toggle="tab">全部（{[contracts.length]}）</a>
+          </li>
+          <li role="presentation">
+            <a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">进行中的项目</a>
+          </li>
+          <li role="presentation">
+            <a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">请求付款的项目</a>
+          </li>
+        </ul>
+
+        <div class="tab-content yzj-size-16 text-muted yzj-top-distance20">
+          <div class="tab-pane active" role="tabpanel" id="home">
+            <div v-for="item in contracts">
+              <p class="yzj-size-16 text-muted">{[item.name]}</p>
+              <div class="yzj-top-distance20">
+                <div class="col-xs-5 clear-left">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                        <img class="media-object" v-bind:src="item.user.freelancer.avatar" width="64" height="64">
+                      </a>
+                    </div>
+                    <div class="media-body yzj-height10">
+                      <p class="yzj-size-16">{[item.user.freelancer.name]}</p>
+                      <p class="yzj-size-14 yzj-top-distance10 text-primary">{[item.create_at]}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-3 clear-both text-primary">
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'carry' && item.job.paymethod != 'hour'">
+                    <p class="yzj-size-14">{[item.stone.name]}</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/active" class="btn btn2 btn-primary btn-sm yzj-size-14">立即付款</a>
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'finish' && item.job.paymethod != 'hour'">
+                    <p class="yzj-size-14">已完成{[item.stones.length]}个里程碑</p>
+                    <p class="yzj-top-distance10">
+                      共支付￥{[item.amount.toFixed(2)]}
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'carry' && item.job.paymethod == 'hour'">
+                    <p class="yzj-size-14">本周已工作{[item.workload]}小时</p>
+                    <p class="yzj-top-distance10">
+                      {[item.stone.create_at | year_month_day]}——{[item.stone.create_at != ''? item.stone.create_at : '至今' | year_month_day]}
+                    </p>
+                  </div>
+                  <div v-if="item.job.paymethod != 'hour' && item.stoneStatus == 'carry_pay'">
+                    <p class="yzj-size-14">请求付款：￥{[item.amount.toFixed(2)]}</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/pay"
+                          class="btn btn2 btn-primary btn-sm yzj-size-14">检查&马上付款</a>
+                    </p>
+                  </div>
+                  <div v-if="item.job.paymethod == 'hour' && item.stoneStatus == 'carry_pay'">
+                    <p class="yzj-size-14">工作日志已提交</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/pay" 
+                          class="btn btn2 btn-primary btn-sm yzj-size-14">检查&马上付款</a>
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'dispute'">
+                    <p class="yzj-size-14">申请退款，客服处理中</p>
+                  </div>
+                  <div v-if="item.status == 'service'">
+                    <p class="yzj-size-14">客服处理已完成</p>
+                  </div>
+                  <div v-if="item.status === 'finish'">
+                    <p class="yzj-size-14">已完成：{[item.actual_end_at | dataformat]}</p>
+                    <div v-if="item.is_evaluate && item.evaluate.team.content != undefined" class="yzj-top-distance10 clearfix">
+                      <div class="yzj-size-14 pull-left" style="line-height: 18px;">评价：{[item.score]}</div>
+                      <star :aver-score="item.score" :eveluate-num="1"></star>
+                    </div>
+                    <p class="yzj-top-distance10">
+                      <a href="#" @click="employ(item.user.freelancer.id)" data-toggle="modal" 
+                          data-target="#employ" class="btn btn-default btn-sm">再次雇佣</a>
+                    </p>
+                  </div>
+                  <div v-if="item.is_open_next">
+                    <p class="yzj-size-14">工作已暂停</p>
+                    <p class="yzj-top-distance10">
+                      <a href="#" @click="pay(item.id)" data-toggle="modal" data-target="#employ" 
+                          class="btn btn-default btn-sm">为下周工作付款</a>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="col-xs-2"></div>
+                <div class="col-xs-2 clear-right text-right">
+                  <a class="btn btn-default btn-lg" data-toggle="dropdown" role="button" 
+                      aria-haspopup="true" aria-expanded="false">操作</a>
+                  <p class="dropdown-menu Top-right-down handle-down">
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#send_message">
+                        <span class="col-xs-12">发送消息</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.hourly !== 0 && item.status !== 'service">
+                      <a href="/clients/jobs/{[item.id]}">
+                        <span class="col-xs-12">查看工作日志</span>
+                      </a>
+                    </span>
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)" data-toggle="modal" data-target="#send-reward">
+                        <span class="col-xs-12">发放奖金</span>
+                      </a>
+                    </span>
+                    <span class="d-list">
+                      <a href="/freelancers/contracts/{[item.id]}">
+                        <span class="col-xs-12">查看合同</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.hourly === 0">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                        <span class="col-xs-12">查看个人资料</span>
+                      </a>
+                    </span>
+                                  
+                    <span class="d-list" v-if="item.hourly !== 0 && (item.status === 'pause' || item.status === 'carry' || item.status === 'carry_pay')">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#finish-hour-contract">
+                        <span class="col-xs-12">结束合同</span>
+                      </a>
+                    </span>
+
+                    <span class="d-list" v-if="item.status === 'finish'">
+                      <a href="#" @click="employ(item.user.freelancer.id)" data-toggle="modal" data-target="#employ">
+                        <span class="col-xs-12">再次雇佣</span>
+                      </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="line"></div>
+              
+            </div>
+          </div>
+          <div class="tab-pane" role="tabpanel" id="profile">
+            <div v-for="item in process">
+              <p class="yzj-size-16 text-muted">{[item.name]}</p>
+              <div class="yzj-top-distance20">
+                <div class="col-xs-5 clear-left">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                        <img class="media-object" v-bind:src="item.user.freelancer.avatar" width="64" height="64">
+                      </a>
+                    </div>
+                    <div class="media-body yzj-height10">
+                      <p class="yzj-size-16">{[item.user.freelancer.name]}</p>
+                      <p class="yzj-size-14 yzj-top-distance10 text-primary">{[item.create_at]}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-3 clear-both text-primary">
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'carry' && item.job.paymethod != 'hour'">
+                    <p class="yzj-size-14">{[item.stone.name]}</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/active" class="btn btn2 btn-primary btn-sm yzj-size-14">立即付款</a>
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'finish' && item.stone_status == 'carry'">
+                    <p class="yzj-size-14">已完成{[item.stones.length]}个里程碑</p>
+                    <p class="yzj-top-distance10">
+                      共支付￥{[item.amount.toFixed(2)]}
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'carry' && item.stoneStatus == 'carry' && item.job.paymethod == 'hour'">
+                    <p class="yzj-size-14">本周已工作{[item.workload]}小时</p>
+                    <p class="yzj-top-distance10">
+                      {[item.stone.create_at | year_month_day]}——{[item.stone.create_at != ''? item.stone.create_at : '至今' | year_month_day]}
+                    </p>
+                  </div>
+                  <div v-if="item.status == 'dispute'">
+                    <p class="yzj-size-14">申请退款，客服处理中</p>
+                  </div>
+                  <div v-if="item.status == 'service'">
+                    <p class="yzj-size-14">客服处理已完成</p>
+                  </div>
+                  <div v-if="item.status === 'finish'">
+                    <p class="yzj-size-14">已完成：{[item.actual_end_at | dataformat]}</p>
+                    <div v-if="item.is_evaluate == true && item.evaluate.team.content != undefined" class="yzj-top-distance10 clearfix">
+                      <div class="yzj-size-14 pull-left">评价：</div>
+                      <star :aver-score="item.score"></star>
+                    </div>
+                    <p class="yzj-top-distance10">
+                      <a href="#" @click="employ(item.user.freelancer.id)" data-toggle="modal" 
+                          data-target="#employ" class="btn btn-default btn-sm">再次雇佣</a>
+                    </p>
+                  </div>
+                  <div v-if="item.is_open_next">
+                    <p class="yzj-size-14">工作已暂停</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/pay" @click="" data-toggle="modal" data-target="#employ" 
+                          class="btn btn-default btn-sm">为下周工作付款</a>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="col-xs-2"></div>
+
+                <div class="col-xs-2 clear-right text-right">
+                  <a class="btn btn-default btn-lg" data-toggle="dropdown" role="button" 
+                      aria-haspopup="true" aria-expanded="false">操作</a>
+                  <p class="dropdown-menu Top-right-down handle-down">
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#send_message">
+                        <span class="col-xs-12">发送消息</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.hourly !== 0 && item.status !== 'service' && item.status !== 'carry'">
+                      <a href="/clients/jobs/{[item.id]}">
+                        <span class="col-xs-12">查看工作日志</span>
+                      </a>
+                    </span>
+                        
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)" data-toggle="modal" 
+                          data-target="#send-reward">
+                        <span class="col-xs-12">发放奖金</span>
+                      </a>
+                    </span>
+
+                    <span class="d-list">
+                      <a href="/freelancers/contracts/{[item.id]}">
+                        <span class="col-xs-12">查看合同</span>
+                      </a>
+                    </span>
+
+                    <span class="d-list" v-if="item.hourly === 0">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                        <span class="col-xs-12">查看个人资料</span>
+                      </a>
+                    </span>
+
+                    <span class="d-list" v-if="item.hourly !== 0 && (item.status === 'pause' || item.status === 'carry' || item.status === 'carry_pay')">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#finish-hour-contract">
+                        <span class="col-xs-12">结束合同</span>
+                      </a>
+                    </span>
+                    
+                    <span class="d-list" v-if="item.status === 'finish'">
+                      <a @click="employ(item.user.freelancer.id)" data-toggle="modal" data-target="#employ">
+                        <span class="col-xs-12">再次雇佣</span>
+                      </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="line"></div>
+
+            </div>
+          </div>
+
+          <div class="tab-pane" role="tabpanel" id="messages">
+            <div v-for="item in closed">
+              <p class="yzj-size-16 text-muted">{[item.name]}</p>
+              <div class="yzj-top-distance20">
+                <div class="col-xs-5 clear-left">
+                  <div class="media">
+                    <div class="media-left media-middle">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                          <img class="media-object" v-bind:src="item.user.freelancer.avatar" width="64" height="64">
+                      </a>
+                    </div>
+                    <div class="media-body yzj-height10">
+                      <p class="yzj-size-16">{[item.user.freelancer.name]}</p>
+                      <p class="yzj-size-14 yzj-top-distance10 text-primary">{[item.create_at]}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xs-3 clear-both text-primary">
+                  <div v-if="item.job.paymethod != 'hour' && item.stoneStatus == 'carry_pay'">
+                    <p class="yzj-size-14">请求付款：￥{[item.amount.toFixed(2)]}</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/pay" class="btn btn2 btn-primary btn-sm yzj-size-14">检查&马上付款</a>
+                    </p>
+                  </div>
+                  <div v-if="item.job.paymethod == 'hour' && item.stoneStatus == 'carry_pay'">
+                    <p class="yzj-size-14">工作日志已提交</p>
+                    <p class="yzj-top-distance10">
+                      <a href="/clients/contracts/{[item.id]}/pay" class="btn btn2 btn-primary btn-sm yzj-size-14">检查&马上付款</a>
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="col-xs-2"></div>
+                
+                <div class="col-xs-2 clear-right text-right">
+                  <a class="btn btn-default btn-lg" data-toggle="dropdown" role="button" 
+                      aria-haspopup="true" aria-expanded="false">操作</a>
+                  <p class="dropdown-menu Top-right-down handle-down">
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#send_message">
+                        <span class="col-xs-12">发送消息</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.hourly !== 0 && item.status !== 'service">
+                      <a href="/clients/jobs/{[item.id]}">
+                        <span class="col-xs-12">查看工作日志</span>
+                      </a>
+                    </span>
+                    <span class="d-list">
+                      <a href="#" @click="setContract(item)" data-toggle="modal" data-target="#send-reward">
+                        <span class="col-xs-12">发放奖金</span>
+                      </a>
+                    </span>
+                    <span class="d-list">
+                      <a href="/freelancers/contracts/{[item.id]}">
+                        <span class="col-xs-12">查看合同</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.hourly === 0">
+                      <a href="/freelancers/{[item.user.freelancer.id]}">
+                        <span class="col-xs-12">查看个人资料</span>
+                      </a>
+                    </span>
+                    <span class="d-list" 
+                        v-if="item.hourly !== 0 && (item.status === 'pause' || item.status === 'carry' || item.status === 'carry_pay')">
+                      <a href="#" @click="setContract(item)"  data-toggle="modal" data-target="#finish-hour-contract">
+                        <span class="col-xs-12">结束合同</span>
+                      </a>
+                    </span>
+                    <span class="d-list" v-if="item.status === 'finish'">
+                      <a href="#" @click="employ(item.user.freelancer.id)" data-toggle="modal" data-target="#employ">
+                        <span class="col-xs-12">再次雇佣</span>
+                      </a>
+                    </span>
+                  </p>
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              <div class="line"></div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--确认合同-->
+    <div class="yzj-top-distance30" v-if="contracts.length<=0">
+      <h4 class="text-muted">
+        <strong>合同</strong>
+      </h4>
+      <div class="yzj-box yzj-top-distance20">
+        <div class="yzj-height50 yzj-size-16 text-center text-muted">
+            您还没有雇佣服务方
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <!-- 发送消息 -->
+  <send-message v-if="contract.id" :contract-id="contract.id"></send-message>
+
+  <!-- 发送消息 -->
+  <operate-contract v-if="contract.id" :contract-id="contract.id" status="pause" :user-name="contract.user.freelancer.name" :project-name="contract.name" title="暂停合同" :callback="endOperate"></operate-contract>
+  
+  <!-- 结束合同 -->
+  <modal :showmodal.sync="modals.finish_modal">
+    {% if user.identify[0] == "c" %}
+      <finish_contract :stone="stone" :is_carray="is_carray" 
+          :contract_id="contract.id" 
+          :is_freelancer="false" slot="content">
+      </finish_contract>
+    {% else %}
+      <finish_contract :stone="stone" :is_carray="is_carray" :contract_id="contract.id" :is_freelancer="true" slot="content"></finish_contract>
+      {% endif %}
+  </modal>
+  
+  <!-- 结束合同(时薪制） -->
+  <finish-hour-contract v-if="contract.id" :contract="contract"></finish-hour-contract>
+  
+  <!-- 发放奖金 -->
+  <post-bonus v-if="contract.id" :freelancer-id="contract.user.freelancer.id" :contract-id="contract.id"></post-bonus>
+ 
+  <!-- 弱提示组件-->
+  <strap_alert :show-type="alert.showType" :msg="alert.msg" :show-alert="alert.showAlert"></strap_alert>
+  
+  <!-- 再次雇佣modal-->
+  <employ v-if="uuid" :uuid="uuid"></employ>
+
+  <confirm modal-id="draftTarget" title="删除草稿" 
+      msg="确定删除此草稿？" 
+      :ok-fn.sync="delDraft">
+  </confirm>
+
+  {% include "footer.html" %} 
+  {% include "modal-delete-box.html" %}
+
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/production/myproject.min.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

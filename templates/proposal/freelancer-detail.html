@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>投标详情</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "include/header/freelancer.html" %}
+      </nav>
+    </header>
+    <div id="proposal">
+      <div class="container">
+        <div class="alert alert-success yzj-top-distance5" style="display: none"></div>
+      </div>
+      <div class="container yzj-top-distance30">
+        <!--左侧-->
+        <div class="col-xs-9 clear-both">
+          <div class="yzj-box">
+            <h3 class="text-muted">{[proposal.job.name]}</h3>
+            <p class="yzj-top-distance15 yzj-height30">
+              <span class="label label-default label-pro-detail">{[proposal.job.category.parent_name]}</span>
+              <span class="label label-default label-pro-detail">{[proposal.job.category.name]}</span> 发布于{[proposal.job.create_at | days]}
+              <a href="/jobs/{[proposal.job.id]}" class="text-warning" style="margin-left:15px">查看工作详情</a>
+            </p>
+            <div class="yzj-top-distance30">
+              <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/pro-detail-icon06.png">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info">
+                      {[ proposal.job.paymethod | paymethod ]}
+                    </p>
+                    <p class="yzj-top-distance10" v-if="proposal.job.paymethod === 'hour'">{[proposal.job.workload | workload]}</p>
+                    <p class="yzj-top-distance10" v-if="proposal.job.paymethod === 'hour'">{[proposal.job.duration | duration]}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/send-icon03.png" width="21" height="22" v-if="proposal.job.level == 'entry' ">
+                    <img class="media-object" src="/static/images/send-icon04.png" width="21" height="22" v-if="proposal.job.level == 'middle' ">
+                    <img class="media-object" src="/static/images/send-icon05.png" width="21" height="22" v-if="proposal.job.level == 'expert' ">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info">
+                      {[ proposal.job.level | level ]}
+                    </p>
+                    <p class="yzj-top-distance10"> {[ proposal.job.level | level 'description']} </p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-4 clear-left" v-if="proposal.job.paymethod === 'fixed'">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/rmb-icon.png" width="21" height="22">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info">预算</p>
+                    <p class="yzj-top-distance10" v-if="proposal.job.paymethod === 'fixed'">{[proposal.job.budget]}元</p>
+                    <p class="yzj-top-distance10" v-else>{[proposal.job.level | level 'price']}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="yzj-top-distance30">
+                <p class="yzj-size-16 text-info">工作描述</p>
+                <p class="yzj-top-distance20 yzj-height30">
+                  {[proposal.job.job_desc]}
+                </p>
+                <p class="line"></p>
+                <p class="yzj-size-16 text-info" v-if="proposal.ptype == 'I'">邀请信</p>
+                <p class="yzj-size-16 text-info" v-else>求职信</p>
+                <p class="yzj-top-distance20 yzj-height30">
+                  {[proposal.message]}
+                </p>
+                <p v-if="proposal.attachment.name" class="clear-left yzj-size-14 yzj-top-distance20">
+                  <img src="/static/images/link-icon.png" class="yzj-right-distance10">
+                  <a href="{[proposal.attachment.path]}">{[proposal.attachment.name]}</a>
+                </p>
+                <template v-if="messages.length>0">
+                  <p class="line"></p>
+                  <p class="yzj-size-16 text-info">消息</p>
+                  <ul class="message-list yzj-top-distance10" style="padding-left:0">
+                    <li v-for="item in messages">
+                      <i v-if="item.name==proposal.user.freelancer.name"></i>
+                      <i v-if="item.name!=proposal.user.freelancer.name" class="active"></i>
+                      <p>
+                      <span v-if="item.name!=proposal.user.freelancer.name" class="text-warning yzj-size-14" style="padding-right:10px">{[item.name]}</span>
+                      <span v-if="item.name==proposal.user.freelancer.name" class="text-warning yzj-size-14" style="padding-right:10px">我</span> 
+                      {[item.create_at]}
+                      </p>
+                      <p v-bind:class="$index==messages.length-1?'timeline':'activeline'">{[item.content]}</p>
+                    </li>
+                  </ul>
+                </template>
+                <template v-if="proposal.status == 'hire' || proposal.status == 'interview'">
+                  <p class="line"></p>
+                  <p class="yzj-size-16 text-info yzj-top-distance30 yzj-bot-distance20">附言</p>
+                  <textarea class="bidTextarea" rows="7" v-model="message"></textarea>
+                  <br/>
+                  <button type="button" class="btn btn-primary btn-lg yzj-top-distance30" v-on:click="send_message">发送</button>
+                </template>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--右侧-->
+        <div class="col-xs-3 clear-right">
+          <operate :proposal="proposal"></operate>
+          <client :team_id.sync="proposal.invite.team_id" :top="'1'"></client>
+          <div class="yzj-box yzj-top-distance30">
+            <h4 class="text-muted">工作动态</h4>
+            <p class="yzj-top-distance20 yzj-size-14">已有{[proposal.job.applied]}人申请</p>
+            <p class="yzj-top-distance20 yzj-size-14">已有{[proposal.job.interview]}人沟通</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <strap-alert :msg="alert.msg" :title="alert.title" :show-type="alert.showType" :show-alert.sync="alert.showAlert" :callback="alert.cb"></strap-alert>
+  <alert :msg="error_msg"></alert>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/production/freelancer_detail.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

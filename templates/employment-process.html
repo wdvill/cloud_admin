@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>工作详情</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+      </nav>
+    </header>
+
+  <div id="body" class="container yzj-top-distance70">
+    <div class="row">
+    <div class="col-xs-6 col-xs-offset-3">
+      <div class="col-xs-3 text-center clear-both">
+        <img src="/static/images/process-img01.png">
+        <p class="yzj-top-distance30 yzj-size-16 text-muted">发布一个工作</p>
+      </div>
+      <div class="col-xs-1 text-center clear-both">
+        <img src="/static/images/process-icon01.png" class="yzj-top-distance30">
+      </div>
+      <div class="col-xs-3 text-center clear-both">
+        <img src="/static/images/process-img02.png">
+        <p class="yzj-top-distance30 yzj-size-16 text-muted">自由职业者申请</p>
+      </div>
+      <div class="col-xs-1 text-center clear-both">
+        <img src="/static/images/process-icon01.png" class="yzj-top-distance30">
+      </div>
+      <div class="col-xs-3 text-center clear-both">
+        <img src="/static/images/process-img03.png">
+        <p class="yzj-top-distance30 yzj-size-16 text-muted">面试雇佣</p>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-top-distance30"></div>
+      <div class="clearfix"></div>
+      <div class="yzj-top-distance70">
+      <div class="col-xs-5 clear-right">
+      <a href="/jobs/new" class="btn btn-primary btn-block">发布工作</a>
+      </div>
+      <div class="col-xs-2 text-center yzj-top-distance15 yzj-size-18">或</div>
+      <div class="col-xs-5 clear-left">
+      <a href="/freelancers/find" class="btn btn-default btn-block">查看开发者</a>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+{% include "footer.html" %}
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/editicon-dis.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/js/notice.js"></script>
+</body>
+</html>

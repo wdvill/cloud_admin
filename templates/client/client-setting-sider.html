@@ -1,0 +1,95 @@
+      <div class="col-xs-3 clear-left">
+        <!--个人信息-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon02.png">需求方信息
+          </h4> 
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="concatinfo" %}
+            <a class="active" href="/clients/settings">名片</a>
+            {% else %}
+            <a href="/clients/settings">名片</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="idverify" %}
+            <a class="active" href="/clients/settings/identify">个人认证</a>
+            {% else %}
+            <a href="/clients/settings/identify">个人认证</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="companyverify" %}
+            <a class="active" href="/clients/settings/conidentify">公司认证</a>
+            {% else %}
+            <a href="/clients/settings/conidentify">公司认证</a>
+            {% endif %}
+          </p>
+        </div>
+        <!--钱包-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon01.png">钱包
+          </h4>
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="account" %}
+            <a class="active" href="/settings/account">账户信息</a>
+            {% else %}
+            <a href="/settings/account">账户信息</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="cards" %}
+            <a class="active" href="/settings/cards">银行卡</a>
+            {% else %}
+            <a href="/settings/cards">银行卡</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="alipay" %}
+            <a class="active" href="/settings/alipay">支付宝</a>
+            {% else %}
+            <a href="/settings/alipay">支付宝</a>
+            {% endif %}
+          </p>
+        </div>
+        <!--账号安全-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon03.png">账号安全
+          </h4> 
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="password" %}
+            <a class="active" href="/settings/password">修改密码</a>
+            {% else %}
+            <a href="/settings/password">修改密码</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="question" %}
+            <a class="active" href="/settings/question">修改密保问题</a>
+            {% else %}
+            <a href="/settings/question">修改密保问题</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="notify" %}
+            <a class="active" href="/clients/settings/notify">通知设置</a>
+            {% else %}
+            <a href="/clients/settings/notify">通知设置</a>
+            {% endif %}
+          </p>
+        </div>
+        {% if user.to_dev == false %}
+        <div class="line"></div>
+        <p class="yzj-size-14 yzj-height30">
+          如果您也想利用空余时间提供服务，赚取报酬，您可以
+        </p>
+        <p class="col-xs-offset-1 col-xs-10">
+          <a class="btn btn-primary btn-block yzj-top-distance20" href="/clients/freelancer/new">创建服务方身份</a>
+        </p>
+        {% endif %}
+      </div>

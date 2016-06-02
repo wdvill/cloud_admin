@@ -1,0 +1,26 @@
+<div class="clearfix"></div>
+<div class="navbar-default nav-sub-column yzj-size-14">
+  <div class="container">
+    <ul>
+      {% if sec_nav=="my_jobs" %}
+      <li class="active"><a href="/clients/jobs">我的项目</a></li>
+      <li><a href="/clients/contracts">合同</a></li>
+      <li><a href="/jobs/new">发布项目</a></li>
+      {% elif sec_nav=="contract" %}
+      <li><a href="/clients/jobs">我的项目</a></li>
+      <li class="active"><a href="/clients/contracts">合同</a></li>
+      <li><a href="/jobs/new">发布项目</a></li>
+      {% elif sec_nav=="job_new" %}
+      <li><a href="/clients/jobs">我的项目</a></li>
+      <li><a href="/clients/contracts">合同</a></li>
+      <li class="active"><a href="/jobs/new">发布项目</a></li>
+      {% else %}
+      <li><a href="/clients/jobs">我的项目</a></li>
+      <li><a href="/clients/contracts">合同</a></li>
+      <li><a href="/jobs/new">发布项目</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+

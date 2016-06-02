@@ -1,0 +1,82 @@
+    <div class="col-xs-12 yzj-top-distance10 applicant-list-tab">
+      <ul style="padding: 0">
+        <li class="applicant-list-tab-rcmd"><a href="#recommend" v-on:click="change_page('recommend')"><i></i>推荐（{[recommands.length]}）</a></li>
+        <span class="applicant-list-tab-arrow"></span>
+        <li class="applicant-list-tab-appli"><a href="#appli" v-on:click="change_page('appli')"><i></i>申请人（{[counts.active]}）</a></li>
+        <span class="applicant-list-tab-arrow"></span>
+        <li class="applicant-list-tab-msg text-warning"><i class="active"></i>沟通中（{[counts.interview]}）</li>
+        <span class="applicant-list-tab-arrow"></span>
+        <li class="applicant-list-tab-hire"><a href="#hire" v-on:click="change_page('hire')"><i></i>雇佣（{[counts.hire]}）</a></li>
+        <span class="applicant-list-tab-arrow"></span>
+        <li class="applicant-list-tab-file"><a href="#archive" v-on:click="change_page('archive')"><i></i>归档（{[counts.archive]}）</a></li>
+      </ul>  
+    </div>
+    <div class="col-xs-12 yzj-box applicant-list-box" style="padding-top: 0px;">
+      <div class="applicant-list-blank" v-if="freelancers.length==0">
+        <div class="message-list-blank-bg"></div>
+        <div class="applicant-list-blank-tips">
+          <h4 class="yzj-top-distance20 text-muted">还没有任何沟通中的服务方</h4>
+        </div>        
+      </div>
+      <div v-if="freelancers.length>0">
+      <div class="archive-class-down yzj-top-distance30" v-on:click.stop="show_archive_class"><i></i>邀请未反馈</div>
+      <ul class="archive-ul" v-if="freelancers.length>0">
+        <li class="yzj-top-distance40" v-for="item in freelancers"  v-if="item.status=='active'">
+          <div class="applicant-list-box-icon">
+            <img class="img-circle" v-bind:src="item.avatar" onclick="window.open('/freelancers/{[item.user_id]}')" style="cursor:pointer;">
+            <input type="button" class="btn btn-default btn-sm yzj-top-distance30" value="收藏" v-on:click.stop="modalShow('favorite',item.id)" v-if="!item.is_favorite">
+            <span class="btn btn-primary btn-sm yzj-top-distance30" v-if="item.is_favorite">已收藏</span>
+          </div>
+          <div class="applicant-list-box-con yzj-size-14">
+            <p class="yzj-size-16 text-info"><a href="javascript:;" onclick="window.open('/freelancers/{[item.user_id]}')"><strong>{[item.name]}</strong></a></p>
+            <p>{[item.title]}</p>
+            <p class="yzj-top-distance10 text-info" v-if="item.location.name!=null"><i class="applicant-list-box-con-place"></i>{[item.location.parent_name]}，{[item.location.name]}</p>
+            <p class="yzj-top-distance10" v-if="item.skills.length>0">
+              <span class="label label-default" v-for="i in item.skills">{[i]}</span>
+            </p>
+          </div>
+          <div class="applicant-list-box-right">
+            <div>
+              <span class="send-message btn-primary btn btn-lg" v-on:click.stop="sendOffer(item.proposal_id)">发送offer</span>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance40"></div>
+          <div class="line"></div>
+        </li>
+      </ul>
+      <div class="archive-class-down" v-on:click.stop="show_archive_class"><i></i>已联系的申请人</div>
+      <ul class="archive-ul" v-if="freelancers.length>0">
+        <li class="yzj-top-distance40" v-for="item in freelancers"  v-if="item.status!='active'">
+          <div class="applicant-list-box-icon">
+            <img class="img-circle" v-bind:src="item.avatar" v-on:click="select_detail(item)" style="cursor:pointer;">
+            <input type="button" class="btn btn-default btn-sm yzj-top-distance30" value="收藏" v-on:click.stop="modalShow('favorite',item.id)" v-if="!item.is_favorite">
+            <span class="btn btn-primary btn-sm yzj-top-distance30" v-if="item.is_favorite">已收藏</span>
+          </div>
+          <div class="applicant-list-box-con yzj-size-14">
+            <p class="yzj-size-16 text-info"><a href="javascript:;" v-on:click="select_detail(item)"><strong>{[item.name]}</strong></a></p>
+            <p>{[item.title]}</p>
+            <p class="yzj-top-distance10 text-info" v-if="item.location.name!=null"><i class="applicant-list-box-con-place"></i>{[item.location.parent_name]}，{[item.location.name]}</p>
+            <p class="yzj-top-distance10" v-if="item.skills.length>0">
+              <span class="label label-default" v-for="i in item.skills">{[i]}</span>
+            </p>
+          </div>
+          <div class="applicant-list-box-right">
+            <div>
+              <span class="send-message btn-primary btn btn-sm" data-toggle="modal" v-on:click.stop="modalShow('send_message',item.proposal_id)">发送消息</span>
+              <span class="btn-arrow-down btn-primary" v-on:click.stop="showBtns">
+                <i></i>
+              </span>
+              <ul class="operates">
+                <li v-on:click.stop="sendOffer(item.proposal_id)">发送offer</li><li data-toggle="modal" v-on:click.stop="modalShow('refuse',item.proposal_id)">拒绝申请</li>
+              </ul>
+              <span class="close-icon" data-toggle="modal" v-on:click.stop="modalShow('archive',item.proposal_id)"></span>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance40"></div>
+          <div class="line"></div>
+        </li>
+      </ul>
+      </div>
+    </div>

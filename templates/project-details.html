@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+    <div id="body">
+    <div class="container">
+      <div class="alert alert-success yzj-top-distance5" v-show="job.favorite == true">
+        <span class="yzj-right-distance15">你已经被雇佣</span> 
+        <a href="#" class="text-warning">查看合同</a>
+      </div>
+    </div>
+    <div class="container yzj-top-distance30">
+      <!--左侧-->
+      <div class="col-xs-9 clear-both">
+        <div class="yzj-box">
+          <h3 class="text-muted">{[job.name]}</h3>
+          <p class="yzj-top-distance15 yzj-height30">
+            <span class="label label-default label-pro-detail" v-for = "item in job.skills">{[item]}</span>
+            发布于{[job.create_at]}小时前
+          </p>
+          <div class="yzj-top-distance30">
+            <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/pro-detail-icon06.png">
+                  </div>
+                  <div class="media-body yzj-height20">
+                  <p class="yzj-size-18 text-info">
+                  {[ global._paymethod[job.paymethod] ]}
+                  </p>
+                  <!-- <p class="yzj-top-distance10">交付时间2016年3月5日</p> -->
+                  </div>
+              </div>
+            </div>
+            <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/pro-detail-icon02.png">
+                  </div>
+                  <div class="media-body yzj-height20">
+                  <p class="yzj-size-18 text-info">
+                  {[ global._level[job.level] ]}
+                  </p>
+                  <p class="yzj-top-distance10">
+                  我想找一个经验和能力比较出众的人</p>
+                  </div>
+              </div>
+            </div>
+            <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/pro-detail-icon03.png">
+                  </div>
+                  <div class="media-body yzj-height20">
+                  <p class="yzj-size-18 text-info">预算</p>
+                  <p class="yzj-top-distance10">{[job.budget]}元</p>
+                  </div>
+              </div>
+            </div>
+        <div class="clearfix"></div>
+        <div class="yzj-top-distance30">
+          <p class="yzj-size-16 text-info">工作描述</p>
+          <p class="yzj-top-distance20 yzj-height30">
+            {[job.description]}
+          </p>
+          <p class="line"></p>
+          <p class="yzj-size-16 text-info">需要方最近的活动</p>
+          <p class="yzj-top-distance20 yzj-height30">
+          <p class="yzj-top-distance20 yzj-size-14">
+          最后查看：{[job.last_view_time]}
+          </p>
+          <p class="yzj-top-distance15 yzj-size-14">
+          报名人数：{[job.proposal.interview]}</p>
+          <p class="yzj-top-distance15 yzj-size-14">
+          面试：{[job.proposal.proposal]}</p>
+          </p>
+        </div>
+      </div>
+      </div>
+      <div class="yzj-box yzj-top-distance30 yzj-size-14">
+        <p class="yzj-size-16 text-info">该需求方开放的其他工作
+        （{[other.length]}）</p>
+        <div class="col-xs-10 clear-both">
+        <div class="yzj-top-distance15" v-for = "item in other">
+          <p class="pull-left"><a href="#" class="text-warning">{[item.name]}</a></p>
+          <p class="pull-right">{[ global._paymethod[item.paymethod] ]}</p>
+          <div class="clearfix"></div>
+        </div>
+        </div>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+    <!--右侧-->
+    <div class="col-xs-3 clear-right">
+      <div class="yzj-box text-center" v-show="job.proposal.proposal == '' " id="job_proposal">
+      <a class="btn btn2 btn-primary btn-lg yzj-size-14"
+       href="/jobs/{[job.id]}/proposal">我要投标</a>
+      <a class="yzj-top-distance15 btn btn2 btn-default btn-lg yzj-size-14" href="#" v-on:click = "collect()">
+      收&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;藏</a>
+      </div>
+      <div class="yzj-box text-center" v-else id="job_proposal_already">
+      <a class="btn btn2 btn-info btn-lg yzj-size-14" href="#" disabled="disabled">您已投标</a>
+      </div>
+
+      <p class="text-muted yzj-top-distance30 yzj-size-16">中国</p>
+      <p class="yzj-top-distance15 yzj-size-14">北京05:36PM</p> 
+
+      <p class="text-muted yzj-top-distance30 yzj-size-16">2个工作的机会</p>
+      <p class="yzj-top-distance15 yzj-size-14">0%出租率，2开的工作</p> 
+
+      <p class="text-muted yzj-top-distance30 yzj-size-16">总支付0美元</p>
+      <p class="yzj-top-distance15 yzj-size-14">1个已雇佣 1个活跃的职位</p> 
+
+      <p class="yzj-top-distance30">
+      <span class="yzj-right-distance10">
+        <img src="/static/images/big-star-icon-color.png"/>
+        <img src="/static/images/big-star-icon-color.png"/>
+        <img src="/static/images/big-star-icon-color.png"/>
+        <img src="/static/images/big-star-icon-color.png"/>
+        <img src="/static/images/big-star-icon-color.png"/>
+      </span>
+      <span class="yzj-size-14">（0.00）0条评论</span>
+      </p>
+      <p class="yzj-top-distance30 yzj-size-14">
+        注册时间：2014-03-04
+      </p>
+    </div>
+  </div>
+  </div>
+  </div>
+
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/common/js/vue-directive.js"></script>
+    <script src="/static/js/frontend/profile-details.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+  </html>

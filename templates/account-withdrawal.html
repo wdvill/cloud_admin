@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>设置中心-钱包-提现</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+
+    <div id="layout" class="container yzj-top-distance50">
+      <!--左侧-->
+      {% include "freelancer-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>账户提现</strong></h4>
+        <div class="yzj-top-distance20 yzj-box">
+          <form id="form-withdrawals" class="form-horizontal yzj-top-distance20">
+          <div class="form-group yzj-size-16 text-info">
+            <label class="control-label col-xs-3 text-left">
+              提现账户
+            </label>
+            <div class="col-xs-6 clear-left">
+                <select class="form-control" required-msg="请选择提现账户" required name="account" v-model="account">
+                  <option selected>选择提现账户</option>
+                  <option v-for="item in accounts" value="{[item.card_no]}">{[item.card_no]}({[item.bank]})</option>
+                </select>
+            </div>
+          </div>
+
+          <div class="form-group error-div" name="error" data-name="account">
+            <div class="col-xs-offset-3 col-xs-9 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+              <span class="errorMsg"></span>
+            </div>
+          </div>
+
+          <div class="form-group yzj-size-16 text-info">
+            <label class="control-label col-xs-3 text-left">
+              提现金额
+            </label>
+            <div class="col-xs-6 clear-left">
+                <input type="text" required-msg="提现金额不能低于100" required name="price" v-model="price" placeholder="输入提现金额" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group error-div" name="error" data-name="price">
+            <div class="col-xs-offset-3 col-xs-9 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+              <span class="errorMsg"></span>
+            </div>
+          </div>
+
+          <div class="form-group yzj-size-16 text-info">
+            <label class="control-label col-xs-3 text-left">
+              手机验证码
+            </label>
+            <div class="col-xs-4 clear-left">
+                <input type="text" required-msg="手机验证码不能为空" required name="code" placeholder="验证码" class="form-control">
+            </div>
+            <div class="col-xs-2 clear-left">
+              <span vcode="clock-vcode" class="btn btn-block btn-primary yzj-size-14" v-on:click="sendvcode">获取验证码</span>
+            </div>
+          </div>
+          
+          <div class="form-group error-div" name="error" data-name="code">
+            <div class="col-xs-offset-3 col-xs-9 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+              <span class="errorMsg"></span>
+            </div>
+          </div>
+
+          <div class="form-group yzj-top-distance50">
+            <div class="col-xs-8 col-xs-offset-3 clear-left">
+              <div class="col-xs-4 clear-left clear-right">
+                <input type="button" class="btn btn-primary btn-block yzj-right-distance15" value="确认提现" v-on:click.stop="withdraw">
+              </div>
+            </div>
+          </div>
+        </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/production/withdrawals.min.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+</body>
+</html>

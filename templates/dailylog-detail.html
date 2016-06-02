@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>日志详情</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body id="freelance-daily">
+    <div id="layout">
+    <div class="container yzj-top-distance30">
+      <div class="pull-left">
+      <a href="/freelancers/diary" class="btn btn-primary btn-lg">返回工作日志</a>
+      </div>
+      <div class="pull-right">
+      <a href="/contracts/{[contract_id]}/diary/{[shot_id-1]}" class="btn btn-sm btn-default yzj-right-distance15" v-if="shot.is_page_up">上一条</a>
+      <a href="/contracts/{[contract_id]}/diary/{[parseInt(shot_id)+1]}" class="btn btn-sm btn-default" v-if="shot.is_page_down">下一条</a>
+      </div>
+      <div class="clearfix"></div>
+      <div class="work-log-component" style="background:none;padding:0;margin-top:30px" v-if="shot!=''">
+        <div class="pull-left"><img :src="shot.freelancer.avatar" width="100" height="100" ></div>
+        <div class="col-xs-10 yzj-top-distance15">
+          <p class="yzj-size-18"><span v-text="shot.freelancer.name"></span> - <span v-text="shot.shot_at"></span></p>
+          <div class="yzj-top-distance20 log-ft">
+            <ul class="active-state">
+              <li v-for="n in 10" :class="{'active': n < parseInt(shot.activity/10, 10)}"></li>
+            </ul>
+            <span class="yzj-size-14 yzj-left-distance20" v-text="shot.description"></span>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <p class="text-muted yzj-top-distance50 yzj-size-16">
+          <strong>窗口名称 : <span v-text="shot.name"></span></strong>
+        </p>
+        <div class="yzj-top-distance30 dailydetail-img yzj-bot-distance50">
+          <img :src="shot.attachment"/>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/production/dailylog-detail.min.js"></script>
+</body>
+</html>

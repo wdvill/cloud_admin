@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>服务方-待签约</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "include/header/client-top.html" %}
+      </div>
+      {% include "include/header/client-freelancer.html" %}
+    </nav>
+  </header>
+  <!--行行好，千万别覆盖啦，都改了好几回啦，冲突了找我哈，杨宁-->  
+  <div id="#body" class="container yzj-top-distance50">
+    <div class="row yzj-size-14">
+      <!--左侧-->
+      <div class="col-xs-3">
+        <ul class="emp-service yzj-size-16">
+          <li><a href="/clients/freelancers/waiting"  class="active emp-service01">待签约</a></li>
+          <li><a href="/clients/freelancers/hire" class="emp-service02">已雇佣</a></li>
+          <li><a href="/clients/freelancers/favorite" class="emp-service03">收藏</a></li>
+        </ul>
+      </div>
+
+      <div class="col-xs-9 clear-left">
+        <div class="yzj-box" v-if="contracts.length">
+          <div v-for = "item in contracts">
+            <div class="col-xs-1 clear-both">
+              <a href="/freelancers/{[item.user.freelancer.id]}">
+                <img :src="item.user.freelancer.avatar" width="64" height="64" class="img-circle">
+              </a>
+            </div>
+            <div class="col-xs-4">
+              <p class="yzj-size-16 yzj-top-distance10">
+                <a href="/freelancers/{[item.user.freelancer.id]}" class="text-warning">{[item.user.freelancer.name]}</a>
+              </p>
+              <p class="yzj-size-14 yzj-top-distance10 yzj-height30">{[item.user.freelancer.title]}</p>
+            </div>
+
+            <div class="col-xs-5">
+              <p class="yzj-top-distance10">
+                <a class="project-list-title yzj-right-distance15" title="收藏"></a>
+                <span class="yzj-size-16">{[item.job.name]}</span>
+              </p>
+              <p class="yzj-top-distance10">
+                <img src="/static/images/time-icon.png" class="yzj-right-distance20" />距离过期：{[item.sec_time]}</p>
+            </div>
+
+            <div class="col-xs-2 clear-right text-center yzj-top-distance10">
+              <a class="btn btn-default btn-sm" data-toggle="dropdown" 
+                  role="button" aria-haspopup="true" aria-expanded="false">
+                操作
+              </a>
+              <p class="dropdown-menu Top-right-down handle-down">
+                <span class="d-list">
+                  <a href="/freelancers/{[item.user.freelancer.id]}">
+                    <span class="col-xs-12">查看个人资料</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a href="/freelancers/contracts/{[item.id]}" >
+                    <span class="col-xs-12">查看offer</span>
+                  </a>
+                </span>
+                <span class="d-list">
+                  <a href="#">
+                    <span class="col-xs-12">撤回offer</span>
+                  </a>
+                </span>
+              </p>
+            </div>
+
+            <div class="clearfix"></div>
+            <div class="line"></div>
+
+          </div>
+          <div class="clearfix"></div>
+
+          <div class="text-right" v-page="pageObject" :query="sign_contract_list" ></div>
+
+        </div>
+
+        <div class="yzj-box text-center" v-if="contracts.length==0">
+          <img src="/static/images/daily-log-icon.png" class="yzj-right-distance30" />
+          <span class="yzj-size-16">你还没有发送过offer</span>
+        </div>
+
+      </div>
+    </div>
+    <alertdiv :msg="error_msg"></alertdiv>
+  </div>
+  {% include "footer.html" %}
+  
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/production/sign_contract_list.min.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

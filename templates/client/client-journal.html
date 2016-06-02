@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>查看日志</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body id="body">
+<div id="layout">
+<!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+        {% include "include/header/client-freelancer.html" %}
+    </nav>
+  </header>
+  <div class="container yzj-top-distance40" id="container">
+    <div class="col-xs-10 clear-left">
+      <h3 class="text-muted">查看日志</h3>
+      <h4 class="col-xs-4 clear-left text-muted yzj-top-distance30">
+      <span v-text="weekstone.freelancer"></span>-
+      <span v-text="weekstone.contract_name"></span></h4>
+      <h4 class="col-xs-4 clear-left text-muted yzj-top-distance30">
+        <span v-text="weekstone.start_at | year_month_day"></span> 至 
+        <span v-text="weekstone.end_at | year_month_day"></span>
+      </h4>
+    </div>
+    <div class="col-xs-2 clear-right">
+      <a href="/freelancers/contracts/{[contract_id]}" class="btn2 btn-primary btn-block text-center">返回合同详情页</a>
+    </div>
+    <div class="clearfix"></div>
+
+    <div class="yzj-box yzj-top-distance30">
+      <div class="text-info yzj-size-18 yzj-height50">
+      <div class="col-xs-3">记录总时长  <span v-text="weekstone.shot_times | hourformat"></span>&nbsp;&nbsp;
+        <img src="/static/images/refresh.png" style="cursor:pointer;" v-on:click="get_weekstone_pay"></div>
+        <div class="col-xs-3">
+          <span class="squre-green yzj-right-distance15 yzj-top-distance15"></span>
+          <span class="yzj-right-distance15">软件计时 <span v-text="(weekstone.shot_times - weekstone.manual_times) | hourformat"></span></span>
+          <a href="javascript:;" class="weekstone-tip" data-toggle="tooltip" data-placement="right" title="该时间由云沃客桌面APP自动记录。如对工作日志有异议可联系对方进行修改。"></a>
+        </div>
+        <div class="col-xs-6">
+          <span class="squre-yellow yzj-right-distance15 yzj-top-distance15"></span>
+          <span class="yzj-right-distance15">手动计时 <span v-text="weekstone.manual_times | hourformat"></span></span>
+          <a href="javascript:;" class="weekstone-tip" data-toggle="tooltip" data-placement="right" title="该时间为服务方手动添加时间，在合同签订时，你可以决定是否同意对方手动添加工作时间。"></a>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="line"></div>
+      <div class="col-xs-10 text-info yzj-size-18 yzj-height50 clear-left">
+        <div class="col-xs-4">时薪：  ￥<span v-text="weekstone.hourly"></span>/小时</div>
+        <div class="col-xs-4 clear-right">最多工作<span v-text="weekstone.workload"></span>小时/周</div>
+        <div class="col-xs-4 clear-left">本周应结款：   ￥<span v-text="weekstone.calculate_amount"></span></div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="line"></div>
+      <div class="col-xs-2">
+        <h4 class="text-muted">验收：</h4>
+        <p class="text-warning yzj-size-14 yzj-top-distance10 yzj-height20" v-if="end_agree_time!=''">距离自动验收<br>还有<span v-text="end_agree_time"></span></p>
+      </div>
+      <div class="col-xs-8 table-border">
+        <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance30 table-sort" v-on:click="agree('accept')">
+         <img src="/static/images/journal-icon1.png"> 
+         <p class="yzj-top-distance20 text-info yzj-size-16">同意</p>
+         <p class="yzj-top-distance15">上周工作已完成</p>
+        </div>
+        <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance30 table-sort">
+         <img src="/static/images/journal-icon2.png"> 
+         <p class="yzj-top-distance20 text-info yzj-size-16">联系对方</p>
+         <p class="yzj-top-distance15">部分工作有争议需修改</p>
+        </div>
+        <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance30 table-sort" v-on:click="agree('refuse')">
+         <img src="/static/images/journal-icon3.png"> 
+         <p class="yzj-top-distance20 text-info yzj-size-16">结束合同</p>
+         <p class="yzj-top-distance15">工作不合格并结束合同</p>
+        </div>
+        <div class="clearfix"></div> 
+      </div>
+      <div class="clearfix"></div>
+    </div>
+    <div class="yzj-box-fff yzj-top-distance30">
+      <div class="select-workday">
+        <ul>
+          <li v-bind:class="$index==0?'active':''" v-for="n in weekstone_days"><a href="javascript:;" value="{[n.e]}" v-on:click="select_weekstone_day">{[n.c]}</a></li>
+        </ul>
+      </div>
+      <div class="line01"></div>
+      <work-Log :log-data="shots" :contract_id="contract_id"></work-Log>
+    </div>
+    <alert :msg="error_msg"></alert>
+    <modal :showmodal.sync="modals.weekstone_agree_modal">
+      <weekstone_agree :weekstone="weekstone" :contract_id="contract_id" :is_agree="is_agree" slot="content"></weekstone_agree>
+    </modal>
+  </div>
+
+</div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/production/client-journal.min.js"></script>
+  <script>
+    $(function() {
+      $("[data-toggle='tooltip']").tooltip();
+    })
+  </script>
+</body>
+</html>

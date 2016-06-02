@@ -1,0 +1,1 @@
+ALTER TABLE `portfolio` change COLUMN `address` `link` VARCHAR (100) NOT NULL DEFAULT '';

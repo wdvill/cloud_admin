@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>浏览首页</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body id="body">
+  <div id="layout" v-cloak>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="/"><img src="/static/images/yzj_logo.png" height="52" width="171"></a>
+          </div>
+          <div class="Top-center pull-left yzj-size-16">
+            <ul>
+              <li class="active"><a href="/browse" class="text-info">浏览</a></li>
+              <li><a href="/" class="text-info">介绍</a>
+                <li>
+            </ul>
+          </div>
+          <div class="navbar-right navbar-brand yzj-top-distance10">
+            <a href="/signin" class="btn btn2 btn-primary btn-sm yzj-size-14">开启云工作</a>
+          </div>
+          <div class="navbar-right navbar-brand Top-right yzj-size-14">
+            <div class="pull-left search-box">
+              <input class="form-control search-box-text" type="text" placeholder="搜索" id="search_text" />
+              <ul>
+                <li class="pull-left search-box-icon dropdown" id="search_box">
+                  <img src="/static/images/nav-icon02.png" class="yzj-right-distance10">
+                  <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="/static/images/nav-down.png">
+                  </a>
+                  <ul class="dropdown-menu find-down">
+                    <span class="active">找项目</span>
+                    <span>找高手</span>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+            <ul class="pull-left yzj-right-distance15 yzj-top-distance5">
+              <li>
+                <a href="/signin">登录</a>
+              </li>
+              <li>
+                <a href="/signup-role">注册</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container yzj-top-distance50">
+      <ul class="nav nav-tabs nav-tabs-full" role="tablist">
+        <li role="presentation" class="active">
+          <a href="#home1" aria-controls="home" role="tab" data-toggle="tab" aria-expanded="false">
+          浏览工作机会
+        </a>
+        </li>
+        <li role="presentation" class="">
+          <a href="#home2" aria-controls="profile" role="tab" data-toggle="tab" aria-expanded="true">
+          浏览人才
+        </a>
+        </li>
+      </ul>
+      <p class="yzj-size-16 yzj-top-distance20">点击下方分类名称即可查看相应分类下的工作机会或服务方</p>
+      <div class="tab-content tab-content-three">
+        <div class="tab-pane col-xs-12 clear-both yzj-top-distance20 active" role="tabpanel" id="home1">
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[0].name]}</strong></span>
+                <span class="pull-right" role="tab" id="headingOne">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in one_categories">
+                <a href="/browse/jobs?pid={[cate.pid]}&cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img01.png" class="yzj-top-distance50">
+              </p>
+            </div>
+
+            <div class="col-xs-12 clear-both cate-detail">
+              <div id="collapseOne" class="panel-collapse collapse yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/Android-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Android</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/java-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Java</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ios-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">ios</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/html5-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">HTML5</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/php-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">PHP</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/python-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Python</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[1].name]}</strong></span>
+                <span class="pull-right">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in two_categories">
+                <a href="/browse/jobs?cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img02.png" class="yzj-top-distance50">
+              </p>
+            </div>
+
+            <div class="col-xs-12 clear-both">
+              <div id="collapseTwo" class="panel-collapse collapse cate-detail yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ps-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Photoshop</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/css3-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">CSS3</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ai-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">illustrator</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/maya-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Maya</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/3d-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">3D Max</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/fw-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Fireworks</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[2].name]}</strong></span>
+                <span class="pull-right">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in three_categories">
+                <a href="/browse/jobs?cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img03.png" class="yzj-top-distance50">
+              </p>
+            </div>
+            <div class="col-xs-12 clear-both">
+              <div id="collapseFour" class="panel-collapse collapse cate-detail yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/python-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Python</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/lr-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">LoadRunner</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/perl-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">perl</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/ub-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">UnixBench</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/jm-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">JMeter</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/shell-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">SHELL</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--浏览人才-->
+        <div class="tab-pane col-xs-12 clear-both yzj-top-distance20" role="tabpanel" id="home2">
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[0].name]}</strong></span>
+                <span class="pull-right" role="tab" id="headingOne">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse1" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in one_categories">
+                <a href="/browse/freelancers?cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img01.png" class="yzj-top-distance50">
+              </p>
+            </div>
+            <div class="col-xs-12 clear-both">
+              <div id="collapse1" class="panel-collapse collapse cate-detail yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  -Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/Android-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Android</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/java-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Java</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ios-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">ios</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/html5-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">HTML5</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/php-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">PHP</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/python-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Python</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[1].name]}</strong></span>
+                <span class="pull-right">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse2" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in two_categories">
+                <a href="/browse/freelancers?cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img02.png" class="yzj-top-distance50">
+              </p>
+            </div>
+            <div class="col-xs-12 clear-both">
+              <div id="collapse2" class="panel-collapse collapse cate-detail yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  -Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ps-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Photoshop</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/css3-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">CSS3</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/ai-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">illustrator</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/maya-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Maya</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/3d-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">3D Max</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/fw-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Fireworks</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-minhei-600 brower_bg">
+              <h4 class="text-muted">
+                <span class="pull-left"><strong>{[parent_categories[2].name]}</strong></span>
+                <span class="pull-right">
+                  <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse3" aria-expanded="false" aria-controls="collapseOne">
+                  <img src="/static/images/category-icon.png">
+                  </a>
+                </span>
+              </h4>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance15 yzj-size-14" v-for="cate in three_categories">
+                <a href="/browse/freelancers?cid={[cate.category_id]}">{[cate.name]}</a>
+              </p>
+              <p class="brower_img">
+                <img src="/static/images/browse-img03.png" class="yzj-top-distance50">
+              </p>
+            </div>
+            <div class="col-xs-12 clear-both">
+              <div id="collapse3" class="panel-collapse collapse cate-detail yzj-border" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+                <div class="yzj-box yzj-size-14 yzj-height30">
+                  -Web前端开发是一项很特殊的工作，涵盖的知识面非常广，既有具体的技术，又有抽象的理念。简单地说，它的主要职能就是把网站的界面更好地呈现给用户。Web前端开发技术主要包括：CSS、HTML、DOM、BOM、Ajax、JavaScript等。理论层面的知识，包括代码的可维护性、组件的易用性、分层语义模板和浏览器分级支持，等等
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance15"></div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/python-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">Python</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/lr-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">LoadRunner</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/perl-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">perl</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/ub-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">UnixBench</p>
+                  </div>
+                  <div class="col-xs-4 clear-both text-center">
+                    <img src="/static/images/jm-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">JMeter</p>
+                    <div class="yzj-top-distance30"></div>
+                    <img src="/static/images/shell-icon.png">
+                    <p class="yzj-size-14 yzj-top-distance10 text-primary">SHELL</p>
+                  </div>
+                  <div class="clearfix"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-size-16 yzj-top-distance20">
+        在云沃客上，需求方可以发布如上类型的需求，相关技能服务方可以获得相应工作机会
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/frontend/browse-index.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+  <script>
+    $(function() {
+      $('.Hbody:not(:last-child)').mouseover(function() {
+        $(this).children('.Hone').hide();
+        $(this).children('.Htwo').show();
+      });
+      $('.Hbody:not(:last-child)').mouseout(function(event) {
+        $(this).children('.Hone').show();
+        $(this).children('.Htwo').hide();
+      });
+      $("#search_box .dropdown-menu span").each(function () {
+        $(this).click(function(){
+          $("#search_box .dropdown-menu span").removeClass("active");
+          $(this).addClass("active");
+        })
+      })
+      $("#search_text").keydown(function(event){
+        var keyword = $(this).val()
+        var url = ''
+        $('#search_box .dropdown-menu span').each(function (index, item) {
+          if ($(item).html() == '找高手' && $(item).hasClass('active')) {
+            url = '/browse/freelancers?q=' + keyword
+          } else {
+            url = '/browse/jobs?q=' + keyword
+          }
+        })
+        if (event.keyCode === 13) {
+          window.location.href = url
+        }
+      });
+    })
+  </script>
+</body>
+
+</html>

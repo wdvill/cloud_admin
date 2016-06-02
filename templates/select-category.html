@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>选择擅长领域-开发者</title>
+  <link rel="stylesheet" type="text/css" href="/static/bower_libs/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "include/header/freelancer-top.html" %}
+      </div>
+      {% include "include/header/freelancer.html" %}
+    </nav>
+  </header>
+  <div id="layout">
+    <div class="container yzj-top-distance70">
+      <h3 class="text-center text-muted">欢迎来到云沃客</h3>
+      <h5 class="text-center yzj-top-distance15">请选择一个您主要提供的服务类型</h5>
+
+      <!--详细-->
+      <div class="col-xs-offset-1 col-xs-10 clear-both">
+        <!--1-->
+        <div class="col-xs-12 clear-left yzj-top-distance50" v-show="cur_cate == cate.category_id" v-for="cate in categorys">
+          <div class="col-xs-4 clear-left">
+            <div class="yzj-box yzj-border text-center select-category">
+              <p class="yzj-fix-width"><img v-bind:src="cate.src">
+              </p>
+              <h5 class="text-muted yzj-top-distance20">{[ cate.name ]}</h5>
+            </div>
+            <p class="yzj-size-16 text-center yzj-top-distance20 text-muted">你选错了吗</p>
+            <p class="yzj-size-14 text-center yzj-top-distance10"><a class="text-warning reselect" v-on:click="reselect" href="javascript:;">重新选择</a></p>
+          </div>
+          <div class="col-xs-8">
+            <div class="text-info yzj-size-16">请选择你擅长的领域。<span class="text-warning">（最多选择4项）</span>
+            </div>
+            <div class="yzj-top-distance40">
+              <!--span class="label-default label-large active">桌面软件开发</span-->
+              <span class="label label-default label-large" v-for="child in cate.children" :class="{'active':skills.indexOf(child.category_id) >= 0}" id="cate-{[child.category_id]}" @click="toggle_skill(child.category_id, $event)">{[ child.name ]}</span>
+            </div>
+            <div class="clearfix"></div>
+
+            <div class="yzj-top-distance30 col-xs-4 clear-left">
+              <button class="btn btn-primary btn-block" v-on:click="update_user_category">保存并继续</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--选择类别-->
+      <div class="col-xs-offset-1 col-xs-10 clear-both yzj-top-distance20" v-show="isParent">
+        <div class="col-xs-4 clear-left yzj-top-distance20 category" v-for="cate in categorys" @click="select_parent(cate.category_id)">
+          <div class="yzj-box yzj-border text-center select-category ">
+            <p class="yzj-fix-width"><img :src="cate.src">
+            </p>
+            <h5 class="text-muted yzj-top-distance20">{[ cate.name ]}</h5>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  <script src="/static/bower_libs/jquery/dist/jquery.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/bower_libs/vue/dist/vue.min.js"></script>
+  <script src="/static/bower_libs/js-cookie/src/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/frontend/users/user_category.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

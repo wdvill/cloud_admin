@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>需求者-设置-名片</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+    
+    <div id="body" class="container yzj-top-distance30">
+      <!--左侧-->
+      {% include "client/client-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>名片信息</strong></h4>
+        <div class="yzj-size-16 yzj-top-distance20 yzj-box">
+          <div v-show="show_info">
+            <div class="col-xs-3">
+              <img width="102" height="102" class="img-circle" v-bind:src="profile.freelancer.avatar">
+            </div>
+            <div class="col-xs-6 yzj-top-distance20">
+              <h4 class="text-muted">{[profile.freelancer.name]}</h4>
+              <p class="yzj-height50 text-info" v-if="profile.company_verify.is_verify !='uncheck'">{[profile.team_name]}</p>
+            </div>
+            <p class="pull-right yzj-height50">
+              <a href="javascript:;" v-on:click="edit_info('show_info')">
+                <img src="/static/images/edit-btn-icon.png" class="dis_icon">
+              </a>
+            </p>
+          </div>
+          <div v-show="!show_info">
+            <form class="form-horizontal" id="form-client-info">
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">姓名</label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" required required-msg="用户名不能为空" data-regular="/^[\u4E00-\u9FA5]{2,10}$/" data-msg="姓名在2-10个字符" v-model="pname" name="pname" class="form-control" v-bind:value="profile.freelancer.name" />
+                </div>
+              </div>
+              <div class="form-group error-div" data-name="pname">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">头像</label>
+                <div class="col-xs-2 clear-both">
+                  <img v-bind:src="profile.freelancer.avatar" width="102" height="102" class="img-circle">
+                </div>
+                <div class="col-xs-4 clear-left yzj-size-14 text-left text-info">
+                  <p class="yzj-size-14 text-primary yzj-top-distance10">支持JPG,JPEG,GIF,PNG,BMP格式，且不超过
+                    <span class="text-warning">5M</span>
+                  </p>
+                  <!--上传框-->
+                  <div class="inputfileload pull-left yzj-right-distance15 yzj-top-distance15">
+                    <div class="uploadphoto">上传文件</div>
+                    <input type="file" class="inputfile" id="photo" name="photo" accept="image/*" v-on:change="onload_file('avatar')" />
+                  </div>
+                  <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+                  <div class="fileloadtext pull-left yzj-top-distance15">现在未选择任何文件</div>
+                </div>
+              </div>
+              <div class="form-group error-div" name="error" data-name="logo">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="col-xs-offset-3 col-xs-6 clear-left yzj-top-distance50">
+                <div class="col-xs-6 clear-left">
+                  <a class="btn btn-primary btn-block" v-on:click="update_info">保存</a>
+                </div>
+                <div class="col-xs-6 clear-left">
+                  <a class="btn btn-default btn-block" v-on:click="show_info=true">取消</a>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance50 text-info">
+            <p class="pull-left yzj-height30">公司信息</p>
+            <p class="pull-left yzj-height30 col-xs-offset-2dot4" v-if="profile.company_verify.is_verify=='uncheck'">
+              你尚未进行公司认证 -- <a href="/clients/settings/conidentify" class="text-warning">去认证</a>
+            </p>
+            <p class="pull-right">
+              <a href="javascript:;" v-on:click="edit_info('show_ca')">
+                <img src="/static/images/edit-btn-icon.png" class="dis_icon">
+              </a>
+            </p>
+          </div>
+          <div class="clearfix"></div>
+          <div class="line"></div>
+          <div class="yzj-top-distance30" v-show="show_ca">
+            <div class="col-xs-3">
+              <img width="69" height="69" class="img-circle" v-bind:src="profile.logo">
+            </div>
+            <div class="col-xs-8">
+              <p>{[profile.team_name]}
+                <i v-if="profile.company_verify.is_verify=='pass'" class="company-v" title="已认证"></i>
+                <i v-if="profile.company_verify.is_verify!='pass'" class="noverify" title="未认证"></i>
+              </p>
+              <p class="yzj-top-distance30 yzj-size-14">
+                <a v-bind:href="profile.link | formatLink" target="_blank" class="text-warning">{[profile.link]}</a>
+              </p class="yzj-top-distance30">
+              <p class="yzj-top-distance30">简介：</p>
+              <p class="yzj-top-distance20 yzj-height20">{[profile.overview]}</p>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="yzj-top-distance30" v-show="!show_ca">
+            <form class="form-horizontal" id="form-client-ca">
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">公司名称</label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" required required-msg="公司名称不能为空" name="cname" class="form-control" v-bind:value="profile.team_name" v-model="cname" v-bind:disabled="profile.company_verify.is_verify!='pass'?false:true" />
+                </div>
+              </div>
+              <div class="form-group error-div" data-name="cname">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">企业logo</label>
+                <div class="col-xs-2 clear-both">
+                  <img v-bind:src="profile.logo" width="102" height="102" class="img-circle">
+                </div>
+                <div class="col-xs-4 clear-left yzj-size-14 text-left text-info">
+                  <p class="yzj-size-14 text-primary yzj-top-distance10">支持JPG,JPEG,GIF,PNG,BMP格式，且不超过
+                    <span class="text-warning">5M</span>
+                  </p>
+                  <!--上传框-->
+                  <div class="inputfileload pull-left yzj-right-distance15 yzj-top-distance15">
+                    <div class="uploadphoto">上传文件</div>
+                    <input type="file" class="inputfile" id="logo" name="logo" accept="image/*" v-on:change="onload_file('logo')" />
+                  </div>
+                  <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+                  <div class="fileloadtext pull-left yzj-top-distance15">现在未选择任何文件</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">网址</label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" class="form-control" v-model="link" v-bind:value="profile.link" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">简介</label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <textarea required required-msg="简介必填" name="message" rows="7" class="bidTextarea yzj-top-distance20" v-model="overview">{[profile.overview]}</textarea>
+                </div>
+              </div>
+              <div class="form-group error-div" data-name="message">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="col-xs-offset-3 col-xs-6 clear-left yzj-top-distance50">
+                <div class="col-xs-6 clear-left">
+                  <a class="btn btn-primary btn-block" v-on:click="update_ca">保存</a>
+                </div>
+                <div class="col-xs-6 clear-left">
+                  <a class="btn btn-default btn-block" v-on:click="show_ca=true">取消</a>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </form>
+          </div>
+          <!-- 联系方式 -->
+          <div class="yzj-top-distance50 text-info">
+            <p class="pull-left yzj-height30">联系方式</p>
+            <p class="pull-right">
+              <a href="javascript:;" v-on:click="edit_info('show_contact')">
+                <img src="/static/images/edit-btn-icon.png" class="dis_icon">
+              </a>
+            </p>
+          </div>
+          <div class="clearfix"></div>
+          <div class="line"></div>
+          <div class="yzj-bot-distance40" v-show="show_contact">
+            <div class="yzj-top-distance40">
+              <div class="col-xs-3 text-left text-muted">城市</div>
+              <div class="col-xs-6 clear-left" v-if="profile.location.parent_name && profile.location.parent_name!=''">{[profile.location.parent_name]}，{[profile.location.name]}</div>
+              <div class="col-xs-6 clear-left" v-else>未填写</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="yzj-top-distance40">
+              <div class="col-xs-3 text-left text-muted">地址</div>
+              <div class="col-xs-6 clear-left" v-if="profile.address!=''">{[profile.address]}</div>
+              <div class="col-xs-6 clear-left" v-else>未填写</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="yzj-top-distance40">
+              <div class="col-xs-3 text-left text-muted">联系电话</div>
+              <div class="col-xs-6 clear-left" v-if="profile.phone!=''">{[profile.phone]}</div>
+              <div class="col-xs-6 clear-left" v-else>未填写</div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group yzj-size-16 yzj-top-distance40">
+              <div class="col-xs-3 text-left text-muted">邮箱</div>
+              <div class="col-xs-6 clear-left" v-if="profile.email!=''">{[profile.email]}</div>
+              <div class="col-xs-6 clear-left" v-else>未填写</div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="yzj-bot-distance40" v-show="!show_contact">
+            <form class="form-horizontal" id="form-client-contact">
+              <div class="form-group">
+                <label class="control-label col-xs-3 text-left">
+                  <span class="text-warning">*</span> 城市
+                </label>
+                <div class="col-xs-3 clear-left">
+                  <select class="form-control select-control" v-on:change="select_child_address()" v-model="address_pid">
+                    <option value="">选择省份</option>
+                    <option v-for="item in prarent_address" v-bind:value="item.address_id">{[ item.name ]}</option>
+                  </select>
+                </div>
+                <div class="col-xs-3 clear-left">
+                  <select class="form-control select-control" v-model="location_id">
+                    <option value="">选择市/区域</option>
+                    <option v-for="item in child_address" v-bind:value="item.address_id">{[ item.name ]}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group yzj-size-16">
+                <label class="control-label col-xs-3 text-left">
+                  <span class="text-warning">*</span> 地址
+                </label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input v-bind:value="profile.address" type="text" required required-msg="地址不能为空" v-model="t_address" name="address" class="form-control" />
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="form-group error-div" name="error" data-name="address">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="form-group yzj-size-16">
+                <label class="control-label col-xs-3 text-left">
+                  <span>&nbsp;&nbsp;</span>联系电话
+                </label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" v-bind:value="profile.phone" v-model="t_phone" name="phone" class="form-control" />
+                </div>
+              </div>
+              <div class="form-group yzj-size-16">
+                <label class="control-label col-xs-3 text-left">
+                  <span>&nbsp;&nbsp;</span>邮箱
+                </label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" v-bind:value="profile.email" v-model="t_email" name="email" class="form-control" data-regular="/^\d{6}$/" data-msg="输入正确的邮箱地址" />
+                </div>
+              </div>
+              <div class="form-group error-div" name="error" data-name="email">
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="form-group yzj-top-distance50">
+                <div class="col-xs-offset-3 col-xs-6 clear-left">
+                  <div class="col-xs-6 clear-left">
+                    <a class="btn btn-primary btn-block" v-on:click="update_contact">保存</a>
+                  </div>
+                  <div class="col-xs-6 clear-left">
+                    <a class="btn btn-default btn-block" v-on:click="show_contact=true">取消</a>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+      <alert :msg="error_msg"></alert>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/production/client_setting_info.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

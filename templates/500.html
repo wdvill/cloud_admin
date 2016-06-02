@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>服务器开小差啦</title>
+		<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+		<link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+	  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+	<body style="background-color:#fff;">
+		<header class="header-navbar">
+		  <nav class="navbar navbar-default">
+		  <div class="container">
+        {% if user %}
+		    {% include "header.html" %}
+        {% else %}
+		    {% include "header-nologin.html" %}
+        {% endif %}
+		  </div>
+		  </nav>
+		</header>
+		<!--中间内容开始-->
+		<div class="text-center">
+			<p class="yzj-top-distance70">
+				<img src="/static/images/500.png">
+			</p>
+			<h3 style="margin-top:75px;" style="color:#999">
+				<b>服务器出错了！！</b>
+			</h3>
+			<p class="yzj-top-distance40">
+				<img src="/static/images/go-back.png" onclick="window.history.go(-1)"/>
+			</p>
+		</div>
+		{% include "footer.html" %}
+	</body>
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/selectlist.js"></script>
+<script src="/static/js/editicon-dis.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/js/notice.js"></script>
+</html>

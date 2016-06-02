@@ -1,0 +1,77 @@
+//工作日志组件
+.clearfix:before, .clearfix:after {
+  content:"";
+  display:table;
+}
+.clearfix:after{
+  clear:both;
+  overflow:hidden;
+}
+.contactus {
+  h2 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333333;
+    font-weight: 400;
+  }
+  .contactus-body {
+    padding:30px;
+    background: #ffffff;
+  }
+  .info {
+    padding-top: 40px;
+    padding-left: 0;
+    border-bottom: 1px solid #e0e0e0;
+    li {
+      float: left;
+      width: 420px;
+      padding-left: 80px;
+      margin-bottom: 40px;
+    }
+    h4 {
+      color: #666666;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 0 0;
+    }
+    p {
+      padding: 10px 0;
+      font-size: 14px;
+      color: #999999;
+    }
+    .icon-adress {
+      background: url(../../../images/views/about/icon-adress.png) left center no-repeat;
+    }
+    .icon-phone {
+      background: url(../../../images/views/about/icon-phone.png) left center no-repeat;
+    }
+    .icon-servers {
+      background: url(../../../images/views/about/icon-servers.png) left center no-repeat;
+    }
+    .icon-mail {
+      background: url(../../../images/views/about/icon-mail.png) left center no-repeat;
+    }
+  }
+  .adress {
+    padding-top: 30px;
+    padding-left: 0;
+    li {
+      float: left;
+      width: 420px;
+      padding-left: 15px;
+      margin-bottom: 40px;
+    }
+    h4 {
+      color: #666666;
+      font-size: 18px;
+      font-weight: 700;
+      padding: 10px 0 0;
+    }
+    p {
+      padding: 10px 0;
+      font-size: 14px;
+      color: #999999;
+      line-height: 1.5;
+    }
+  }
+}

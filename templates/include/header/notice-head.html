@@ -1,0 +1,23 @@
+    <li id="notice" class="notice-box">
+    <a href="#" class="notice-hide"><img src="/static/images/nav-icon04.png"></a>
+    <a href="#" class="notice-show"><img src="/static/images/nav-icon05.png"></a>
+    <span v-if="!is_null" class="isonline"></span>
+    <div class="notice-remind">
+      <div class="d-list" v-for="notice in notices_unread">
+        <a id="a_{[notice.id]}" name="{[notice.extra.url]}" style="cursor: pointer;" onclick="seeNotice(this.id.substring(2),this.name)">
+        {[notice.content]}
+        </a>
+        <span id="{[notice.id]}" onclick="putNotice(this.id)" class="delete-box">
+          <img src="/static/images/icon-delete.png">
+        </span>
+      </div>
+      <div v-if="is_null" class="d-no-list">
+          <img src="/static/images/no-message.png">
+      </div>
+      <div class="d-list-last">
+        <a href="/notify">
+          查看所有通知
+        </a>
+      </div>
+    </div>
+    </li>

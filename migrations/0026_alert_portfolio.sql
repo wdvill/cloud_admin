@@ -1,0 +1,1 @@
+alter table `portfolio` add `skills` varchar(1000) NOT NULL DEFAULT '';

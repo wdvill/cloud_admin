@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>项目详情</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+      </nav>
+    </header>
+    <div id="project-detail" v-cloak>
+      {% if user.identify[0] == 'f' %}
+      <div class="container" v-if="job.proposal.status == 'hire'">
+        <div class="alert alert-success yzj-top-distance10" style="margin-bottom:0">
+          <span class="yzj-right-distance15">你已经被雇佣</span>
+          <a href="/freelancers/contracts/{[job.proposal.contract_id]}" class="text-warning">查看合同</a>
+        </div>
+      </div>
+      <div class="container" v-if="job.proposal.status != '' && job.proposal.status != 'hire' && job.proposal.status != 'refuse'">
+        <div class="alert alert-info yzj-top-distance10" style="margin-bottom:0">
+          <span class="yzj-right-distance15">你已经投过标或已经接受了需求方的邀请</span>
+          <a href="/freelancers/proposal/{[job.proposal.proposal_id]}" class="text-warning">查看详情</a>
+        </div>
+      </div>
+      <div class="container" v-if="job.proposal.status != '' && job.proposal.status == 'refuse'">
+        <div class="alert alert-info yzj-top-distance10" style="margin-bottom:0">
+          <span class="yzj-right-distance15">你的投标被拒绝或已经拒绝了需求方的邀请</span>
+        </div>
+      </div>
+      {% else %}
+      <div class="container">
+        <div id="fail_div" role="alert" class="alert alert-danger yzj-top-distance10" style="display: none"></div>
+        <div id="success_div" role="alert" class="alert alert-success yzj-top-distance10" style="display: none"></div>
+      </div>
+      {% endif %}
+      <div class="container yzj-top-distance30">
+        <!--左侧-->
+        <div class="col-xs-9 clear-both">
+          <div class="yzj-box">
+            <h3 class="text-muted" v-text="job.name"></h3> {% if user.identify[0] == 'c' %}
+            <div class="yzj-top-distance20 clearfix">
+              <div class="col-xs-2 clear-left">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon01.png">
+              </span>
+                <a href="/jobs/{[job.id]}/edit" class="yzj-size-14 text-info">编辑项目</a>
+              </div>
+              <div class="col-xs-2 clear-left" v-if="job.status!='close'">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon02.png">
+              </span>
+                <a href="javascript:;" v-on:click="update_pro('close')" class="yzj-size-14 text-info">关闭项目</a>
+              </div>
+              <div class="col-xs-2 clear-left" v-if="job.status=='close'">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon03.png">
+              </span>
+                <a href="/jobs/new?q={[job.id]}" class="yzj-size-14 text-info">再次发布</a>
+              </div>
+              <div class="col-xs-2 clear-left" v-if="job.status!='close'">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon04.png">
+              </span>
+                <a v-if="job.status=='private'" href="javascript:;" v-on:click="update_pro('normal')" class="yzj-size-14 text-info">转为公开状态</a>
+                <a v-if="job.status=='normal'" href="javascript:;" v-on:click="update_pro('private')" class="yzj-size-14 text-info">转为私有状态</a>
+              </div>
+              <div class="col-xs-2 clear-left">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon05.png">
+              </span>
+                <a href="/clients/jobs/{[job.id]}" class="yzj-size-14 text-info">查看申请人</a>
+              </div>
+              <div class="col-xs-2 clear-left">
+                <span class="yzj-right-distance10">
+                <img src="/static/images/pro-detail-icon05.png">
+              </span>
+                <a href="/clients/jobs/{[job.id]}#hire" class="yzj-size-14 text-info">查看已雇佣人</a>
+              </div>
+            </div>
+            {% endif %}
+            <p class="yzj-top-distance15 yzj-height30">
+              <span class="label label-default label-pro-detail" v-text="job.category.parent_name"></span>
+              <span class="label label-default label-pro-detail" v-text="job.category.name"></span> 发布于{[job.create_at | days]}
+            </p>
+            <div class="yzj-top-distance30">
+              <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/pro-detail-icon06.png">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info" v-text="job.paymethod | paymethod"></p>
+                    <p class="yzj-top-distance10" v-if="job.paymethod === 'hour'" v-text="job.duration | duration"></p>
+                    <p class="yzj-top-distance10" v-if="job.paymethod === 'hour'" v-text="job.workload | workloadC"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/send-icon03.png" width="21" height="22" v-if="job.level == 'entry' ">
+                    <img class="media-object" src="/static/images/send-icon04.png" width="21" height="22" v-if="job.level == 'middle' ">
+                    <img class="media-object" src="/static/images/send-icon05.png" width="21" height="22" v-if="job.level == 'expert' ">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info">
+                      {[ job.level | level ]}
+                    </p>
+                    <p class="yzj-top-distance10" v-text="job.level | level 'description'"></p>
+                  </div>
+                </div>
+              </div>
+              <div class="col-xs-4 clear-left">
+                <div class="media">
+                  <div class="media-left">
+                    <img class="media-object" src="/static/images/rmb-icon.png" width="21" height="22">
+                  </div>
+                  <div class="media-body yzj-height20">
+                    <p class="yzj-size-18 text-info">预算</p>
+                    <p class="yzj-top-distance10" v-if="job.paymethod === 'fixed'">{[job.budget]}元</p>
+                    <p class="yzj-top-distance10" v-else>{[job.level | level 'price']}</p>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="yzj-top-distance30 position-relative">
+                <span class="hires">需要聘请{[job.hires]}个服务方</span>
+                <p class="yzj-size-16 text-info">项目描述</p>
+                <p class="yzj-top-distance20 yzj-height30 description" v-html="job.description | html_decode">
+                </p>
+                <p class="line"></p>
+                <detail v-if="job.id" :job.sync="job"></detail>
+                <p class="line"></p>
+                <p class="yzj-size-16 text-info">需求方最近的活动</p>
+                <p class="yzj-top-distance20 yzj-height30">
+                  <p class="yzj-top-distance20 yzj-size-14">
+                    最后查看：{[job.last_view_time]}
+                  </p>
+                  <p class="yzj-top-distance15 yzj-size-14">
+                    报名人数：{[job.proposal.proposal]}</p>
+                  <p class="yzj-top-distance15 yzj-size-14">
+                    面试：{[job.proposal.interview]}</p>
+                </p>
+              </div>
+            </div>
+          </div>
+          <!--申请人列表-->
+          {% if user.identify[0] != 'f' %}
+          <div class="yzj-box proposal-box" v-show="proposal.list.length > 0">
+            <div class="head">
+              <span class="title" @click="proposal.showDetail = !proposal.showDetail">
+                <i class="icon" :class="{'icon-extend': proposal.showDetail}"></i>申请人</span>
+              <span class="pull-right">
+                  招标范围：高达{[proposal.maxPrice]}{[unit]} | 平均{[proposal.avgPrice]}{[unit]} | 最低{[proposal.minPrice]}{[unit]}
+                </span>
+            </div>
+            <ul class="list" v-show="proposal.showDetail">
+              <li>
+                <span class="name">申请人</span>
+                <span>申请时间</span>
+                <span>报价({[unit]})</span>
+              </li>
+              <li v-for="item in proposal.list">
+                <a href="/freelancers/{[item.userId]}" target="_blank"><span class="name" v-text="item.name"></span></a>
+                <span v-text="item.time"></span>
+                <span v-text="item.price"></span>
+              </li>
+            </ul>
+          </div>
+          {% endif %}
+          <div class="yzj-box yzj-top-distance30 yzj-size-14">
+            <p class="yzj-size-16 text-info">该需求方开放的其他工作 （{[other.length]}）
+            </p>
+            <div class="col-xs-10 clear-both">
+              <div class="yzj-top-distance15" v-for="item in other">
+                <p class="pull-left"><a href="/jobs/{[item.id]}" class="text-warning">{[item.name]}</a></p>
+                <p class="pull-right">{[ global._paymethod[item.paymethod] ]}</p>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+        <!--右侧-->
+        <div class="col-xs-3 clear-right">
+          {% if user.identify[0] == 'f' %}
+          <div class="yzj-box text-center" v-show="job.proposal.status === '' " id="job_proposal">
+            <a class="btn btn2 btn-primary btn-lg yzj-size-14" href="/jobs/{[job.id]}/proposal">我要投标</a>
+
+            <a class="yzj-top-distance15 btn btn2 btn-collect btn-lg yzj-size-14" href="javascript:;" v-on:click="collect()" v-if="job.favorite">取消收藏</a>
+            <a class="yzj-top-distance15 btn btn2 btn-default btn-lg yzj-size-14" href="javascript:;" v-on:click="collect()" v-else>
+        收&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;藏</a>
+          </div>
+          <div class="yzj-box text-center" v-else id="job_proposal_already">
+            <a class="btn btn2 btn-info btn-lg yzj-size-14" href="javascript:;" disabled="disabled">您已投标</a>
+            <a class="yzj-top-distance15 btn btn2 btn-collect btn-lg yzj-size-14" href="javascript:;" v-on:click="collect()" v-if="job.favorite">取消收藏</a>
+            <a class="yzj-top-distance15 btn btn2 btn-default btn-lg yzj-size-14" href="javascript:;" v-on:click="collect()" v-else>
+        收&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;藏</a>
+          </div>
+          <alert_modal msg="您已经成功收藏此项目"></alert_modal>
+          {% endif %}
+          <client :team_id.sync="job.team.id" :top.sync="'{% if user.identify[0] == 'f' %}1{% endif%}'"></client>
+        </div>
+      </div>
+      <strap-alert :msg="alert.msg" :title="alert.title" :show-type="alert.showType" :show-alert.sync="alert.showAlert"></strap-alert>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/production/project_detail.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

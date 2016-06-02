@@ -1,0 +1,201 @@
+@font-face {
+    font-family: 'yunzujiaicon';
+	src:url('../fonts/yunzujiaicons.eot?jajcz1');
+	src:url('../fonts/yunzujiaicons.eot?jajcz1#iefix') format('embedded-opentype'),
+		url('../fonts/yunzujiaicons.ttf?jajcz1') format('truetype'),
+		url('../fonts/yunzujiaicons.woff?jajcz1') format('woff'),
+		url('../fonts/yunzujiaicons.svg?jajcz1#yunzujiaicons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="yunzujiaIcon-"], [class*="yunzujiaIcon-"] {
+    /* use !important to prevent issues with browser extensions that change fonts */
+    font-family: 'yunzujiaicon' ;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+.yunzujiaIcon-new2-open:before {
+    content: "\e93a";
+}
+.yunzujiaIcon-collection:before {
+    content: "\e924";
+}
+.yunzujiaIcon-user-thin:before {
+    content: "\e937";
+}
+.yunzujiaIcon-lock-thin:before {
+    content: "\e938";
+}
+.yunzujiaIcon-news2:before {
+    content: "\e939";
+}
+.yunzujiaIcon-recycle-bin:before {
+    content: "\e927";
+}
+.yunzujiaIcon-tag:before {
+    content: "\e92e";
+}
+.yunzujiaIcon-add:before {
+    content: "\e900";
+}
+.yunzujiaIcon-all:before {
+    content: "\e901";
+}
+.yunzujiaIcon-arrow-down:before {
+    content: "\e902";
+}
+.yunzujiaIcon-Authentication:before {
+    content: "\e903";
+}
+.yunzujiaIcon-banner-left:before {
+    content: "\e904";
+}
+.yunzujiaIcon-banner-left2:before {
+    content: "\e905";
+}
+.yunzujiaIcon-banner-right:before {
+    content: "\e906";
+}
+.yunzujiaIcon-banner-right2:before {
+    content: "\e907";
+}
+.yunzujiaIcon-building:before {
+    content: "\e908";
+}
+.yunzujiaIcon-chat:before {
+    content: "\e909";
+}
+.yunzujiaIcon-chat-thin:before {
+    content: "\e90a";
+}
+.yunzujiaIcon-cloud-contact:before {
+    content: "\e90b";
+}
+.yunzujiaIcon-collection-thin:before {
+    content: "\e90c";
+}
+.yunzujiaIcon-computer:before {
+    content: "\e90d";
+}
+.yunzujiaIcon-create:before {
+    content: "\e90e";
+}
+.yunzujiaIcon-date:before {
+    content: "\e90f";
+}
+.yunzujiaIcon-design:before {
+    content: "\e910";
+}
+.yunzujiaIcon-documents:before {
+    content: "\e911";
+}
+.yunzujiaIcon-downloads:before {
+    content: "\e912";
+}
+.yunzujiaIcon-eye:before {
+    content: "\e913";
+}
+.yunzujiaIcon-file:before {
+    content: "\e914";
+}
+.yunzujiaIcon-flow:before {
+    content: "\e915";
+}
+.yunzujiaIcon-genius:before {
+    content: "\e916";
+}
+.yunzujiaIcon-house:before {
+    content: "\e917";
+}
+.yunzujiaIcon-im:before {
+    content: "\e918";
+}
+.yunzujiaIcon-image:before {
+    content: "\e919";
+}
+.yunzujiaIcon-medal:before {
+    content: "\e91a";
+}
+.yunzujiaIcon-mobile:before {
+    content: "\e91b";
+}
+.yunzujiaIcon-money:before {
+    content: "\e91c";
+}
+.yunzujiaIcon-mylist:before {
+    content: "\e91d";
+}
+.yunzujiaIcon-mylist-yuan:before {
+    content: "\e91e";
+}
+.yunzujiaIcon-news:before {
+    content: "\e91f";
+}
+.yunzujiaIcon-open-windows:before {
+    content: "\e920";
+}
+.yunzujiaIcon-pen:before {
+    content: "\e921";
+}
+.yunzujiaIcon-pen-thin:before {
+    content: "\e922";
+}
+.yunzujiaIcon-pen-yuan:before {
+    content: "\e923";
+}
+.yunzujiaIcon-problem:before {
+    content: "\e925";
+}
+.yunzujiaIcon-prompt:before {
+    content: "\e926";
+}
+.yunzujiaIcon-restore:before {
+    content: "\e928";
+}
+.yunzujiaIcon-service:before {
+    content: "\e929";
+}
+.yunzujiaIcon-share-three:before {
+    content: "\e92a";
+}
+.yunzujiaIcon-smiling-face:before {
+    content: "\e92b";
+}
+.yunzujiaIcon-submit:before {
+    content: "\e92c";
+}
+.yunzujiaIcon-system:before {
+    content: "\e92d";
+}
+.yunzujiaIcon-uploads:before {
+    content: "\e92f";
+}
+.yunzujiaIcon-user-fat:before {
+    content: "\e930";
+}
+.yunzujiaIcon-user-friends:before {
+    content: "\e931";
+}
+.yunzujiaIcon-user-yuan:before {
+    content: "\e932";
+}
+.yunzujiaIcon-wall:before {
+    content: "\e933";
+}
+.yunzujiaIcon-window:before {
+    content: "\e934";
+}
+.yunzujiaIcon-work:before {
+    content: "\e935";
+}
+.yunzujiaIcon-yes:before {
+    content: "\e936";
+}
+

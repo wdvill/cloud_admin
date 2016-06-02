@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+  <head> 
+    <meta charset="UTF-8" /> 
+    <title>我的工作</title> 
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" /> 
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css" /> 
+    <link rel="stylesheet" type="text/css" href="/static/css/redefine.css" /> 
+    <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css" />
+    <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" /> 
+    <link ref="stylesheet" type="text/css" href="/static/css/hint.min.css" />
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head> 
+  <body>
+    <div id="layout"> 
+      <!--头部--> 
+      <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "include/header/freelancer-myjobs.html" %}
+      </nav>
+      </header> 
+
+      <div id="my-jobs" class="container yzj-top-distance50">
+        <div class="col-xs-9">
+          <h3 class="text-muted">我的工作(进行中) <a class="pull-right text-warning" style="font-size: 18px; line-height: 26px;" href="/freelancers/contracts">查看所有合同</a></h3>
+          <div class="yzj-box yzj-top-distance20">
+            <h4 v-if="contracts.length != 0" class="text-muted">待定合同(offer)</h4>
+
+            <div v-if="contracts.length != 0" class="line"></div>
+
+            <div v-if="contracts.length != 0" class="table-responsive">
+              <table class="table border-outer">
+                <col width="50%"/> 
+                <col width="30%"/> 
+                <col width="20%"/> 
+                <tr v-for="contract in contracts">
+                  <td>
+                    <h5 class="text-muted">{[contract.name]}</h5>
+                    <h5 class="offer-sender">{[contract.user.client.name]}发送来的offer</h5>
+                  </td>
+
+                  <td>
+                    <h5 v-if="contract.job.paymethod != 'hour'" class="text-muted" style="margin-bottom: 6px;">￥{[contract.amount.toFixed(2)]}</h5>
+                    <h5 v-if="contract.job.paymethod == 'hour'" class="text-muted" style="margin-bottom: 6px;">￥{[contract.hourly.toFixed(2)]}/小时</h5>
+                    <h5 v-if="contract.job.paymethod != 'hour'" style="line-height: 18px;">共{[contract.stones.length]}个里程碑，已托管{[contract.amount.toFixed(2)]}元</h5>
+                  </td>
+                  <td>
+                    <a href="/freelancers/offer/{[contract.id]}" class="btn btn-primary btn-sm">查看offer</a>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="yzj-box yzj-top-distance20" v-if="contracts.length == 0 && doing.length == 0 && doing_hour.length == 0">
+              <p class="text-center yzj-top-distance40">
+              <img src="/static/images/nofavorite-icon.png">
+              </p>
+              <p class="yzj-bot-distance40 text-center yzj-top-distance20 yzj-size-16">您还没有任何工作~<a href="/find-work-home" class="text-warning">去查找工作并申请吧</a></p>
+              </div>
+
+            <h4 v-if="doing.length !=0 " class="text-muted">固定价格工作</h4>
+
+            <div v-if="doing.length !=0 " class="line"></div>
+            <table v-if="doing.length !=0 " class="table border-outer">
+              <col width="60%" />
+              <col width="40%"/> 
+              <tr v-for="contract in doing">
+                <td class="position-relative valign-top">
+                  <h5 class="text-muted valign-top">{[contract.name]}</h5>
+                  <div class="opsition-absolute-left-bottom">
+                    <div class="offer-sender">需求方:{[contract.user.client.name]}</div>
+                    <div class="operate">
+                      <a class="text-warning" style="margin-right: 20px;" href="/freelancers/contracts/{[contract.id]}">合同详情</a>
+                      <a class="text-warning" @click="setContract(contract.id)"  data-toggle="modal" data-target="#send_message" href="#">发消息</a>
+                    </div>
+                  </div>
+                </td>
+
+                <td style="text-align: right">
+                  <h5>￥{[contract.amount.toFixed(2)]}中已经支付了<span class="has_paid">￥{[contract.total_amount.toFixed(2)]}</span></h5>
+                  <div class="contract-pay-apply" v-if="contract.currentStone.status == 'carry' && !contract.currentStone.audit_at">
+                    <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#apply" v-on:click="setStone(contract.currentStone,contract.id)">提交结款申请</a>
+                  </div>
+                  <div class="text-notice" v-if="contract.currentStone.status == 'carry' && contract.currentStone.audit_at">
+                    需求方于{[contract.currentStone.audit_at]}要求修改
+                  </div>
+                  <div class="contract-pay-apply" v-if="contract.currentStone.status == 'carry' && contract.currentStone.audit_at">
+                    <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#apply" v-on:click="setStone(contract.currentStone,contract.id)">重新提交结款申请</a>
+                  </div>
+                  <div class="text-notice" v-if="contract.currentStone.status == 'carry_pay'">
+                    您于{[contract.currentStone.request_at]}提交了结款申请
+                  </div>
+                  <div class="contract-pay-apply" v-if="contract.currentStone.status == 'carry_pay'">
+                    <a href="javascript:;" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#apply" v-on:click="setStone(contract.currentStone,contract.id)">重新提交结款申请</a>
+                  </div>
+                  <div v-if="contract.currentStone != undefined">
+                    <div class="line_height20">完成【{[contract.currentStone.name]}】获得{[contract.currentStone.amount]}元</div>
+                    <div class="line_height20">
+                      (截止日：{[contract.currentStone.end_at | year_month_day]})
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+            </table>
+            <h4 v-if="doing_hour.length !=0 " class="text-muted">按小时付费工作</h4>
+            <div v-if="doing_hour.length !=0 " class="line"></div>
+            <table  v-if="doing_hour.length !=0 " class="table border-outer">
+              <col width="60%" />
+              <col width="40%"/> 
+              <tr v-for="contract in doing_hour">
+                <td>
+                  <h5 class="text-muted">{[contract.name]}</h5>
+                  <div class="offer-sender">需求方:{[contract.user.client.name]}</div>
+                  <div class="operate">
+                    <a class="text-warning" style="margin-right: 20px;" href="/freelancers/contracts/{[contract.id]}">合同详情</a>
+                    <a class="text-warning" @click="setContract(contract.id)"  data-toggle="modal" data-target="#send_message" href="#">发消息</a>
+                  </div>
+                </td>
+
+                <td style="text-align: right">
+                  <div v-if="contract.stones[contract.stones.length-1].shot_times/60 != 0">
+                    <div>本周工作了{[contract.stones[contract.stones.length-1].shot_times | hourformat]}小时</div>
+                    <div>@￥{[contract.hourly.toFixed(2)]}/小时=￥<span v-text="(contract.stones[contract.stones.length-1].shot_times*contract.hourly/60).toFixed(2)"></span></div>
+                    <div>
+                      <a v-if="contract.workload != 0" href="/freelancers/diary" class="text-warning">查看工作日志</a>
+                    </div>
+                  </div>
+                  <div v-if="contract.stones[contract.stones.length-1].shot_times/60 == 0">
+                    <div>还没有工作时间记录</div>
+                    <div>使用<a href="/desktop" class="text-warning">云沃客桌面APP</a>追踪时间</div>
+                    <div>
+                      <a v-if="contract.status == 'pause' || contract.status == 'carry_paid' || contract.status == 'finish' || contract.status == 'carry'" href="/freelancers/diary" class="text-warning">查看工作日志</a>
+                    </div>
+                  </div>
+                </td>
+
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-xs-3">
+          <div class="padding30 backgruond-fff margin-bottom-20">
+            <h4 class="text-muted">收益</h4>
+            <div class="line"></div>
+            <div class="yzj-top-distance20 yzj-size-16">
+              <p class="text-warning"><a class="text-warning font14" style="margin-bottom: 18px; display: block;" href="#">查看代收款</a></p>
+              <p class="text-warning"><a class="text-warning font14" href="#">更多关于支付进程的信息</a></p>
+            </div>
+          </div>
+          <div class="padding30 backgruond-fff margin-bottom-20">
+            <h4 class="text-muted">成功指南</h4>
+            <div class="line"></div>
+            <div class="yzj-top-distance20 yzj-size-16">
+              <p class="text-reminde" style="margin-top: 0;">和需求方进行充分的沟通。了解需求方的要求和一些有用的信息。</p>
+              <p class="text-reminde">对于按工作时间付费的项目，你需要下载云沃客桌面APP来记录您的工作时间，以保证您的权益。</p>
+              <p class="text-warning"><a href="/desktop" class="text-warning font14">去下载</a></p>
+              <p class="text-reminde">对于按工作时间收费的合同，请及时更新您的工作日志。请确保去除那些非工作时间。手动添加工作时间之前请先和您的客户进行沟通。</p>
+              <p class="text-reminde">一旦您有了客户并完成了工作，您可以及时更新您的档案，看看是否可以添加一些新的技能和经历。</p>
+              <p class="text-warning"><a class="text-warning font14" href="#"> >>> 报表</a></p>
+            </div>
+          </div>
+        </div>
+        <!-- 发送消息 -->
+        <send-message v-if="current_id" :contract-id="current_id"></send-message>
+
+        <div class="modal fade bs-example-modal-lg choose-sort apply-modal" id="apply" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+          <div class="modal-dialog contract-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+                  <span aria-hidden="true" class="yzj-size-30">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body yzj-box yzj-height20 yzj-top-distance10"> 
+                <h3 class="modal-title text-muted text-center">提交结款申请</h3>
+                <div class="yzj-size-16 yzj-top-distance50 text-info" style="padding-left:100px;padding-right: 100px;"> 
+
+                  <table>
+                    <col width="30%"/>
+                    <col width="70%"/>
+                    <tr>
+                      <td colspan="2"><span class="apply-tip">提交完工作申请，你的酬劳将会在批准之后释放</span></td>
+                    </tr>
+                    <tr>
+                      <td>
+                        里程碑
+                      </td>
+                      <td>
+                        {[stoneName]}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        酬劳
+                      </td>
+                      <td>
+                        {[stoneAmount]}元
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        留言
+                      </td>
+                      <td>
+                        <textarea rows="4" class="form-control" v-model="message" id="reason"></textarea>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>附件</td>
+                      <td>
+                        <div class="inputfileload pull-left yzj-right-distance15" v-model="attachment"> 
+                          <div class="uploadphoto">
+                           上传文件
+                          </div> 
+                          <input type="file" v-on:change="notifyFileInput($event)" class="inputfile" id="fileupload" name="file" /> 
+                         </div> 
+                         <div class="fileloadtext pull-left yzj-right-distance45" v-show="filename != '' " v-model="filename">
+                          {[ filename ]}
+                         </div> 
+                         <divv v-show="filename == '' " class="fileloadtext pull-left">
+                          文件大小不得超过5MB
+                         </div> 
+                        </div>
+                        <div class="form-group" v-show="errFile"> 
+                         <div class="col-xs-12 text-warning yzj-size-14"> 
+                          <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errFile]} 
+                         </div> 
+                        </div>  
+                      </td>
+                    </tr>
+                  </table>
+
+
+                  <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                    <div class="col-xs-4 clear-right">
+                      <button type="button" class="btn btn-primary btn-block yzj-right-distance15" v-on:click="apply()">确认</button>
+                    </div>
+                    <div class="col-xs-4 clear-right">
+                      <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/production/jobs.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+</html>

@@ -1,0 +1,102 @@
+.notice-message{
+	background: #ffffff;
+	padding: 10px 30px;
+	border: 1px solid #e6e6e6;
+	overflow: hidden;
+	margin:30px 0 20px 0;
+}
+.notice-message p{
+	margin-top: 5px;
+	float: left;
+	width: 938px;
+	line-height: 24px;
+	font-size: 14px;
+	color: #999999;
+}
+.notice-message .notice-btn{
+	background: #ff6b04;
+	border:none;
+	padding: 10px 20px;
+	font-size: 14px;
+	color: #ffffff;
+	float: right;
+}
+.notice-message .notice-btn:hover{
+	background: #ff7a2c;
+}
+.table-box{
+	padding: 16px 30px 40px;
+	background: #ffffff;
+}
+.read{
+	cursor: pointer;
+	margin-left: 5px;
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	background: #d2d2d2;
+	border-radius: 50%;
+}
+.no-read{
+	cursor: pointer;
+	margin-left: 5px;
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	background: #ff6b04;
+	border-radius: 50%;
+}
+.time-center{
+	text-align: center;
+}
+.del-btn{
+	display: none;
+	cursor: pointer;
+}
+.notice-table{
+	width: 100%;
+}
+.notice-table td{
+	line-height: 18px;
+	vertical-align: middle;
+	background: url(../images/dash.png) repeat-x left bottom;
+	padding: 15px 0;
+}
+.notice-table tr:hover td{
+	background: #f7f7f7;
+}
+.notice-table tr:hover .del-btn{
+	display: inline;
+}
+.table-title{
+	line-height: 60px;
+	border-bottom:1px solid #e5e5e5;
+	overflow: hidden;
+}
+.table-title a{
+	float: right;
+	font-size: 16px;
+	color: #333333;
+	margin-left: 24px;
+	line-height: 60px;
+}
+.table-title h1{
+	float: left;
+	font-size: 18px;
+	color: #333333;
+	font-weight: bold;
+	line-height: 60px;
+}
+.table-title a:hover{
+	color: #ff6b04;
+}
+.table-title a.active{
+	color: #ff6b04;
+}
+.num-no-read,.num-read{
+	cursor: pointer;
+}
+.pageNotify{
+	float: right;
+	margin-top: 20px;
+}

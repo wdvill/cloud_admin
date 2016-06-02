@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>服务方-已雇佣</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "include/header/client-top.html" %}
+        </div>
+        {% include "include/header/client-freelancer.html" %}
+      </nav>
+    </header>
+  <div id="body" class="container yzj-top-distance50">
+    <div class="row yzj-size-14">
+    <!--左侧-->
+    <div class="col-xs-3">
+      <ul class="emp-service yzj-size-16">
+        <li><a href="/clients/freelancers/waiting"  class="emp-service01">待签约</a></li>
+        <li><a href="/clients/freelancers/hire" class="active emp-service02">已雇佣</a></li>
+        <li><a href="/clients/freelancers/favorite"  class="emp-service03">收藏</a></li>
+      </ul>
+    </div>
+    <div class="col-xs-9 clear-left">
+      <div class="yzj-box" v-if="freelancers.length>0">
+      <div v-for = "item in freelancers">
+        <div class="col-xs-1 clear-both">
+         <a href="/freelancers/{[item.user_id]}">
+        <img v-bind:src="item.avatar" width="64" height="64" class="img-circle">
+        </a></div>
+        <div class="col-xs-3">
+          <p class="yzj-size-16 yzj-top-distance10"><a href="/freelancers/{[item.user_id]}" class="text-warning">{[item.name]}</a></p>
+          <p class="yzj-size-14 yzj-top-distance10 yzj-height30">
+          {[item.overview]}
+          </p>
+        </div>
+        <div class="col-xs-4 clear-right">
+          <p class="yzj-top-distance10">
+          <span class="yzj-size-16" v-if="item.hiring==true">雇佣中</span>
+          <span class="yzj-size-16" v-if="item.hiring==false">雇佣结束</span>
+          </p>
+          <p class="yzj-top-distance10">收藏于{[item.last_hire_time]}</p>
+        </div>
+        <div class="col-xs-2 clear-both">
+          <img src="/static/images/hire-ing.png" v-if="item.hiring==true"/>
+          <img src="/static/images/hire-ing.png" v-if="item.hiring==false"/>
+        </div>
+        <div class="col-xs-2 clear-right text-center yzj-top-distance10">
+          <a class="btn btn-default btn-sm" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+            操作
+          </a>
+          <p class="dropdown-menu Top-right-down handle-down">
+            <span class="d-list">
+              <a href="/freelancers/{[item.user_id]}">
+                <span class="col-xs-12">
+                  查看个人资料
+                </span>
+              </a>
+            </span>
+            <span class="d-list">
+              <a v-if="(item.contracts).length==1" href="/freelancers/contracts/{[item.contracts[0].id]}">
+                <span class="col-xs-12">
+                  查看合同
+                </span>
+              </a>
+              <a v-if="(item.contracts).length>1" href="#" data-toggle="modal" data-target="#myModal" v-on:click="look_contract($index)">
+                <span class="col-xs-12">
+                  查看合同
+                </span>
+              </a>
+            </span>
+           <!--  <span class="d-list" v-if="item.hiring==false">
+              <a v-if="(item.contracts).length==1" href="/freelancers/contracts/{[item.contracts[0].id]}">
+                <span class="col-xs-12">
+                  查看评价
+                </span>
+              </a>
+              <a v-if="(item.contracts).length>1" href="#" data-toggle="modal" data-target="#myModal" v-on:click="look_contract($index)">
+                <span class="col-xs-12">
+                  查看评价
+                </span>
+              </a>
+            </span> -->
+            <span class="d-list">
+              <a href="/freelancers/{[item.user_id]}/invite">
+                <span class="col-xs-12">
+                  发送邀请
+                </span>
+              </a>
+            </span>
+            <span class="d-list" v-if="item.hiring==false">
+              <a href="/clients/proposal/{[item.favorite.location.location_id]}/offer">
+                <span class="col-xs-12">
+                  再次雇佣
+                </span>
+              </a>
+            </span>
+            <span class="d-list">
+              <a href="/freelancers/{[item.user_id]}">
+                <span class="col-xs-12">
+                  联系对方
+                </span>
+              </a>
+            </span>
+          </p>
+        </div>
+        <div class="clearfix"></div>
+        <div class="line"></div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="text-right" v-page="pageObject" v-bind:query="employment_list_page" ></div>
+      </div>
+      <div class="yzj-box text-center" v-if="freelancers.length==0">
+          <img src="/static/images/daily-log-icon.png" class="yzj-right-distance30" />
+          <span class="yzj-size-16">你还没有雇佣服务方</span>
+      </div>
+    </div>
+    </div>
+  </div>
+<alertdiv :msg="error_msg"></alertdiv>
+
+
+
+<div class="modal fade bs-example-modal-lg choose-sort" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+  <div class="modal-dialog contract-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+          <span aria-hidden="true" class="yzj-size-30">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body yzj-height20 yzj-top-distance10"> 
+      <h3 class="modal-title text-muted text-center">请选择要查看的合同</h3> 
+      <p class="yzj-top-distance30 text-info text-center yzj-size-14">
+        您与服务方哇大虎拥有多个项目的合同，请选择想要查看的合同
+      </p>
+        <div class="yzj-size-16 yzj-top-distance50"> 
+          <form class="form-horizontal yzj-top-distance50">
+           <div class="form-group">
+             <label class="col-xs-offset-1 col-xs-2 control-label yzj-size-16">选择合同:</label> 
+             <div class="col-xs-7 clear-left"> 
+               <div class="col-xs-12 clear-both"> 
+                 <select class="form-control select-control" v-model="choose_contract">
+                   <option value="none" selected>请选择要查看的合同</option>
+                   <option  v-for="item in lookContract" value="{[item.id]}">{[item.name]}</option>
+                 </select>
+               </div>
+             </div> 
+           </div>
+         </form>
+        <div class="yzj-top-distance50 yzj-size-14 col-xs-10 col-xs-offset-1 yzj-bot-distance70">
+          <div class="col-xs-4 col-xs-offset-2 clear-right">
+            <a class="btn btn-primary btn-block yzj-right-distance15" v-on:click="select_contract">确认</a>
+          </div>
+          <div class="col-xs-4 clear-right">
+            <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer yzj-top-distance10"></div>
+  </div>
+</div>
+</div>
+{% include "footer.html" %}
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/editicon-dis.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/vue-directive.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/production/employ_list.min.js"></script>
+<script src="/static/js/notice.js"></script>
+</body>
+</html>

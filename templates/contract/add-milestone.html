@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>添加里程碑</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+
+  <div class="container add-milestone" v-cloak>
+
+    <h2 class="header">添加里程碑</h2>
+    <div class="body">
+      <h4>合同详情</h4>
+        <contract :uuid="uuid"></contract>
+      <h4>添加新的里程碑</h4>
+
+      <!-- 里程碑列表组件 -->
+      <milestone-list  :mlist.sync="milestoneData"></milestone-list>
+
+      <a class="btn-add-milestone" @click="addMilestone">＋添加里程碑</a>
+
+      <div class="footer">
+        <a @click="creatMilestone">支付里程碑费用</a>
+        <a>取消</a>
+      </div>
+      
+    </div>
+    
+  </div>
+
+  {% include "footer.html" %}
+
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/production/add-milestone.min.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

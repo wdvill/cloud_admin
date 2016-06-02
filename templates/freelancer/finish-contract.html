@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>结束合同</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+    <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+  <body>
+    <div>
+      <!--头部-->
+      <header class="header-navbar">
+        <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+        </nav>
+      </header>
+
+      <div class="container yzj-top-distance30 yzj-size-14" id="container">
+        <h4 class="text-muted yzj-top-distance20 yzj-bot-distance20"><strong>结束与{[contract.user.client.name]}的合同 -- {[contract.name]}</strong></h4>
+        <div class="alert alert-danger" role="alert" v-show="contract.status=='carry'">
+          当前正在进行的合同正在进行中，你还有未得到的报酬。继续结束合同意味着您将放弃这笔报酬，请谨慎操作。如果您在等待对方支付已完成部分的报酬，在结束合同之前请先与对方沟通。
+        </div>
+        <p class="text-info yzj-top-distance10">分享你的经验，你的反馈将会对需求方和云沃客平台提供有价值的信息</p>
+
+        <div class="yzj-top-distance20 yzj-box">
+          <div class="col-xs-1 clear-left" style="width: 5%;"><i class="evaluate-secrecy"></i></div>
+          <div class="col-xs-8 clear-left yzj-top-distance15">
+            <p class="text-info yzj-size-16"><strong>保密评价</strong></p>
+            <p class="text-info yzj-top-distance20">评价将匿名并不会直接展示给对方</p>
+            <p class="text-info yzj-size-16 yzj-top-distance20"><strong>结束合同的原因</strong></p>
+            <select class="form-control yzj-top-distance20" style="width:420px">
+              <option v-for="item in question" v-bind:value="item.question_id" v-model="question_id">{[item.name]}</option>
+            </select>
+            <p class="text-info yzj-size-16 yzj-top-distance20"><strong>你是否愿意将这个需求方推荐给你的朋友或者同行</strong></p>
+            <div class="evaluate-div yzj-top-distance20">
+              <span>一点也不想</span>
+              <span v-for="n in 9"><input type="radio" value="{[n]}" name="evaluate"/>{[n]}</span>
+              <span>非常乐意</span>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div class="yzj-top-distance20 yzj-box">
+          <div class="col-xs-1 clear-left" style="width: 5%;"><i class="evaluate-open"></i></div>
+          <div class="col-xs-8 clear-left yzj-top-distance15">
+            <p class="text-info yzj-size-16"><strong>公开评价</strong></p>
+            <p class="text-info yzj-top-distance20">双方互评之后，该评价将展示在需求方的档案中</p>
+            <div class="text-info yzj-top-distance30">
+              <ul class="start_list">          
+                <li>
+                  <div id="evaluate1"></div>
+                  <input type='hidden' id="e1" v-model="evaluate[0]" value="0" />
+                  <em>沟通</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li>
+                  <div id="evaluate2"></div>
+                  <input type='hidden' id="e2" v-model="evaluate[2]" value="0"/>
+                  <em>合作</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li>
+                  <div id="evaluate3"></div>
+                  <input type='hidden' id="e3" v-model="evaluate[3]" value="0"/>
+                  <em>需求质量</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li>
+                  <div id="evaluate4"></div>
+                  <input type='hidden' id="e4" v-model="evaluate[4]" value="0"/>
+                  <em>可用性</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li>
+                  <div id="evaluate5"></div>
+                  <input type='hidden' id="e5" v-model="evaluate[5]" value="0"/>
+                  <em>合理设置交付时间</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li>
+                  <div id="evaluate6"></div>
+                  <input type='hidden' id="e6" v-model="evaluate[6]" value="0"/>
+                  <em>技能</em>
+                  <div class="clearfix"></div>
+                </li>
+              </ul>
+            </div>
+            <p class="text-warning yzj-size-16 yzj-top-distance10"><strong>总分：<span id="score">0</span>分</strong></p>
+            <p class="text-info yzj-size-16 yzj-top-distance30"><strong>分享与其合作的感受</strong></p>
+            <textarea class="yzj-top-distance20 bidTextarea" rows="7"></textarea>
+            <p class="yzj-top-distance20">*结束合同，我们会冻结该项目的工作日志，我们会通知需求方工作已经完成，并将尾款结算。（按小时收费的显示）</p>
+            <div class="yzj-top-distance50 yzj-bot-distance50 col-xs-7 clear-left">
+              <div class="col-xs-6 clear-left">
+                <input type="button" value="结束合同" class="btn btn-primary btn-block" v-on:click="finish_contract">
+              </div>
+              <div class="col-xs-6 clear-left">
+                <input type="button" value="取消" class="btn btn-default btn-block" onclick="history.go(-1)">
+              </div>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+        <alert :msg="error_msg"></alert>
+
+      </div>
+      {% include "footer.html" %}
+    </div>
+    <script src="/static/js/jquery-2.1.4.min.js"></script> 
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+    <script src="/static/js/jquery.raty.min.js"></script>
+    <script src="/static/production/finish_contract.min.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        orderRaty("evaluate1","e1",0,false);
+        orderRaty("evaluate2","e2",0,false);
+        orderRaty("evaluate3","e3",0,false);
+        orderRaty("evaluate4","e4",0,false);
+        orderRaty("evaluate5","e5",0,false);
+        orderRaty("evaluate6","e6",0,false);
+      })
+      function orderRaty(_id, _inputId, _score, _readOnly) {
+        $('#' + _id).raty({
+          path : "/static/images/raty/",
+          targetType: 'number',
+          width: 230,
+          score:_score, 
+          readOnly:_readOnly,
+          click: function(score, evt) {
+            $('#'+_inputId).val(score);
+            $('#score').html(calculateScore());
+          }
+        });
+      }
+      function calculateScore(){
+        var score = 0;
+        $(".start_list li>input").each(function(){
+          score += parseInt($(this).val());
+        })
+        return (score/$(".start_list li>input").length).toFixed(2)
+      }
+    </script>
+  </body>
+</html>

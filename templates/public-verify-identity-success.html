@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+    </nav>
+  </header>
+  <div id="layout">
+    <div class="container yzj-top-distance30">
+      <!--左侧-->
+      {% if user.identify[0] == "f" %} {% include "freelancer-setting-sider.html" %} {% else %} {% include "client/client-setting-sider.html" %} {% endif %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <!--身份认证-认证通过-->
+        <h4 class="text-muted"><strong>身份认证</strong></h4>
+        <div class="yzj-top-distance20 yzj-box">
+          <p class="text-center">
+            <img src="/static/images/success.png">
+          </p>
+          <div style="margin-left:-30px">
+            <h3 class="yzj-top-distance20 text-muted text-center">
+          您已完成实名认证
+          </h3>
+            <p class="yzj-top-distance40 yzj-size-16" style="margin-left:39%;">
+              认证姓名：{{user.profile.name}}<br/><br/><br/> 认证身份：{{user.profile.id_number[:6]}}********{{user.profile.id_number[14:]}}
+            </p>
+            <p class="yzj-top-distance40 text-center yzj-size-16">
+              您在账户管理中所绑定的银行卡和支付宝必须与认证身份一致，<br/><br/> 如想更改认证信息，请联系客服&nbsp;&nbsp;
+              <input type="button" class="btn2 btn-primary" value="联系客服" style="width:150px">
+            </p>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance20"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

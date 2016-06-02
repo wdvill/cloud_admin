@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>云沃客简介</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body id="report">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% if user %}
+          {% include "header.html" %}
+          {% else%}
+          {% include "header-nologin.html" %}
+          {% endif%}
+        </div>
+      </nav>
+    </header>
+    <div class="container yzj-top-distance50">
+      <div class="col-xs-3 clear-left yzj-size-16">
+        <span class="yzj-right-distance15"><img src="/static/images/aboutus-icon01.png"></span>
+        <span class="text-muted yzj-size-18">关于我们</span>
+        <p class="line"></p>
+        <p class="yzj-left-distance35"><a href="/about">云沃客简介</a></p>
+        <p class="yzj-left-distance35 yzj-top-distance15"><a href="/joinus" class="active">加入我们</a></p>
+        <p class="yzj-left-distance35 yzj-top-distance15"><a href="/concatus">联系我们</a></p>
+        <p class="yzj-left-distance35 yzj-top-distance15"><a href="/legal/privacy">注册协议</a></p>
+        <p class="yzj-left-distance35 yzj-top-distance15"><a href="/legal">用户协议</a></p>
+      </div>
+      <div class="col-xs-9 clear-both">
+         <h4 class="text-muted"><strong>加入我们</strong></h4>
+         <div class="yzj-box yzj-top-distance30">
+           <div class="yzj-box">
+            <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon01.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>总经办</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">产品经理</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">北京</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+
+           <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon02.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>运营部</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">内容运营经理</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">北京</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-2"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">运营专员</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">文案策划</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+
+           <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon03.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>行政人事部</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">招聘专员</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-2"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">法务专员</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+
+           <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon04.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>销售部</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">销售总监</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">北京</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-2"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">销售经理</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">销售助理</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">北京</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+
+           <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon05.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>财务部</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">出纳员</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+
+           <div class="job yzj-bot-distance30">
+             <div class="media">
+             <div class="media-left"><img src="/static/images/joinus-icon06.png"></div>
+             <div class="media-body"><h4 class="text-info"><strong>技术部</strong></h4></div>
+             </div>
+             <div class="clearfix"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">Web前端架构师</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">北京</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-2"></div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">PHP高级工程师</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="col-xs-5 yzj-border yzj-box yzj-top-distance20">
+               <p class="yzj-size-16">
+               <span class="pull-left">Python高级开发工程师</span>
+               <span class="pull-right"><img src="/static/images/address2.png" class="yzj-right-distance10">深圳</span>
+               </p>
+               <div class="clearfix"></div>
+               <p class="yzj-size-14 yzj-top-distance20">发布于2016年02月24日</p>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+         </div>
+         </div>
+      </div>
+    </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

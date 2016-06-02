@@ -1,0 +1,122 @@
+<div class="navbar-header">
+  <a class="navbar-brand" href="/">
+    <img src="/static/images/yzj_logo.png" height="52" width="171">
+  </a>
+</div>
+
+<ul class="Top-center pull-left yzj-size-16 freelancer {{ first_nav }}">
+  <li>
+    <a href="/find-work-home" class="text-info">找工作</a>
+  </li>
+  <li>
+    <a href="/freelancers/jobs" class="text-info">我的工作</a>
+  </li>
+  <li>
+    <a href="/freelancers/reports" class="text-info">报表</a>
+  </li>
+  <li>
+    <a href="/messages/" target="_blank" class="text-info">消息</a>
+  </li>
+</ul>
+
+<div class="navbar-right navbar-brand Top-right">
+  <ul class="pull-right">
+    <li id="show_search">
+      <a href="#">
+        <img src="/static/images/nav-icon02.png"></a>
+    </li>
+    <li class="dropdown">
+      <a href="/help">
+        <img src="/static/images/nav-icon03.png">
+      </a>
+    </li>
+    {% include "include/header/notice-head.html" %}
+    <li class="default-img dropdown">
+      <span class="dropdown-toggle" data-toggle="dropdown" 
+          role="button" aria-haspopup="true" aria-expanded="false">
+        <a href="#">
+          <img src="{{user.profile.avatar}}" 
+              class="yzj-right-distance20 img-circle" width="32" height="32">
+        </a>
+        <a href="#" >
+          <img src="/static/images/nav-down.png">
+        </a>
+      </span>
+      <p class="dropdown-menu Top-right-down">
+
+        {% if user.to_dev %}
+          <span class="d-list active-box">
+            <a href="/users/f/{{user.uuid}}" class="active">
+              <span class="col-xs-3 clear-left"> 
+                <img src="{{user.profile.avatar}}" width="40" height="40" 
+                  class="yzj-right-distance10 img-circle"/>
+              </span>
+              <span class="col-xs-8 clear-both">
+                {{user.profile.name}}<br/>服务方
+              </span>
+              <span class="clearfix"></span>
+            </a>
+          </span>
+        {% endif %}
+
+        {% for x in user.team %}
+          <span class="d-list">
+            <a href="/users/c/{{x.uuid}}">
+              <span class="col-xs-3 clear-left"> 
+                <img class="img-circle" src="{{x.logo}}" 
+                    width="40" height="40"/>
+              </span>
+              <span class="col-xs-8 clear-both">
+               {{ x.name }}<br/>需求方
+              </span>
+              <span class="clearfix"></span>
+            </a>
+          </span>
+        {% endfor %}
+        <span class="d-list">
+          <a href="/settings">
+            <span class="col-xs-3 clear-left text-center"> 
+              <img src="/static/images/setting-icon.png"/>
+            </span>
+            <span class="col-xs-8 clear-both">设置</span>
+            <span class="clearfix"></span>
+          </a>
+        </span>
+        <span class="d-list">
+          <a href="/signout">
+            <span class="col-xs-3 clear-left text-center"> 
+              <img src="/static/images/exit-icon.png"/>
+            </span>
+            <span class="col-xs-8 clear-both">退出</span>
+            <span class="clearfix"></span>
+          </a>
+        </span>
+      </p>
+    </li>
+  </ul>
+
+  <!-- 搜索框 -->
+  <div id="search_box" class="pull-right search-box" 
+      style="margin-right:-40px;display:none;" >
+    <input id="search_text" class="form-control search-box-text" 
+        type="text" placeholder="搜索"  />
+    <ul>
+      <li class="pull-left search-box-icon dropdown" >
+        <img src="/static/images/nav-icon02.png" class="yzj-right-distance10">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#" 
+            role="button" aria-haspopup="true" aria-expanded="false">
+          <img src="/static/images/nav-down.png">
+        </a>
+        <ul class="dropdown-menu find-down">
+          <span class="active">找项目</span>
+          <span>找高手</span>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+  
+
+      
+

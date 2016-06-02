@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>
+      我的消息
+    </title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/selectize.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/notice.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+  <body>
+    <div id="layout">
+      <!--头部-->
+      <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      </nav>
+      </header>
+      <div id="noticelist" class="container yzj-top-distance30">
+          <!--div class="notice-message">
+            <p>
+              您当前的身份是服务方，在需求方身份下，有{[unread_num]}条未读消息，如需查看，您可以切换为需求方身份
+            </p>
+            <button class="notice-btn">切换为需求者身份</button>
+            <button class="notice-btn hidden">切换为开发者者身份</button>
+          </div-->
+          <div class="table-box">
+            <div class="table-title">
+              <h1>通知</h1>
+              <a v-on:click="get_unread" class="num-no-read {[current_status==1?'active':'']}">
+                 未读({[unread_num]})
+              </a>
+              <a v-on:click="get_all" class="num-read {[current_status==0?'active':'']}">
+                 全部({[all_count]})
+              </a>
+            </div>
+            <table class="notice-table">
+                <tbody v-for="notice in notices">
+                  <td width='3%' class="time-center"><span v-show="notice.read_at!=''&&notice.read_at!=null" class="read"></span><span v-show="notice.read_at==''||notice.read_at==null" class="no-read"></span></td>
+                  <td width="80%">
+                    <a id="b_{[notice.id]}" name="{[notice.extra.url]}" target="_blank" style="cursor: pointer;" onclick="seeNotice(this.id.substring(2),this.name)">{[notice.content]}</a>
+                  </td>
+                  <td width="14%" class="time-center">{[notice.create_at]}</td>
+                  <td width="3%" class="time-center"><a class="del-btn" id="list{[notice.id]}" onclick="deleteNotice(this.id)"><img src="/static/images/icon-delete.png"></a></td>
+                </tbody>
+            </table>
+            <div class="yzj-box yzj-top-distance20" v-if="is_null">
+            <p class="text-center yzj-top-distance40">
+            <img src="/static/images/nofavorite-icon.png">
+            </p>
+            <p class="yzj-bot-distance40 text-center yzj-top-distance20 yzj-size-16">您目前还没有通知~</p>
+            </div>
+            <div class="clearfix"></div>
+            <div class="pageNotify" v-page="pageObject" v-bind:query="pageChange"></div>
+            <div class="clearfix"></div>
+          </div>
+      </div>
+    </div>
+
+{% include "footer.html" %}
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/common/js/vue-directive.js"></script>
+<script src="/static/js/notice.js"></script>
+</body>
+</html>

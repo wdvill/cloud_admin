@@ -1,0 +1,1 @@
+ALTER TABLE `feedback` ADD COLUMN `contract` VARCHAR(50) NOT NULL DEFAULT '';

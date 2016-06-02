@@ -1,0 +1,111 @@
+.add-milestone {
+  margin-top: 50px;
+
+  .header {
+    font-size: 18px;
+    color: #333333;
+  }
+
+  .body {
+    padding: 40px;
+    margin-top: 20px;
+    background: #ffffff;
+  }
+
+  h4 {
+    font-size: 16px;
+    color: #333333;
+    padding-bottom: 20px;
+  }
+
+  .contract-info {
+    padding-left: 0;
+
+    li {
+      font-size: 16px;
+      padding: 14px 0;
+      line-height: 1;
+      color: #666666;
+    }
+
+    a {
+      color: #ff6204;
+    }
+
+    span {
+      display: inline-block;
+      width: 150px;
+    }
+  }
+
+  table {
+    width: 100%;
+    font-size: 16px;
+    color: #666666;
+
+    th {
+      padding-left: 25px;
+      width: 30%;
+      font-weight: 400;
+      line-height: 40px;
+    }
+
+    td {
+      padding: 5px 0;
+    }
+
+    input[type=text] {
+      width: 260px;
+      height: 46px;
+      padding: 0 20px;
+      border: 1px solid #e0e0e0;
+    }
+
+    .text-block {
+      display: inline-block;
+      width: 25px;
+      vertical-align: middle;
+    }
+  }
+
+  .btn-add-milestone {
+    display: inline-block;
+    padding: 11px 20px;
+    margin-left: 25px;
+    margin-top: 5px;
+    font-size: 14px;
+    color: #ff6204;
+    border: 1px solid #ff6204;
+    line-height: 1;
+  }
+
+  .footer {
+    padding-top: 60px;
+    margin-top: 40px;
+    border-top: 1px solid #e0e0e0;
+    text-align: center;
+      
+    a {
+      display: inline-block;
+      width: 180px;
+      padding: 17px 0;
+      margin: 0 5px;
+      text-align: center;
+      font-size: 16px;
+      line-height: 1;
+    }
+
+    a:first-child {
+      color: #ffffff;
+      background: #ff6204;
+      border: 1px solid #ff6204;
+    }
+
+    a:last-child {
+      color: #999999;
+      background: #ffffff;
+      border: 1px solid #999999;
+    }
+
+  }
+}

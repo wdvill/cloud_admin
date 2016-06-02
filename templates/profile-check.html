@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>资料审核</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+	<div>
+		<!--头部-->
+		<header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+      </nav>
+    </header>
+
+		<div id="layout" class="container yzj-top-distance50">
+			<div class="col-xs-offset-3 col-xs-6 clear-both">
+				<h3 class="text-muted text-center">
+					干得漂亮，现在您的资料已经完成
+				</h3>
+				<div class="yzj-box yzj-top-distance50">
+					<div class="col-xs-3 clear-left">
+						<img src="/static/images/default-img.png" width="100" height="100">
+					</div>
+					<div class="col-xs-9">
+						<h3 class="text-info">赵四</h3>
+						<h4 class="text-info yzj-top-distance15">产品经理</h4>
+						<h5 class="text-warning yzj-top-distance15">预览我的全部资料</h5>
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="col-xs-12 clear-left yzj-top-distance50">
+					<div class="col-xs-6 clear-right">
+						<button class="btn btn-block btn-primary">提交我的资料</button>
+					</div>
+					<div class="col-xs-6 clear-right">
+						<button class="btn btn-block btn-default">保存草稿</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include "footer.html" %}
+
+	<script src="/static/js/jquery-2.1.4.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/selectlist.js"></script>
+	<script src="/static/js/editicon-dis.js"></script>
+	<script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>查找服务方</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% if user != None %}
+          {% if user.identify[0] == "c" %}
+          {% include "include/header/client-top.html" %}
+          </div>
+          {% include "include/header/client-freelancer.html" %}
+          {% else %}
+          {% include "include/header/freelancer-top.html" %}
+          </div>
+          {% endif %}
+
+        {% else %}
+        {% include "include/header/header-nologin.html" %}
+        {% endif %}
+      </nav>
+    </header>
+    <div id="body" class="container yzj-top-distance50">
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class="col-xs-10 clear-left">
+          <input type="text" class="form-control search-box-works" placeholder="请输入关键字" v-model="keyword" v-on:keyup.enter="searchkeyword()"/>
+          <img src="/static/images/nav-icon02.png" class="yzj-right-distance10 yzj-top-distance-55 yzj-left-distance20">
+        </div>
+        <div class="col-xs-2 clear-left">
+        <button class="btn btn-block btn-default" v-on:click="searchkeyword()">
+          {{_("Search", lang)}}</button>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-top-distance50 yzj-box">
+      <!--搜索条件-->
+      <div class="col-xs-12 clear-both">
+        <div class="col-xs-4 clear-left">
+          <select class="form-control" v-model="categorys">
+            <option value="">全部分类</option>
+            <option v-for="item in category" value="{[item.category_id]}">{[item.name]}</option>
+          </select>
+        </div>
+<!--         <div class="col-xs-3 clear-left">
+  <select class="form-control" v-model = "coop_rate">
+    <option selected="selected">成功率</option>
+    <option>2</option>
+    <option>3</option>
+    <option>4</option>
+  </select>
+</div> -->
+        <div class="col-xs-3 clear-left">
+          <select class="form-control" v-model = "hourly_range">
+            <option value="0" selected = "selected">全部时薪</option>
+            <option value="1">50元/小时及以下</option>
+            <option value="2">50元/小时-100元/小时</option>
+            <option value="3">100/小时-150/小时</option>
+            <option value="4">150/小时及以上</option>
+          </select>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="line" style="margin-left:-30px;margin-right:-30px;"></div>
+      <div class="yzj-top-distance70 text-center" v-if="users.length==0">
+        <img src="/static/images/nofavorite-icon.png"/>
+      </div>
+      <p class="yzj-top-distance30 yzj-size-16 text-info text-center" v-if="users.length==0">没有匹配到哦,换一个搜索条件也许会有更多结果哦!</p>
+      <div class="col-xs-12 clear-both" v-for="item in users">
+        <div class="col-xs-2 clear-both">
+          <img class="category img-circle" v-bind:src="item.avatar" width="102" height="102" v-on:click="show_person_detail(item.id)" />
+          <p class="yzj-top-distance20">
+          <a class="btn btn-sm btn-default" v-if="!item.favorite" v-on:click="collect_person(item.id)">收藏</a>
+          <a class="btn btn-sm btn-primary" v-if="item.favorite">已收藏</a>
+          </p>
+        </div>
+        <div class="col-xs-8 clear-left">
+          <a class="text-muted yzj-size-16 category" v-on:click="show_person_detail(item.id)"><strong>{[item.name]}</strong></a>
+          <p class="yzj-size-14 yzj-top-distance10">{[item.title]}</p>
+          <p class="yzj-size-14 yzj-top-distance15">
+            <img src="/static/images/address.png" class="yzj-right-distance10">
+            {[item.location]}
+          </p>
+          <p class="yzj-size-12 yzj-top-distance15 yzj-height30">
+            {[item.overview]}
+          </p>
+          <p class="yzj-top-distance15">
+            <span class="label label-default" v-for="skill in item.skills">
+            {[skill]}
+            </span>
+          </p>
+        </div>
+        <div class="col-xs-2 clear-right text-right text-info">
+          <p>
+          <a href="/freelancers/{[item.id]}/invite" class="btn btn-block btn-primary">邀请工作</a></p>
+          <p class="yzj-top-distance20 yzj-size-14">
+            <!-- <img src="/static/images/level-icon.png" class="yzj-right-distance10" />最受好评 -->
+          </p>
+          <p class="yzj-top-distance15 yzj-size-14">
+          时薪 <strong>{[item.hourly]}元</strong>/小时
+          </p>
+          <p class="yzj-top-distance15 yzj-size-14">
+          工作总时长 <strong>{[item.hours]}</strong>小时
+          </p>
+        </div>
+        <div class="clearfix"></div>
+        <div class="line03"></div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-top-distance30 text-right">
+        <div v-page="pageObject" v-bind:query="searchperson"></div>
+      </div>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/js/frontend/findperson-list.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

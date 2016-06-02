@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>申请人列表</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+  <div id="body" v-on:click="hideList">
+    <div id="layout" class="container yzj-top-distance50">
+      <div role="alert" class="alert alert-success" style="margin-top:-40px;display:none"></div>
+      <h4 class="text-muted"><strong>{{job.name}}</strong></h4>
+      <div class="yzj-top-distance10 applicant-list-nav">
+        <ul>
+          <li class="applicant-list-detail"><i></i><a href="/jobs/{[job_id]}">查看项目详情</a></li>
+          <li class="applicant-list-edit"><i></i><a href="/jobs/{[job_id]}/edit">编辑项目</a></li>
+          <li class="applicant-list-close"><i></i><a data-toggle="modal" data-target="#confirmModal" href="javascript:;">关闭项目</a></li>
+        </ul>
+      </div>
+      <div v-show="show_page.recommend">{% include "client/client-recommend-list.html" %}</div>
+      <div v-show="show_page.appli">{% include "client/client-applicant-list.html" %}</div>
+      <div v-show="show_page.msg">{% include "client/client-interview-list.html" %}</div>
+      <div v-show="show_page.hire">{% include "client/client-hire-list.html" %}</div>
+      <div v-show="show_page.archive">{% include "client/client-archive-list.html" %}</div>
+    </div>
+
+
+    <proposal_detail :item="proposal_detail" :messages="messages"></proposal_detail>
+
+    <div class="modal fade bs-example-modal-lg choose-sort" id="favorite" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="yzj-size-30">&times;</span>
+        </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+            <h3 class="modal-title text-muted text-center">收藏</h3>
+            <div class="yzj-size-16 text-center yzj-top-distance30" style="padding:0 50px 30px 30px">
+              <p class="text-info yzj-height40 text-left" style="width:530px;margin:0 auto;">添加备注可以快速了解服务方的信息哦！</p>
+              <div class="text-info yzj-size-14 yzj-height40">
+                <textarea class="bidTextarea" rows="3" v-model="favorite_message" name="favorite_message"></textarea>
+                <div style="margin-left:-350px">
+                  <error name="favorite_message"></error>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" v-on:click.stop="add_favorite">收藏</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 提示框 -->
+    <strap-alert :msg="alert.msg" :title="alert.title" :show-type="alert.showType" :callback="alert.callback" :show-alert.sync="alert.showAlert"></strap-alert>
+    <!-- 确认框 -->
+    <confirm :title="confirm.title" :msg="confirm.msg" modal-id="confirmModal" :ok-fn.sync="confirm.okFn"></confirm>
+    <!-- 发送消息 -->
+    <send-message v-if="proposal_id" :proposal-id="proposal_id" :load="load" :select-count="select_count"></send-message>
+
+    <div class="modal fade bs-example-modal-lg choose-sort" id="archive" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="yzj-size-30">&times;</span>
+        </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+            <h3 class="modal-title text-muted text-center">归档</h3>
+            <div class="yzj-size-16" style="padding:30px 60px">
+              <div class="text-info yzj-size-14 yzj-height40">
+                <p v-for="item in archive_questions"><input type="radio" name="reason" value="{[item.question_id]}" v-model="archive_question" v-on:change="archiveOffer">{[item.name]}</p>
+              </div>
+              <p class="yzj-top-distance30 yzj-height30">服务方不会看到这条信息，你的反馈是对云沃客最大的帮助，我们将尽可能为您提供更好的服务</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal fade bs-example-modal-lg choose-sort" id="refuse" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+      <div class="modal-dialog contract-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true" class="yzj-size-30">&times;</span>
+        </button>
+          </div>
+          <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+            <h3 class="modal-title text-muted text-center">拒绝申请</h3>
+            <div class="yzj-size-16 yzj-top-distance50" style="padding-left:60px">
+              <p>选择一个原因，让这个申请人知道你为什么没有接受他，发送消息给他吧</p>
+              <p class="yzj-top-distance10 text-warning">一旦拒绝，对方将无法再次投标该项目，请谨慎操作。若对对方的投标不满意，可联系对方重新投标。</p>
+              <h4 class="text-info yzj-top-distance30"><strong>选择一个拒绝的原因</strong></h4>
+              <div class="text-info yzj-size-14 yzj-top-distance30 yzj-height40">
+                <p v-for="item in refuse_questions"><input type="radio" name="reason" value="{[item.question_id]}" v-model="refuse_question">{[item.name]}</p>
+              </div>
+              <div class="yzj-top-distance30">
+                <p class="yzj-size-16"><span class="text-muted">消息</span>（可选）</p>
+                <textarea rows="5" class="bidTextarea yzj-top-distance20" style="width:620px;resize:none" v-model="reason"></textarea>
+              </div>
+              <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-primary btn-block yzj-right-distance15" v-on:click.stop="refuseOffer">发送</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/production/client_applicant_list.min.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

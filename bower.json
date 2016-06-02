@@ -1,0 +1,30 @@
+{
+  "name": "yzj",
+  "description": "云族佳前端第三方库",
+  "authors": [
+    "shinygang"
+  ],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "js-cookie": "^2.1.0",
+    "selectize": "^0.12.1",
+    "bootstrap": "^3.3.6",
+    "amazeui": "^2.5.2",
+    "vue": "^1.0.17",
+    "Jcrop": "Jcrop#^0.9.12",
+    "jquery": "2.1.4",
+    "bootstrapvalidator": "bootstrapValidator#^0.5.3",
+    "jquery-i18n-properties": "^1.2.2",
+    "jquery-dateFormat": "^1.0.2"
+  },
+  "devDependencies": {
+    "jquery-validation": "^1.15.0",
+    "underscore": "^1.8.3"
+  }
+}

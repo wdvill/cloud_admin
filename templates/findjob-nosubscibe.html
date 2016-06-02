@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+      </nav>
+    </header>
+
+    <div id="layout" class="container yzj-top-distance30">
+      <!--左侧-->
+      <div class="col-xs-2 clear-both">
+        <div class="yzj-box">
+          <!--我的订阅-->
+          <div class="text-primary">
+            <h4>我的订阅</h4>
+            <p class="yzj-top-distance20 yzj-size-16">
+              <span class="pull-left">
+              <a href="javascript:()" class="active">订阅1</a></span>
+              <span class="pull-right hide">
+              <img src="/static/images/del-btn-icon.png">
+              </span>
+            </p>
+            <div class="clearfix"></div>
+            <p class="yzj-top-distance20 yzj-size-16">
+              <span class="pull-left">
+              <a href="javascript:()">订阅1</a></span>
+              <span class="pull-right hide">
+              <img src="/static/images/del-btn-icon.png">
+              </span>
+            </p>
+            <div class="clearfix"></div>
+            <p class="yzj-top-distance20 yzj-size-16">
+              <span class="pull-left">
+              <a href="javascript:()">为我推荐</a></span>
+              <span class="pull-right hide">
+              <img src="/static/images/del-btn-icon.png">
+              </span>
+            </p>
+            <div class="clearfix"></div>
+          </div>
+          <!--我的订阅-->
+          <div class="yzj-top-distance40 yzj-size-14">
+          <h4 class="text-info">
+          <span class="pull-left">我的类别</span>
+          <span class="pull-right">
+            <a href="javascript:()">
+            <img src="/static/images/edit-btn-icon.png"></a>
+          </span>
+          </h4>
+          <div class="clearfix"></div>
+          <div class="line"></div>
+            <p class="yzj-top-distance20">
+              <a class="text-warning" href="javascript:()">桌面软件开发</a>
+            </p>
+            <p class="yzj-top-distance20">
+              <a class="text-warning" href="javascript:()">电子商务开发</a>
+            </p>
+            <p class="yzj-top-distance20 text-warning">
+              <a class="text-warning" href="javascript:()">游戏开发</a>
+            </p>
+            <p class="yzj-top-distance20 text-warning">
+              <a class="text-warning" href="javascript:()">手机应用开发</a>
+            </p>
+          </div>
+          <!--最近搜索-->
+          <div class="yzj-top-distance40 yzj-size-14">
+          <h4 class="text-info">
+          <span class="pull-left">最近搜索</span>
+          <span class="pull-right hide">
+            <a href="javascript:90">
+            <img src="/static/images/edit-btn-icon.png"></a>
+          </span>
+          </h4>
+          <div class="clearfix"></div>
+          <div class="line"></div>
+            <p class="yzj-top-distance20">
+              <a class="text-warning" href="javascript:()">桌面软件开发</a>
+            </p>
+            <p class="yzj-top-distance20">
+              <a class="text-warning" href="javascript:()">电子商务开发</a>
+            </p>
+            <p class="yzj-top-distance20 text-warning">
+              <a class="text-warning" href="javascript:()">游戏开发</a>
+            </p>
+            <p class="yzj-top-distance20 text-warning">
+              <a class="text-warning" href="javascript:()">手机应用开发</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      <!--中间-->
+      <div class="col-xs-8">
+        <div class="yzj-box">
+        <h4 class="text-muted">我的订阅</h4>
+        <div class="line"></div>
+        <div class="yzj-top-distance50"></div>
+        <div class="clearfix"></div>
+        <div class="text-center yzj-top-distance50">
+          <img src="/static/images/nofavorite-icon.png"/>
+        </div>
+        <div class="yzj-top-distance20 yzj-size-16 text-center">没有找到相应的工作~</div>
+        </div>
+      </div>
+    <!--右侧-->
+      <div class="col-xs-2 clear-both">
+        <div class="yzj-box">
+          <p class="text-center"><img src="/static/images/default-img.png" class="img-circle" width="64" height="64"></p>
+          <p class="yzj-top-distance20 yzj-size-14">可用性</p>
+          <p class="yzj-top-distance10">
+          <span class="pull-left yzj-size-14 text-muted">暂不接受工作</span>
+          <span class="pull-right">
+            <a href="javascript:()"><img src="/static/images/edit-btn-icon.png"></a>
+          </span>
+          </p>
+          <div class="clearfix"></div>
+          <div class="col-xs-12 clear-both yzj-top-distance20 ">
+            <div class="col-xs-8 clear-both yzj-right-distance10">
+              <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="50" style="width: 50%;">
+                  <span class="sr-only">50% Complete</span>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-3 clear-both yzj-size-14 text-muted">
+              <strong>50%</strong>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <button class="btn btn-block btn-primary">查看我的档案</button>
+          <div class="yzj-top-distance20"></div>
+          <div class="clearfix"></div>
+          <div class="line02"></div>
+          <div class="text-center">
+            <img src="/static/images/computer-icon.png"/>
+          </div>
+          <div class="yzj-top-distance20 yzj-size-14 yzj-height30">
+          <a href="javascript:()" class="text-warning">下载桌面软件记录工作时长</a>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/js/selectlist.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('select').selectlist({
+          zIndex: 10,
+        });   
+      })
+    </script>
+  </body>
+  </html>

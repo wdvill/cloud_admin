@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>帮助中心--搜索结果</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% if user %}
+            {% include "header.html" %}
+          {% else %}
+            {% include "header-nologin.html" %}
+          {% endif %}
+        </div>
+      </nav>
+    </header>
+  </div>
+  <div class="help-page" id="body"  v-cloak>
+    <input type="hidden" id="topic-id" value="{{tid}}" v-model="num_input" />
+    <div class="banner">
+        <input type="search" placeholder="输入您要查找的问题..." @keyup.enter="onEnter" v-model="search_content">
+    </div>
+    <div class="main container">
+      <div class="slider-left">
+        <h2>帮助中心</h2>
+        <ul class="help-menu">
+          {% for t in topics %}
+          <li data-tid={{t.id}} v-model="num_li"><a v-bind:class="num_input=={{t.id}}?'active':''" href="/help/topic/{{t.id}}">{{ t.name }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="body">
+        {% if is_hot %}
+        <h3 class="help-title">热门问题</h3>
+        {% else %}
+        <h3 class="help-title">问题列表</h3>
+        {% endif %}
+        <div class="clearfix">
+          <!-- 热门帮助列表 -->
+          <ul class="help-hot-list">
+            {% for x in hots %}
+            <li><a href="/help/{{x.id}}">{{ x.title}}</a></li>
+            {% endfor %}
+          </ul>
+
+          <!-- 右侧联系方式 -->
+          <div class="contact-slider">
+            <contact></contact>
+          </div>
+          <modal :showmodal.sync="modals.float_msg">
+            <feedback slot="content"></feedback>
+          </modal>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+  <script src="/static/production/help-hot.min.js"></script>
+</body>
+</html>

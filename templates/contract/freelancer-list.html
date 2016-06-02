@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>我的合同</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+    <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+  <body>
+    <div>
+      <!--头部-->
+      <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "include/header/freelancer-myjobs.html" %}
+      </nav>
+      </header>
+      <div id="contract" class="container yzj-top-distance50">
+        <h2 class="text-muted yzj-size-18">我的合同</h2>
+        <div class="yzj-top-distance10 yzj-box text-center yzj-size-18" v-if = "contracts.length<=0">
+          <p class="text-center yzj-top-distance40">
+          <img src="/static/images/nofavorite-icon.png">
+          </p>
+          <p class="yzj-bot-distance40 text-center yzj-top-distance20 yzj-size-16">您还没有合同--<a href="">找一份工作吧</a></p>
+        </div>
+        <div class="yzj-box yzj-top-distance20" v-if = "contracts.length > 0">
+          <table class="table work-sort" style="border: 1px solid #ddd;">
+            <thead>
+              <tr>
+                <td width="30%">合同名称</td>
+                <td width="20%">时间</td>
+                <td width="20%">价格</td>
+                <td width="10%">状态</td>
+                <td width="20%">&nbsp;</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="yzj-size-14" v-for="contract in contracts">
+                <td>
+                <a href="/freelancers/contracts/{[contract.id]}">{[contract.name]}</a>
+                
+                </td>
+                <td><p>{[contract.accept_at | year_month_day]}-
+                  <span v-if="contract.actual_end_at == ''">至今</span>
+                  <span v-else>{[contract.actual_end_at | year_month_day]}</span>
+                  </p></td>
+                <td>
+                  <p v-show="contract.job.paymethod === 'fixed'" class="text-info">定价：¥ {[contract.amount]}</span>
+                  <p v-show="contract.job.paymethod === 'hour'" class="text-info">¥ {[contract.hourly]}/小时</span>
+                  <p v-show="contract.job.paymethod === 'hour'" class="text-info">最大工作时长{[contract.workload]}小时/周</span>
+                </td>
+                <td class="text-info" v-if="contract.status != '争议中'">{[contract.status]}</td>
+                <td class="text-info" v-else>已结束<p class="text-warning">争议中</p></td>
+                <td>
+                  <a  v-if="contract.job.paymethod=='hour'" style="margin-bottom: 10px;" class="text-warning" href="/freelancers/diary?contract_id={[contract.id]}">工作日志 &gt; &gt;</a>
+                  <p class="yzj-size-14" v-if="!contract.is_evaluate && (contract.status_e=='dispute'||contract.status_e=='service'||contract.status_e=='finish')">
+                    <a class="text-warning" href="/contracts/{[contract.id]}/evaluate">评价需求者 &gt; &gt;</a>
+                  </p>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/production/contract_list_freelancer.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+</html>
+

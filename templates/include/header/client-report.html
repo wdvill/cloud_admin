@@ -1,0 +1,36 @@
+<div class="clearfix"></div>
+<div class="navbar-default nav-sub-column yzj-size-14">
+  <div class="container">
+    <ul>
+      {% if sec_nav=="weekly" %}
+      <li class="active"><a href="/clients/reports/weekly">每周总结</a></li>
+      <li><a href="/clients/reports/budget">预算</a></li>
+      <li><a href="/clients/reports/timesheet">工时表</a></li>
+      <li><a href="/clients/reports/trade">交易记录</a></li>
+      {% elif sec_nav=="budget" %}
+      <li><a href="/clients/reports/weekly">每周总结</a></li>
+      <li class="active"><a href="/clients/reports/budget">预算</a></li>
+      <li><a href="/clients/reports/timesheet">工时表</a></li>
+      <li><a href="/clients/reports/trade">交易记录</a></li>
+      {% elif sec_nav=="timesheet" %}
+      <li><a href="/clients/reports/weekly">每周总结</a></li>
+      <li><a href="/clients/reports/budget">预算</a></li>
+      <li class="active"><a href="/clients/reports/timesheet">工时表</a></li>
+      <li><a href="/clients/reports/trade">交易记录</a></li>
+      {% elif sec_nav=="trade" %}
+      <li><a href="/clients/reports/weekly">每周总结</a></li>
+      <li><a href="/clients/reports/budget">预算</a></li>
+      <li><a href="/clients/reports/timesheet">工时表</a></li>
+      <li class="active"><a href="/clients/reports/trade">交易记录</a></li>
+      {% else %}
+      <li><a href="/clients/reports/weekly">每周总结</a></li>
+      <li><a href="/clients/reports/budget">预算</a></li>
+      <li><a href="/clients/reports/timesheet">工时表</a></li>
+      <li><a href="/clients/reports/trade">交易记录</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>公司认证</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+
+    <div id="body" class="container yzj-top-distance30">
+      <!--左侧-->
+      {% include "client/client-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>公司认证</strong></h4>
+        <div class="yzj-top-distance20 yzj-box">
+
+          <div class="alert"  role="alert" 
+              :class="checkStatus.style">
+            <span></span>
+            {[checkStatus.msg]}  
+          </div>
+
+          <form class="form-horizontal yzj-top-distance30 yzj-size-16" id="form-verify">
+          <div class="form-group" style="line-height:40px" v-if="profile.company_verify.is_verify=='uncheck'">
+            <div class="col-xs-12 ">
+              <p class="text-info">认证说明</p>
+              <p class="yzj-size-14">
+              1.需求方有两种认证方式，个人认证和公司认证。
+              </p>
+              <p class="yzj-size-14">
+              2.您在管理账户时所绑定的银行卡和支付宝的所有人（公司）必须与认证身份一致。否则将无法提现。
+              </p>
+            </div>
+          </div>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 企业/机构名称</label>
+            <div class="col-xs-6 clear-left">
+              <input type="text" class="form-control" name="company_name" required required-msg="企业/机构名称不能为空" v-model="company_name" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'"/>
+              <p class="yzj-height50" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">{[profile.company_name]}</p>
+            </div>
+          </div>
+          <error name="company_name"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 营业执照注册号</label>
+            <div class="col-xs-6 clear-left">
+              <input type="text" class="form-control" name="permit_number" v-model="permit_number" required required-msg="营业执照不能为空" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'"/>
+              <p class="yzj-height50" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">{[profile.permit_number]}</p>
+            </div>
+          </div>
+          <error name="permit_number"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 组织机构代码证</label>
+            <div class="col-xs-6 clear-left">
+              <input type="text" class="form-control" name="org_number" v-model="org_number" required required-msg="组织机构代码证不能为空" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'"/>
+              <p class="yzj-height50" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">{[profile.org_number]}</p>
+            </div>
+          </div>
+          <error name="org_number"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 联系人</label>
+            <div class="col-xs-6 clear-left">
+              <input type="text" class="form-control" name="name" v-model="name" required required-msg="联系人不能为空" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'"/>
+              <p class="yzj-height50" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">{[profile.contact]}</p>
+            </div>
+          </div>
+          <error name="name"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 联系电话</label>
+            <div class="col-xs-6 clear-left">
+              <input type="text" class="form-control" name="phone" v-model="phone" required required-msg="联系电话不能为空" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'"/>
+              <p class="yzj-height50" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">{[profile.contact_phone]}</p>
+            </div>
+          </div>
+          <error name="phone"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 营业执照扫描件</label>
+            <div class="clear-both">
+              <img v-bind:src="profile.permit_img" width="240" height="150">
+            </div>
+            <div class="col-xs-offset-3 clear-left yzj-size-14 text-left text-info" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'">
+              <!--上传框-->
+              <div class="inputfileload pull-left yzj-right-distance15 yzj-top-distance15">
+                <div class="uploadphoto">选择文件</div>
+                <input type="file" class="inputfile" required required-msg="请上传营业执照扫描件" id="permit" name="permit" accept="image/*" v-if="profile.company_verify.is_verify=='uncheck'" v-on:change="onload_file('permit')" />
+                <input type="file" class="inputfile" id="permit" name="permit" accept="image/*" v-if="profile.company_verify.is_verify=='unpass'" v-on:change="onload_file('permit')" />
+              </div>
+              <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+            </div>
+          </div>
+          <error name="permit"></error>
+
+          <div class="form-group text-info">
+            <label class="control-label col-xs-3 text-left"><span class="text-warning">*</span> 组织机构代码证</label>
+            <div class="clear-both">
+              <img v-bind:src="profile.org_img" width="240" height="150">
+            </div>
+            <div class="col-xs-offset-3 clear-left yzj-size-14 text-left text-info" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'">
+              <!--上传框-->
+              <div class="inputfileload pull-left yzj-right-distance15 yzj-top-distance15">
+                <div class="uploadphoto">选择文件</div>
+                <input type="file" class="inputfile" required required-msg="请上传组织机构代码证" id="org" name="org" accept="image/*" v-if="profile.company_verify.is_verify=='uncheck'" v-on:change="onload_file('org')" />
+                <input type="file" class="inputfile" id="org" name="org" accept="image/*" v-if="profile.company_verify.is_verify=='unpass'" v-on:change="onload_file('org')" />
+              </div>
+              <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+            </div>
+          </div>
+          <error name="org"></error>
+
+          <div class="form-group yzj-top-distance50" v-if="profile.company_verify.is_verify=='uncheck' || profile.company_verify.is_verify=='unpass'">
+            <div class="col-xs-offset-3 col-xs-6 clear-left">
+              <div class="col-xs-6 clear-left">
+                <input type="button" class="btn btn-primary btn-block" value="提交认证" v-on:click="verify">
+              </div>
+            </div>
+          </div>
+          <div class="form-group yzj-top-distance50 yzj-bot-distance70" v-if="profile.company_verify.is_verify=='pass' || profile.company_verify.is_verify=='checking'">
+            <div class="col-xs-11 yzj-size-14">
+              <p>您在账户管理中所绑定的银行卡和支付宝必须与认证身份一致，如想更改认证信息，请联系客服
+                <a class="btn btn-primary" href="javascript:;" style="margin-left:20px;padding:0px 20px;height:35px;line-height:35px;font-size:14px">联系客服</a>
+              </p>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <alert :msg="error_msg"></alert>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/production/client_setting_conidentify.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+  </html>

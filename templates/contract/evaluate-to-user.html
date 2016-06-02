@@ -1,0 +1,31 @@
+<div v-if="contract.evaluate.team.content != undefined" class="col-xs-8 line_height20">
+                <ul class="start_list" style="margin-top: 0px;">          
+                <li style="overflow: hidden;">
+                  <div v-yzj_star:star="contract.evaluate.team.exchange"></div>
+                  <em style="margin-top: -5px;">沟通</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li style="overflow: hidden;">
+                  <div v-yzj_star:star="contract.evaluate.team.punctual"></div>
+                  <em style="margin-top: -5px;">守时率</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li style="overflow: hidden;">
+                  <div v-yzj_star:star="contract.evaluate.team.cooper"></div>
+                  <em style="margin-top: -5px;">合作</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li style="overflow: hidden;">
+                  <div v-yzj_star:star="contract.evaluate.team.quality"></div>
+                  <em style="margin-top: -5px;">工作质量</em>
+                  <div class="clearfix"></div>
+                </li>
+                <li style="overflow: hidden;">
+                  <div v-yzj_star:star="contract.evaluate.team.skill"></div>
+                  <em style="margin-top: -5px;">技能</em>
+                  <div class="clearfix"></div>
+                </li>
+              </ul>
+              <p class="font14" style="margin-bottom:10px; margin-top: -10px"><b>总分：{[totalc]}分</b></p>
+              <p class="font14"><b>评价：</b>{[contract.evaluate.team.content]}</p>
+            </div>

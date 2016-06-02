@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+<div id="layout">
+    <div class="container yzj-top-distance30">
+      <!--左侧-->
+      {% if user.identify[0] == "f" %}
+      {% include "freelancer-setting-sider.html" %}
+      {% else %}
+      {% include "client/client-setting-sider.html" %}
+      {% endif %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>账户提现</strong></h4>
+        <div class="yzj-top-distance20 yzj-box">
+            <div class="yzj-top-distance10">
+              <form class="form-horizontal">
+                <div class="yzj-size-16">
+                  <label class="control-label col-xs-2 clear-left text-left">提现账户
+                  </label>
+                  <div class="col-xs-5 clear-left">
+                    <select class="form-control select-control" id="city">
+                      <option>账户一</option>
+                      <option>账户二</option>
+                      <option>账户三</option>
+                      <option>账户四</option>
+                      <option>账户五</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="yzj-size-16 yzj-top-distance15">
+                  <label class="control-label col-xs-2 clear-left text-left">提现金额
+                  </label>
+                  <div class="col-xs-5 clear-left">
+                    <input type="text" class="form-control"/>
+                  </div>
+                  <label class="control-label">元</label>
+                </div>
+
+                <div class="yzj-size-16 yzj-top-distance30">
+                  <label class="control-label col-xs-2 clear-left text-left">手机验证码
+                  </label>
+                  <div class="col-xs-3 clear-both">
+                      <input type="text" class="form-control"/>
+                  </div>
+                  <div class="col-xs-2">
+                  <button class="btn btn-primary btn-block">发送验证码
+                  </button>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="yzj-top-distance40 col-xs-offset-2 col-xs-3 clear-both">
+                <button class="btn btn-primary btn-block">确认提现</button>
+                </div>
+                <div class="clearfix"></div>
+                <div class="yzj-top-distance20"></div>
+              </form>
+            </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/selectlist.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('select').selectlist({
+          zIndex: 10,
+        });   
+      })
+    </script>
+  </body>
+  </html>

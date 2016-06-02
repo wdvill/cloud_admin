@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>找工作</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+      </nav>
+    </header>
+
+    <div id="layout" class="container yzj-top-distance50" id="find-job-con">
+      <!--左侧-->
+      <div class="col-xs-3 clear-left">
+        <div class="col-xs-12 clear-both">
+          <h4 class="text-muted"><strong>{{_("Category", lang)}}</strong></h4>
+          <form class="form-horizontal">
+            <div class="yzj-top-distance20">
+              <select class="form-control" v-model="category_pid" v-bind:change="select_child_category()">
+						<option value="" selected="true">选择类别</option>
+						<option v-for="item in categories"  v-bind:value="item.category_id">
+							{[ globel[item.name] ]}
+						</option>
+					</select>
+            </div>
+            <div class="line"></div>
+            <h4 class="text-muted">子分类</h4>
+            <div class="yzj-top-distance20 yzj-size-14 text-info">
+              <p class="yzj-top-distance20" v-for="item in child_categories">
+                <input type="checkbox" v-model="category_ids" v-bind:value="item.category_id" class="bigbox"> {[ globel[item.name] ]}
+              </p>
+            </div>
+            <div class="line"></div>
+            <h4 class="text-muted">{{_("Job Type", lang)}}</h4>
+            <div class="yzj-top-distance20 yzj-size-14 text-info">
+              <p class="yzj-top-distance20" v-for="item in globel._paymethod">
+                <input type="checkbox" v-model="paymethods" v-bind:value="$key" class="bigbox"> {[ item ]}
+              </p>
+            </div>
+            <div class="line"></div>
+            <h4 class="text-muted">{{_("Experience Level", lang)}}</h4>
+            <div class="yzj-top-distance20 yzj-size-14 text-info">
+              <p class="yzj-top-distance20" v-for="item in globel._level">
+                <input type="checkbox" v-model="levels" v-bind:value="$key" class="bigbox"> {[ item ]}
+              </p>
+            </div>
+            <div class="line"></div>
+            <h4 class="text-muted">{{_("Project length", lang)}}</h4>
+            <div class="yzj-top-distance20 text-info yzj-size-14">
+              <p class="yzj-top-distance20" v-for="item in globel._duration">
+                <input type="checkbox" v-model="durations" v-bind:value="$key" class="bigbox"> {[ item ]}
+              </p>
+            </div>
+            <div class="line"></div>
+            <h4 class="text-muted">{{_("Hours per Week", lang)}}</h4>
+            <div class="yzj-top-distance20 text-info yzj-size-14">
+              <p class="yzj-top-distance20" v-for="item in globel._workload">
+                <input type="checkbox" v-model="workloads" v-bind:value="$key" class="bigbox"> {[ item ]}
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!--中间-->
+      <div class="col-xs-9 clear-both">
+        <h4>&nbsp;</h4>
+        <form class="form-horizontal yzj-top-distance20">
+          <div class="col-xs-12 clear-both">
+            <div class="col-xs-10 clear-left">
+              <input type="text" class="form-control text-search" v-model="keyword" placeholder="请输入关键字" />
+            </div>
+            <div class="col-xs-2 clear-both">
+              <button type="button" class="btn btn-default btn-lg btn-search" v-on:click="search()" v-on:keydown="enter($event)">{{_("Search", lang)}}</button>
+            </div>
+          </div>
+        </form>
+        <div class="clearfix"></div>
+        <h5 class="text-warning yzj-top-distance10">高级搜索</h5>
+        <div class="yzj-box yzj-top-distance20">
+          <div class="line"></div>
+          <!--项目列表样式-->
+          <div class="project-list" v-for="item in works">
+            <!--标题-->
+            <div>
+              <span class="pull-left yzj-size-16 project-list-title">
+					<strong><a class="text-info" href="javascript:;">{[ item.name ]}</a></strong></span>
+              <span v-if="!item.favorite" title="收藏" class="glyphicon glyphicon-heart pull-right yzj-size-18 text-primary" v-on:click="collect(item)"></span>
+              <span v-if="item.favorite" title="取消收藏" class="glyphicon glyphicon-heart pull-right yzj-size-18 text-danger" v-on:click="collect(item)"></span>
+              <div class="clearfix"></div>
+            </div>
+            <!--项目参数-->
+            <div class="yzj-top-distance20 text-info yzj-size-14">
+              <span class="yzj-right-distance45" v-if="item.paymethod == 'hour'">付费方式:每小时100(元)</span>
+              <span class="yzj-right-distance45" v-if="item.paymethod == 'fixed'">付费方式:{[ globel._paymethod[item.paymethod] ]}</span>
+              <span class="yzj-right-distance45">难度等级：{[ globel._level[item.level] ]}</span>
+              <span class="yzj-right-distance45">交付时间：{[globel._duration[item.duration]]}</span>
+              <span class="yzj-right-distance45">预算金额：{[ item.budget ]}</span>
+              <span class="yzj-right-distance45">分类：{[ globel[item.category]]} </span>
+            </div>
+            <!--项目描述-->
+            <div class="yzj-top-distance10 yzj-height30 project-detail">
+              {[ item.description ]}
+            </div>
+
+            <!--项目参数-->
+            <div class="yzj-top-distance15 yzj-size-14">
+              <p class="pull-left">
+                <span class="yzj-right-distance10">
+							<strong>需求者：</strong>
+						</span>
+                <p class="pull-left yzj-right-distance45">
+                  <img src="/static/images/star-icon-color.png" />
+                  <img src="/static/images/star-icon-color.png" />
+                  <img src="/static/images/star-icon-color.png" />
+                  <img src="/static/images/star-icon-color.png" />
+                </p>
+              </p>
+              <p class="pull-left">
+                <span class="yzj-right-distance10">
+							<strong>技能：</strong>
+						</span>
+                <span class="label label-default" v-for="tag in item.skills">{[tag]}</span>
+              </p>
+
+              <div class="clearfix"></div>
+            </div>
+            <div class="line"></div>
+          </div>
+
+          <div class="pull-right">
+            <div v-page="pageObject" v-bind:query="query_work_list"></div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/production/find_job.min.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

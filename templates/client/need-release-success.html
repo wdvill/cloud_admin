@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>发布成功</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "include/header/client-top.html" %}
+        </div>
+        {% include "include/header/client.html" %}
+      </nav>
+    </header>
+
+    <div id="body" class="container yzj-top-distance50">
+      <h3 class="text-muted">恭喜！你的项目已经成功发布</h3>
+      <div class="line03"></div>
+      <div class="yzj-box">
+        <h4 class="text-muted">{{job.name}}</h4>
+        <div class="yzj-top-distance20 yzj-size-12 yzj-height30">
+          {{job.description|safe}}
+        </div>
+        <div class="yzj-top-distance10">
+          <span class="yzj-right-distance10 yzj-size-14">
+              技能：
+          </span> {% for skill in job.skills %}
+          <span class="label label-default">{{skill}}</span> {% endfor %}
+        </div>
+      </div>
+      <div v-if="users.length>0">
+        <div class="line03"></div>
+        <h4 class="text-muted yzj-top-distance30">推荐{[users.length]}位自由职业者为你工作</h4>
+        <div class="row yzj-top-distance10 yzj-right-distance0">
+          <div class="col-xs-2dot4 clear-right yzj-top-distance20" v-for="item in users">
+            <div class="yzj-small-box2" v-on:click="select_user(item.id)">
+              <div class="col-xs-4 clear-left">
+                <img class="media-object" v-bind:src="item.avatar" width="40" height="40">
+              </div>
+              <div title="{[item.name]}" class="col-xs-8 yzj-height40 clear-left yzj-size-16">
+                {[item.nametip]}
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <!--具体内容-->
+        <div class="col-xs-12 clear-both yzj-top-distance30">
+          <div class="col-xs-9 clear-both">
+            <!--其中一位详细-->
+            <div class="yzj-box">
+              <div class="col-xs-2 clear-both">
+                <img onclick="window.open('/freelancers/{[choose_one.id]}')" v-bind:src="choose_one.avatar" width="100" height="100" style="cursor:pointer;">
+                <p class="col-xs-11 clear-left yzj-top-distance10">
+                  <button class="btn btn-block btn-default">收藏</button>
+                </p>
+              </div>
+              <div class="col-xs-10 clear-both">
+                <div class="col-xs-12 clear-both">
+                  <div class="yzj-size-16 text-muted">
+                    <p class="pull-left" style="cursor:pointer;" onclick="window.open('/freelancers/{[choose_one.id]}')"><strong>{[choose_one.name]}</strong></p>
+                    <h3 class="pull-right">{[choose_one.hourly]}元 / 小时</h3>
+                  </div>
+                  <div class="clearfix"></div>
+                  <div class="yzj-top-distance20 yzj-size-16">{[choose_one.title]}</div>
+                  <div class="yzj-top-distance15 yzj-size-16 text-muted">
+                    <div class="col-xs-4 clear-left">
+                      <img src="/static/images/address.png" class="yzj-right-distance10">{[choose_one.location.parent_name]}，{[choose_one.location.name]}
+                    </div>
+                  </div>
+                  <div class="clearfix"></div>
+                  <!-- <div class="yzj-top-distance15 yzj-size-14 text-info">
+                                                工作时间：AM 09：30 - PM 05：30
+                                        </div>
+                                        <div class="clearfix"></div> -->
+                  <div class="yzj-top-distance20">
+                    <span class="label label-default label-pro-detail" v-for="i in choose_one.skills">{[i]}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="yzj-top-distance30 yzj-height30 yzj-size-14">
+                <h4 class="text-muted"><strong>简介</strong></h4>
+                <p class="yzj-top-distance20">{[choose_one.overview]}</p>
+              </div>
+            </div>
+            <div class="yzj-box yzj-top-distance30">
+              <h4 class="text-muted pull-left">
+                                            <strong>工作经历与反馈</strong>
+                                    </h4>
+              <!-- <p class="pull-right">
+                                            <select class="form-control select-control choice-select" id="works">
+                                                    <option value="0">最新工作</option>
+                                                    <option value="1">最高金额</option>
+                                                    <option value="2">最低金额</option>
+                                                    <option value="2">最大项目</option>
+                                            </select>
+                                    </p> -->
+              <div class="clearfix"></div>
+              <div class="line"></div>
+              <div class="yzj-size-14">
+                <work v-for="work in works" :itemout="work" :index="$index" :islast="$index==works.length-1 ?'yes':'no'"></work>
+              </div>
+              <div class="text-center loadmore"><a href="javascript:;" onclick="window.open('/freelancers/{[choose_one.id]}')">查看更多</a></div>
+            </div>
+          </div>
+          <div class="col-xs-3 clear-right">
+            <div class="clear-right text-right">
+              <a class="btn btn-block btn-primary" onclick="window.open('/freelancers/{[choose_one.id]}/invite')">邀请他工作</a>
+              <button class="btn btn-default btn-block yzj-top-distance10" @click="employ" data-toggle="modal" data-target="#employ">立即雇佣他</button>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+      <!--添加语言-->
+      <div class="modal fade bs-example-modal-lg invitation" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="yzj-size-30">&times;</span></button>
+            </div>
+            <div class="modal-body">
+              <h3 class="modal-title text-muted text-center" id="myModalLabel">邀请</h3>
+              <form class="form-horizontal yzj-top-distance50">
+                <div class="form-group">
+                  <label class="control-label col-xs-2 col-xs-offset-1 yzj-size-16">
+                                            自由职业者</label>
+                  <div class="col-xs-7">
+                    <div class="media">
+                      <div class="media-left media-middle">
+                        <a href="#">
+                          <img class="media-object" src="/static/images/footer-icon01.png">
+                        </a>
+                      </div>
+                      <div class="media-body yzj-height20">
+                        诚信网站<br> 示范企业
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 立即雇佣modal-->
+      <employ v-if="uuid" :uuid="uuid"></employ>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/production/project_success.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

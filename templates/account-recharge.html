@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>设置中心-钱包-充值</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        <!-- {% include "header-my.html" %} -->
+      </nav>
+    </header>
+
+    <div id="layout" class="container yzj-top-distance50">
+      <!--左侧-->
+      {% include "freelancer-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>账户充值</strong></h4>
+        <div class="yzj-top-distance20 yzj-size-16 yzj-box">
+          <div class="yzj-bot-distance30">收款方：北京云族佳科技有限公司（云沃客第三方项目金托管管理账户）</div>
+          <div class="line"></div>
+          <form id="form-recharge" class="form-horizontal yzj-top-distance30">
+            <div class="form-group text-info">
+              <label class="control-label col-xs-3 text-left">
+                充值金额
+              </label>
+              <div class="col-xs-6 clear-left">
+                  <input type="text" required-msg="充值金额不能为空" required name="price" v-model="price" class="form-control col-xs-10" style="width:83.3333%">
+                  <div class="col-xs-1 yzj-height40">元</div>
+              </div>
+            </div>
+
+            <div class="form-group error-div" name="error" data-name="price">
+              <div class="col-xs-offset-3 col-xs-9 text-warning yzj-size-14">
+                <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                <span class="errorMsg"></span>
+              </div>
+            </div>
+
+            <div class="form-group text-info">
+              <label class="control-label col-xs-3 text-left">
+                选择充值方式
+              </label>
+              <div class="col-xs-9 clear-left table-border">
+                  <div class="pull-left yzj-border text-center recharge-box active">
+                    <p><img src="/static/images/pay-icon.png"></p>
+                  </div>
+              </div>
+            </div>
+
+            <div class="form-group yzj-top-distance50">
+              <div class="col-xs-5 col-xs-offset-7 clear-left">
+                <div class="clear-right text-align-right text-info">
+                  <p class="yzj-top-distance15">充值金额 : {[price]}元 </p>
+                  <p class="yzj-top-distance15">实际支付 : <span class="text-warning">{[price]}</span>元</p>
+                  <input type="button" class="yzj-top-distance30 btn btn-primary btn-block yzj-right-distance0" value="确认充值" v-on:click.stop="recharge" style="width:45%;float:right">
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/production/recharge.min.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+</body>
+</html>

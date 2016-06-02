@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>发送邀请</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body id="body">
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "include/header/client-top.html" %}
+        </div>
+        {% include "include/header/client.html" %}
+      </nav>
+    </header>
+  <div id="body" class="container yzj-top-distance50">
+    <div class="yzj-box">
+      <h4 class="text-muted"><strong>邀请</strong></h4>
+      <div class="yzj-top-distance40 col-xs-12 clear-both yzj-size-16">
+        <div class="form-group">
+          <label class="control-label col-xs-2 clear-left text-left text-info">服务方</label>
+          <div class="col-xs-8 clear-left">
+            <div class="media">
+            <div class="media-left media-middle">
+              <a href="#">
+                <img class="media-object" src="{{freelancer.profile.avatar}}" class="img-circle" width="64" height="64">
+              </a>
+            </div>
+            <div class="media-body yzj-height20">
+              <p class="yzj-size-16"><strong>{{freelancer.profile.name}}</strong></p>
+              <p class="yzj-size-14 yzj-top-distance20">{{freelancer.profile.title}}</p>
+            </div>
+          </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <form id="form-invite">
+        <div class="form-group yzj-top-distance40">
+          <label class="control-label col-xs-2 clear-left text-left text-info">消息</label>
+          <div class="col-xs-8 clear-left">
+            <textarea class="form-control" required required-msg="消息必填" name="message" v-model="message" style="width:800px;height:200px;resize:none;"></textarea>
+          </div>
+        </div>
+        <div style="margin:25px 0px 0px -125px;"><error name="message"></error></div>
+        <div class="clearfix"></div>
+
+        <div class="form-group yzj-top-distance40">
+          <label class="control-label col-xs-2 clear-left text-left text-info">选择为哪份项目雇佣</label>
+          <div class="col-xs-8 clear-left">
+            <div class="yzj-size-14">
+              <div class="col-xs-6 clear-left">
+                <select class="form-control" style="margin-top:-15px;" v-model="job_id" v-on:change="change_jobs">
+                <option v-for="item in jobs" value="{[item.id]}">{[item.name]}</option>
+                </select>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <div v-show="!newproject">
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">项目描述</label>
+            <div class="col-xs-8 clear-left yzj-height30" style="margin-top: -5px">
+              <p class="yzj-size-14" id="project_description">{[jobs[0].description]}</p>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+        </div>
+
+        <div v-show="newproject">
+
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">项目类别</label>
+            <div class="col-xs-8 clear-left">
+              <div class="col-xs-5 clear-left"> 
+                <select class="form-control" v-model="categoryone">
+                  <option value="{[item.category_id]}" v-for="item in category">{[item.name]}</option>
+                </select>
+              </div> 
+              <div class="col-xs-5 clear-left">
+                <select class="form-control" v-model="categorytwo">
+                  <option value="{[item.category_id]}" v-for="item in children_category">{[item.name]}</option>
+                </select>
+              </div> 
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">项目名称</label>
+            <div class="col-xs-8 clear-left">
+              <input type="text" class="form-control"/>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">项目描述</label>
+            <div class="col-xs-8 clear-left">
+              <textarea class="form-control" style="width:800px;height:200px;resize:none;"></textarea>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">付费方式</label>
+            <div class="col-xs-8 clear-left">
+              <p class="yzj-size-14">
+                <input type="radio" name="pay" v-model="paymethod" value="hour" checked="checked" v-on:click="changepay(false)">按小时付费
+              </p>
+              <p class="yzj-size-14 yzj-top-distance20">
+                <input type="radio" name="pay" v-model="paymethod" value="fixed" v-on:click="changepay(true)">支付固定价格
+              </p>
+            </div>
+          </div>
+          <div class="clearfix"></div>
+
+          <div v-show="!fixed">
+            <div class="form-group yzj-top-distance40">
+              <label class="control-label col-xs-2 clear-left text-left text-info">预计工期</label>
+              <div class="col-xs-5 clear-left">
+                <select class="form-control" v-model="duration">
+                  <option value="1" selected="selected">大于6个月</option>
+                  <option value="2">3至6个月</option>
+                  <option value="3">1至3个月</option>
+                  <option value="4">不到1个月</option>
+                  <option value="5">小于1个周</option>
+                </select>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="form-group yzj-top-distance40">
+              <label class="control-label col-xs-2 clear-left text-left text-info">预计工作量</label>
+              <div class="col-xs-5 clear-left">
+                <select class="form-control" v-model="workload">
+                  <option value="1" selected="selected">超过30小时/周</option>
+                  <option value="2">小于30小时/周</option>
+                  <option value="3">我不知道</option>
+                </select>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+          <div v-show="fixed">
+            <div class="form-group yzj-top-distance40">
+              <label class="control-label col-xs-2 clear-left text-left text-info">预算</label>
+              <div class="col-xs-5 clear-left">
+                <div class="col-xs-10 clear-left">
+                  <input type="text" class="form-control" v-model="budget"/> 
+                </div>
+                <div class="col-xs-1 clear-left yzj-top-distance10">元</div>
+                <div class="clearfix"></div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="form-group yzj-top-distance40">
+            <label class="control-label col-xs-2 clear-left text-left text-info">公开这个项目</label>
+            <div class="col-xs-5 clear-left yzj-size-14">
+              <input type="checkbox"/>公开这个项目，让其他服务方也可以找到它。
+            </div>
+          </div>
+        
+        </div>
+        </form>
+
+        <div class="col-xs-10 col-xs-offset-2 clear-left yzj-top-distance50">
+        <a class="btn btn-primary btn-lg yzj-right-distance20" v-on:click="invite">发送</a>
+        <a class="btn btn-default btn-lg" onclick="history.go(-1)">取消</a>
+        </div>
+        <div class="clearfix"></div>
+        <p class="yzj-size-14 col-xs-offset-2 yzj-top-distance15 yzj-bot-distance70">已经很了解这个服务方，<a class="text-warning" >立刻雇佣</a></p>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+  </div>
+  </div>
+
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/production/send_invite.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+  </html>

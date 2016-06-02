@@ -1,0 +1,15 @@
+<div class="nano left-list">
+    <ul class="nano-content nav-stacked">
+        <li class="im_dialog_wrap" ng-repeat="contacts in contacts_list | filter:search" ng-dblclick="DbClickContacts(contacts)">
+            <a dialog class="im_dialog">
+                <div class="im_dialog_photo" ng-bind-html="contacts.avatar | filter_img">
+                </div>
+                <div class="im_dialog_message_wrap">
+                    <div class="im_dialog_name im_dialog_peer">
+                        <span ng-bind="contacts.name"></span>
+                    </div>
+                </div>
+            </a>
+        </li>
+    </ul>
+</div>

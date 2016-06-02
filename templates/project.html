@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>发布工作</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+  <link rel="stylesheet" type="text/css" href="/static/simditor/styles/simditor.css" />
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+  <div id="layout">
+    <input type="hidden" id="languages" value="{{languages}}" />
+    <input type="hidden" id="frameworks" value="{{frameworks}}" />
+    <input type="hidden" id="skills" value="{{skills}}" />
+
+    <div class="container yzj-top-distance50" id="project-new" v-cloak>
+      <h4 class="text-muted"><strong>请选择一个项目分类</strong></h4>
+      <form class="form-horizontal">
+        <div class="form-group yzj-top-distance20">
+          <div class="col-xs-3">
+            <select :disabled="job_id !== ''" class="form-control select-control" v-model="categoryone" id="cat01">
+              <option value="">--请选择--</option>
+              <option v-if="categorys[0]" v-for="item in categorys[0]" :value="item.category_id" v-text="item.name"></option>
+            </select>
+          </div>
+          <div class="col-xs-3 clear-left">
+            <fieldset>
+              <select :disabled="job_id !== ''" class="form-control select-control" v-model="category_id" id="cat02">
+                <option v-if="categorys[categoryone]" v-for="item in categorys[categoryone]" :value="item.category_id" v-text="item.name"></option>
+              </select>
+            </fieldset>
+          </div>
+        </div>
+        <div class="form-group" v-show="errCategory">
+          <div class="col-xs-12 text-warning yzj-size-14">
+            <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errCategory]}
+          </div>
+        </div>
+        <div class="yzj-top-distance30 yzj-box">
+          <h4 class="text-muted"><strong>众包工作描述</strong></h4>
+          <p class="yzj-top-distance40 yzj-size-16 text-info"><span class="text-warning">*</span> 众包工作名称</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-9">
+              <input type="text" class="form-control" placeholder="" v-model="saveItem.name" maxlength="100" @blur="validate('name', 'errName', '请输入众包工作名称')" />
+            </div>
+          </div>
+          <div class="form-group" v-show="errName">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errName]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info col-xs-9 clear-both"> <span class="pull-left"><span class="text-warning">*</span> 工作描述</span> <span class="col-xs-3 pull-right text-right text-primary"> 0/3000 </span> </p>
+          <div class="clearfix"></div>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-9">
+              <textarea id="editor" autofocus class="form-control" rows="10" v-model="saveItem.description" maxlength="10"></textarea>
+            </div>
+            <!-- <div class="col-xs-1 clear-left">
+              <button class="btn btn-xs btn-default btn-example">示例</button>
+            </div> -->
+          </div>
+          <div class="form-group" v-show="errDescription">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errDescription]}
+            </div>
+          </div>
+          <p class="yzj-size-16 text-warning" role="tab" id="headingOne">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="saveItem.attachment.name" aria-controls="collapseOne" class="text-warning" :class="{'collapsed': !saveItem.attachment.name}" @click="expend = !expend">
+              <img v-show="!expend" src="/static/images/panel-title-icon01.png" class="yzj-right-distance10" />
+              <img v-show="expend" src="/static/images/panel-title-icon02.png" class="yzj-right-distance10" /> 上传我的附加文档 <span class="yzj-size-12 text-info">(可选, 文件大小不得超过5MB)</span> </a>
+          </p>
+          <div id="collapseOne" class="panel-collapse collapse yzj-top-distance15" :class="{'in': saveItem.attachment.name}" role="tabpanel" aria-labelledby="headingOne" aria-expanded="saveItem.attachment.name">
+            <div class="inputfileload pull-left yzj-right-distance15">
+              <div class="uploadphoto">
+                上传我的附加文档
+              </div>
+              <input type="file" class="inputfile" id="fileupload" name="file" @change="notifyFileInput" />
+            </div>
+            <div class="fileloadtext pull-left yzj-right-distance45" v-show="saveItem.attachment.name" v-text="saveItem.attachment.name">
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group" v-show="errFile">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errFile]}
+            </div>
+          </div>
+          <p class="yzj-top-distance40 yzj-size-16"><span class="text-warning">*</span> 您想为这份工作雇佣多少开发者</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="radio" id="hires_one" name="mostdetail1" value="1" v-model="hiresIndex" />
+              <label for="hires_one">一个就够了</label>
+              <br />
+              <p class="yzj-top-distance20">
+                <input type="radio" name="mostdetail1" id="hires_two" class=" pull-left" v-model="hiresIndex" value="2" />
+                <label class="pull-left" for="hires_two">需要两个或以上</label>
+                <span class="col-xs-1 clear-both" style="display:inline-block;margin-top:-6px;margin-left:28px" v-show="hiresIndex == 2"> 
+                <input type="number" class="form-control" style="height:30px; width: 100px;" placeholder="请输入您需要的人数" min="2" v-model="saveItem.hires" /> </span>
+                <span class="col-xs-1 pull-left" v-show="hiresIndex == 2">人</span> </p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errHires1">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errHires1]}
+            </div>
+          </div>
+          <p class="yzj-top-distance40 yzj-size-16"><span class="text-warning">*</span> 服务方所需技能</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-7">
+              <input type="text" v-model="saveItem.skills" id="select-skills" @blur="validate('skills', 'errSkill', '请选择技能')" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-skills" value="{{skills}}" />
+            </div>
+          </div>
+          <div class="form-group" v-show="errSkill">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errSkill]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="showItem[category_id].stage"><span class="text-warning">*</span> 项目现在处于什么阶段(帮助我们提供给您更合适的候选人)</p>
+          <div class="yzj-top-distance15 table-border" v-show="showItem[category_id].stage">
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.stage === 'idea' }" @click="saveItem.stage = 'idea'" @mouseover="mouseoverItem('idea')" @mouseout="mouseoutItem('idea')">
+              <img :src="saveItem.stage === 'idea' ||  hover_idea ? '/static/images/project/idea_hover.png' : '/static/images/project/idea.png'" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">只有一个想法</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.stage === 'design' }" @click="saveItem.stage = 'design'" @mouseover="mouseoverItem('design')" @mouseout="mouseoutItem('design')">
+              <img :src="saveItem.stage === 'design' || hover_design ? '/static/images/project/design_hover.png' : '/static/images/project/design.png'" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">
+                有设计</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.stage === 'introduction' }" @click="saveItem.stage = 'introduction'" @mouseover="mouseoverItem('introduction')" @mouseout="mouseoutItem('introduction')">
+              <img :src="saveItem.stage === 'introduction' || hover_introduction ? '/static/images/project/introduction_hover.png' : '/static/images/project/introduction.png'" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">
+                有详细的需求说明</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.stage === 'none' }" @click="saveItem.stage = 'none'" @mouseover="mouseoverItem('none')" @mouseout="mouseoutItem('none')">
+              <img :src="saveItem.stage === 'none' || hover_none ? '/static/images/project/none_hover.png' : '/static/images/project/none.png'" class="yzj-top-distance30" style="width: 32px; height: 32px;" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">啥也没有</p>
+            </div>
+
+            <div class="clearfix"></div>
+
+          </div>
+          <div class="form-group" v-show="errStage">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errStage]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="showItem[category_id].platform !== ''"><span class="text-warning">*</span> 这个程序要在哪些平台应用</p>
+          <div class="form-group yzj-top-distance15" v-show="showItem[category_id].platform !== ''">
+            <div class="col-xs-12 table-border" v-show="showItem[category_id].platform === 'desktop'">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('windows') >= 0}" @click="changeStatu('platforms', 'windows')" @mouseover="mouseoverItem('windows')" @mouseout="mouseoutItem('windows')">
+                <img :src="platforms.indexOf('windows') >= 0 || hover_windows ? '/static/images/project/windows_hover.png' : '/static/images/project/windows.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Windows</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('mac') >= 0}" @click="changeStatu('platforms', 'mac')" @mouseover="mouseoverItem('mac')" @mouseout="mouseoutItem('mac')">
+                <img :src="platforms.indexOf('mac') >= 0 || hover_mac ? '/static/images/project/mac_hover.png' : '/static/images/project/mac.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Mac</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('linux') >= 0}" @click="changeStatu('platforms', 'linux')" @mouseover="mouseoverItem('linux')" @mouseout="mouseoutItem('linux')">
+                <img :src="platforms.indexOf('linux') >= 0 || hover_linux ? '/static/images/project/linux_hover.png' : '/static/images/project/linux.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">LINUX/UNIX</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="col-xs-12 table-border" v-show="showItem[category_id].platform === 'mobile'">
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('iphone') >= 0}" @click="changeStatu('platforms', 'iphone')" @mouseover="mouseoverItem('iphone')" @mouseout="mouseoutItem('iphone')">
+                <img :src="platforms.indexOf('iphone') >= 0 || hover_iphone ? '/static/images/project/iphone_hover.png' : '/static/images/project/iphone.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">iphone</p>
+              </div>
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('ipad') >= 0}" @click="changeStatu('platforms', 'ipad')" @mouseover="mouseoverItem('ipad')" @mouseout="mouseoutItem('ipad')">
+                <img :src="platforms.indexOf('ipad') >= 0 || hover_ipad ? '/static/images/project/ipad_hover.png' : '/static/images/project/ipad.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">ipad</p>
+              </div>
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('android') >= 0}" @click="changeStatu('platforms', 'android')" @mouseover="mouseoverItem('android')" @mouseout="mouseoutItem('android')">
+                <img :src="platforms.indexOf('android') >= 0 || hover_android ? '/static/images/project/android_hover.png' : '/static/images/project/android.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Android</p>
+              </div>
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('winphone') >= 0}" @click="changeStatu('platforms', 'winphone')" @mouseover="mouseoverItem('winphone')" @mouseout="mouseoutItem('winphone')">
+                <img :src="platforms.indexOf('winphone') >= 0 || hover_winphone ? '/static/images/project/winphone_hover.png' : '/static/images/project/winphone.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Window phone</p>
+              </div>
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': platforms.indexOf('other') >= 0}" @click="changeStatu('platforms', 'other')" @mouseover="mouseoverItem('other')" @mouseout="mouseoutItem('other')">
+                <img :src="platforms.indexOf('other') >= 0 || hover_other ? '/static/images/project/other_hover.png' : '/static/images/project/other.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">other</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="form-group" v-show="errPlatform">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errPlatform]}
+            </div>
+          </div>
+
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="showItem[category_id].language">服务方应该知道的开发语言 <span class="yzj-size-14 text-primary">(选填)</span> </p>
+          <div class="form-group yzj-top-distance15 table-fix-width" v-show="showItem[category_id].language">
+            <div class="col-xs-7">
+              <input type="text" v-model="saveItem.languages" id="select-languages" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-languages" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="showItem[category_id].framework">开发框架 <span class="yzj-size-14 text-primary">(选填)</span> </p>
+          <div class="form-group yzj-top-distance15 table-fix-width" v-show="showItem[category_id].framework">
+            <div class="col-xs-7">
+              <input type="text" v-model="saveItem.frameworks" id="select-frameworks" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-frameworks" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="showItem[category_id].api"><span class="text-warning">*</span> 集成API</p>
+          <div class="form-group yzj-top-distance15 table-border" v-show="showItem[category_id].api">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': apis.indexOf('social') >= 0}" @click="changeStatu('apis', 'social')" @mouseover="mouseoverItem('social')" @mouseout="mouseoutItem('social')">
+                <img :src="apis.indexOf('social') >= 0 || hover_social ? '/static/images/project/social_hover.png' : '/static/images/project/social.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">社交API</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': apis.indexOf('pay') >= 0}" @click="changeStatu('apis', 'pay')" @mouseover="mouseoverItem('pay')" @mouseout="mouseoutItem('pay')">
+                <img :src="apis.indexOf('pay') >= 0 || hover_pay ? '/static/images/project/pay_hover.png' : '/static/images/project/pay.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">支付API</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': apis.indexOf('storage') >= 0}" @click="changeStatu('apis', 'storage')" @mouseover="mouseoverItem('storage')" @mouseout="mouseoutItem('storage')">
+                <img :src="apis.indexOf('storage') >= 0 || hover_storage ? '/static/images/project/storage_hover.png' : '/static/images/project/storage.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">储存API</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': apis.indexOf('other') >= 0}" @click="changeStatu('apis', 'other')" @mouseover="mouseoverItem('apiother')" @mouseout="mouseoutItem('apiother')">
+                <img :src="apis.indexOf('other') >= 0 || hover_apiother ? '/static/images/project/apiother_hover.png' : '/static/images/project/apiother.png'" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">其他</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group" v-show="errApi">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errApi]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info"><span class="text-warning">*</span> 选择付款方式</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.paymethod === 'hour' }" @click="saveItem.paymethod = 'hour'" @mouseover="mouseoverItem('hour')" @mouseout="mouseoutItem('hour')">
+                <img :src="saveItem.paymethod === 'hour' || hover_hour ? '/static/images/project/hour_hover.png' : '/static/images/project/hour.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  按小时付费</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.paymethod === 'fixed' }" @click="saveItem.paymethod = 'fixed'" @mouseover="mouseoverItem('fixed')" @mouseout="mouseoutItem('fixed')">
+                <img :src="saveItem.paymethod === 'fixed' || hover_fixed ? '/static/images/project/fixed_hover.png' : '/static/images/project/fixed.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">按固定价格付费</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="form-group" v-show="errPaymethod">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errPaymethod]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="saveItem.paymethod != '' "><span class="text-warning">*</span> 服务方经验水平</p>
+          <div class="form-group yzj-top-distance15" v-show="saveItem.paymethod != '' ">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.level == 'entry' }" @click="saveItem.level = 'entry'" @mouseover="mouseoverItem('entry')" @mouseout="mouseoutItem('entry')">
+                <img :src="saveItem.level == 'entry' || hover_entry ? '/static/images/project/entry_hover.png' : '/static/images/project/entry.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  入门级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="saveItem.paymethod === 'hour'"> &lt;100元 / 小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">我愿意接受一个经验较少价格较 <br />低的开发者</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.level == 'middle' }" @click="saveItem.level = 'middle'" @mouseover="mouseoverItem('middle')" @mouseout="mouseoutItem('middle')">
+                <img :src="saveItem.level == 'middle' || hover_middle ? '/static/images/project/middle_hover.png' : '/static/images/project/middle.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">中间级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="saveItem.paymethod === 'hour'">100元-300元/小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">需要寻找一个比较有经验的自由
+                  <br />职业者</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.level == 'expert' }" @click="saveItem.level = 'expert'" @mouseover="mouseoverItem('expert')" @mouseout="mouseoutItem('expert')">
+                <img :src="saveItem.level == 'expert' || hover_expert ? '/static/images/project/expert_hover.png' : '/static/images/project/expert.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">专业级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="saveItem.paymethod === 'hour'">&gt;300元/小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">我愿意支付更高的费用给与经验 <br />丰富的人</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="form-group" v-show="errLevel">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errLevel]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="saveItem.paymethod == 'hour' "><span class="text-warning">*</span> 预计工作周期长度</p>
+          <div class="form-group yzj-top-distance15" v-show="saveItem.paymethod == 'hour' ">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.duration == 1 }" @click="saveItem.duration = 1" @mouseover="mouseoverItem('duration1')" @mouseout="mouseoutItem('duration1')">
+                <img :src="saveItem.duration == 1 || hover_duration1 ? '/static/images/project/duration1_hover.png' : '/static/images/project/duration1.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  大于6个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.duration == 2 }" @click="saveItem.duration = 2" @mouseover="mouseoverItem('duration2')" @mouseout="mouseoutItem('duration2')">
+                <img :src="saveItem.duration == 2 || hover_duration2 ? '/static/images/project/duration2_hover.png' : '/static/images/project/duration2.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  3至6个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.duration == 3 }" @click="saveItem.duration = 3" @mouseover="mouseoverItem('duration3')" @mouseout="mouseoutItem('duration3')">
+                <img :src="saveItem.duration == 3 || hover_duration3 ? '/static/images/project/duration3_hover.png' : '/static/images/project/duration3.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  1至3个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.duration == 4 }" @click="saveItem.duration = 4" @mouseover="mouseoverItem('duration4')" @mouseout="mouseoutItem('duration4')">
+                <img :src="saveItem.duration == 4 || hover_duration4 ? '/static/images/project/duration4_hover.png' : '/static/images/project/duration4.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  不到1个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.duration == 5 }" @click="saveItem.duration = 5" @mouseover="mouseoverItem('duration5')" @mouseout="mouseoutItem('duration5')">
+                <img :src="saveItem.duration == 5 || hover_duration5 ? '/static/images/project/duration5_hover.png' : '/static/images/project/duration5.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  小于1个周</p>
+              </div>
+
+            </div>
+          </div>
+          <div class="form-group" v-show="saveItem.paymethod === 'hour' && errDuration">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errDuration]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="saveItem.paymethod == 'hour' "><span class="text-warning">*</span> 预计每周工作强度</p>
+          <div class="form-group yzj-top-distance15" v-show="saveItem.paymethod == 'hour' ">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.workload === 1 }" @click="saveItem.workload = 1" @mouseover="mouseoverItem('workload1')" @mouseout="mouseoutItem('workload1')">
+                <img :src="saveItem.workload === 1 || hover_workload1 ? '/static/images/project/workload1_hover.png' : '/static/images/project/workload1.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">超过30小时/周</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.workload === 2 }" @click="saveItem.workload = 2" @mouseover="mouseoverItem('workload2')" @mouseout="mouseoutItem('workload2')">
+                <img :src="saveItem.workload === 2 || hover_workload2 ? '/static/images/project/workload2_hover.png' : '/static/images/project/workload2.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">小于30小时/周</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" :class="{'active': saveItem.workload === 3 }" @click="saveItem.workload = 3" @mouseover="mouseoverItem('workload3')" @mouseout="mouseoutItem('workload3')">
+                <img :src="saveItem.workload === 3 || hover_workload3 ? '/static/images/project/workload3_hover.png' : '/static/images/project/workload3.png'" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">我不知道</p>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group" v-show="saveItem.paymethod === 'hour' && errWorkload">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errWorkload]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="saveItem.paymethod == 'fixed' "><span class="text-warning">*</span> 预算</p>
+          <div class="form-group yzj-top-distance15" v-show="saveItem.paymethod == 'fixed' ">
+            <div class="col-xs-3">
+              <input type="number" class="form-control" placeholder="请输入大于1的整数" v-model="saveItem.budget" min="1" maxlength="9" @blur="validate('budget', 'errBudget', '请输入大于1的整数')" />
+            </div>
+            <label class="control-label yzj-size-16">元</label>
+          </div>
+          <div class="form-group" v-show="saveItem.paymethod === 'fixed' && errBudget">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errBudget]}
+            </div>
+          </div>
+        </div>
+        <div class="yzj-box-special">
+          <button type="button" class="btn btn-primary btn-lg yzj-right-distance15" :disabled="mDisableBtn.normal" @click.stop.prevent="projectCreate('normal')">发布项目</button>
+          <button type="button" class="btn btn-default btn-lg yzj-right-distance45" :disabled="mDisableBtn.draft" @click.stop.prevent="projectCreate('draft')">保存草稿</button>
+        </div>
+      </form>
+      <!-- 操作提示 -->
+      <strap-alert :msg="alert.msg" :title="alert.title" :show-type="alert.showType" :show-alert.sync="alert.showAlert" :callback="alert.cb"></strap-alert>
+
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/selectize.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/production/project.min.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

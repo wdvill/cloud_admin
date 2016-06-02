@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>帮助中心</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+        <nav class="navbar navbar-default">
+            <div class="container">
+                {% include "header.html" %}
+            </div>
+            {% include "header-my.html" %}
+        </nav>
+    </header>
+  </div>
+  <div class="help-page" id="body">
+    <div class="banner">
+      <input type="search" placeholder="输入您要查找的问题..." @keyup.enter="onEnter">
+    </div>
+    <div class="main container">
+      <div class="search col-xs-8" >
+        <p class="search-crumbs">
+          <span>帮助中心</span><span>搜索结果</span>
+        </p>
+        <div class="search-body">
+          <h3>搜索结果</h3>
+          <ul>
+            <li>
+              <h4>什么情况下可以申请开发票？</h4>
+              <p>…… ipsum dolor sit amet, consectetur adipiscing elit. Aenean euismod bibendum laoreet. Proin gravida dolor sit amet lacus accumsan et <span class="high-light">范尊龙</span>commodo. Proin sodales……</p>  
+            </li>
+          </ul>
+        </div>
+        <div class="search-no-result" >
+          <p>没有检索到相关内容。你可以<br>1.精简你要搜索的关键词；<br>2.按照右侧联系方式联系客服解决您的问题。</p>
+        </div>
+      </div>
+      
+      <div class="search-right-bar col-xs-4">
+        <contact></contact>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/vue-directive.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+  <script src="/static/production/help-hot.min.js"></script>
+</body>
+</html>

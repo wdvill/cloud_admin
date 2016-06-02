@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+<link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+<link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+<link rel="stylesheet" type="text/css" href="/static/css/jquery.Jcrop.css" media="screen">
+<title>图片上传预览</title>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        {% include "header.html" %}
+        <div class="clearfix"></div>
+        <div class="navbar-default nav-sub-column yzj-size-14">
+          <div class="container">
+            <ul>
+              <li>找工作</li>
+              <li>收藏</li>
+              <li>简历</li>
+              <li>报名</li>
+              <li>状态</li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <div class="container yzj-top-distance50">
+      <div class="col-xs-10 col-xs-offset-1">
+        <div class="yzj-box">
+          <div class="yzj-box">
+            <div class="col-xs-6 clear-left">
+              <!--上传框-->
+              <div class="inputfileload pull-left yzj-right-distance15">
+                <div class="uploadphoto">上传文件</div>
+                <input type="file" class="inputfile" id="photo" name="photo"> 
+              </div>
+              <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+              <div class="fileloadtext pull-left">现在未选择任何文件</div>
+              <div class="clearfix"></div>
+              <p class="yzj-top-distance20">
+                <img src="/static/images/edit-img.png" id="sourceImg" alt="[Jcrop Example]" />
+              </p>
+            </div>
+
+            <!--右侧-->
+            <div class="col-xs-6 text-center">
+              <h4 class="text-muted"><strong>您的头像预览</strong></h4>
+              <div class="yzj-top-distance20">
+                <div id="preview-pane">
+                  <div class="preview-container img-circle">
+                    <img src="/static/images/edit-img.png" class="jcrop-preview" alt="Preview" id="cutImg"/>
+                  </div>
+                </div>
+              </div>
+
+              <div class="clearfix"></div>
+              <div style="height:200px"></div>
+              <div class="yzj-top-distance50">
+                <div class="col-xs-6 clear-left">
+                  <button class="btn btn-block btn-primary">保存头像</button>
+                </div>
+                <div class="col-xs-6 clear-left">
+                  <button class="btn btn-block btn-default">取消</button>
+                </div>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+{% include "footer.html" %}
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/jquery.Jcrop.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/js/notice.js"></script>
+<script type="text/javascript">
+  $(document).ready(function(){
+      $("#photo").change(function(){
+              var objUrl = getObjectURL(this.files[0]) ;
+              if (objUrl) {
+                $("#sourceImg").attr("src", objUrl) ;
+                $("#cutImg").attr("src", objUrl) ;
+                jcrop_api.setImage(objUrl);
+              }
+            }) ;
+            
+            //建立一個可存取到該file的url
+            function getObjectURL(file) {
+              var url = null ; 
+              if (window.createObjectURL!=undefined) { // basic
+                url = window.createObjectURL(file) ;
+              } else if (window.URL!=undefined) { // mozilla(firefox)
+                url = window.URL.createObjectURL(file) ;
+              } else if (window.webkitURL!=undefined) { // webkit or chrome
+                url = window.webkitURL.createObjectURL(file) ;
+              }
+              return url ;
+            }
+            var jcrop_api,
+                boundx,
+                boundy,
+                $preview = $('#preview-pane'),
+                $pcnt = $('#preview-pane .preview-container'),
+                $pimg = $('#preview-pane .preview-container img'),
+                xsize = $pcnt.width(),
+                ysize = $pcnt.height();
+            
+            $('#sourceImg').Jcrop({
+              onChange: updatePreview,
+              onSelect: updatePreview,
+              aspectRatio: xsize / ysize
+            },function(){
+              var bounds = this.getBounds();
+              boundx = bounds[0];
+              boundy = bounds[1];
+              jcrop_api = this;
+              $preview.appendTo(jcrop_api.ui.holder);
+            });
+            function updatePreview(c)
+            {
+              if (parseInt(c.w) > 0)
+              {
+                var rx = xsize / c.w;
+                var ry = ysize / c.h;
+                $pimg.css({
+                  width: Math.round(rx * boundx) + 'px',
+                  height: Math.round(ry * boundy) + 'px',
+                  marginLeft: '-' + Math.round(rx * c.x) + 'px',
+                  marginTop: '-' + Math.round(ry * c.y) + 'px'
+                });
+              }
+            };
+
+});
+</script>
+</body>
+</html>

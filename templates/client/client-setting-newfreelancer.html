@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>创建服务方身份</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+      </nav>
+    </header>
+
+    <div id="body" class="container yzj-top-distance30">
+      <!--左侧-->
+      {% include "client/client-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <h4 class="text-muted"><strong>创建服务方身份</strong></h4>
+        <div class="yzj-top-distance20 yzj-box yzj-size-16 text-info">
+          <p class="yzj-height30">新创建的服务方姓名与当前姓名一致。</p>
+          <p class="yzj-height30">成为服务方之后，你需要创建并完善您的档案。档案完善后即可在网站上投标，开启云工作。</p>
+          <p class="text-center yzj-top-distance70"><img src="/static/images/create-freelancer.png"></p>
+          <div class="text-center yzj-top-distance70">
+            <a class="btn btn-primary" style="width:180px" v-on:click="commit">成为服务方</a>
+          </div>
+          <p class="yzj-height30 yzj-top-distance50 col-xs-12 yzj-bot-distance70">创建服务方身份不会改变您的需求方身份，我们将为您创建一个独立的服务方账号，您可以自由地在两个身份之间切换。</p>
+          <div class="clearfix"></div>
+        </div>
+      </div>
+      <alert :msg="error_msg"></alert>
+    </div>
+  </div>
+  
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script src="/static/production/client_setting_newfreelancer.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+  </body>
+  </html>

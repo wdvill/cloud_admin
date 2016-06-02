@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+        {% include "header-my.html" %}
+      </nav>
+    </header>
+
+    <div id="layout" class="container yzj-top-distance50">
+      <h3 class="text-muted">浏览工作</h3>
+      <div class="yzj-top-distance20">
+        <div class="form-horizontal form-group">
+          <label class="control-label text-left col-xs-1 clear-both yzj-size-16">职位搜索</label>
+          <div class="col-xs-10 clear-left">
+            <input type="text" class="form-control"/>
+          </div>
+          <div class="col-xs-1 clear-both">
+            <button class="btn btn-block btn-default">搜索</button>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+      <div class="yzj-top-distance30">
+        <form class="form-horizontal">
+          <div class="col-xs-4 clear-both yzj-size-14" v-for="cate in categorys">
+            <h4 class="text-muted">
+              <strong>Web移动和软件开发</strong>
+            </h4>
+            <p class="yzj-top-distance15">
+              桌面软件开发
+            </p>
+            <p class="yzj-top-distance15">
+              电子商务开发
+            </p>
+            <p class="yzj-top-distance15">
+              游戏开发
+            </p>
+            <p class="yzj-top-distance15">
+              手机应用开发
+            </p>
+            <p class="yzj-top-distance15"></p>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="col-xs-4 clear-both yzj-size-14" v-for="cate in categorys">
+            <h4 class="text-muted">
+              <strong>Web移动和软件开发</strong>
+            </h4>
+            <p class="yzj-top-distance15">
+              桌面软件开发
+            </p>
+            <p class="yzj-top-distance15">
+              电子商务开发
+            </p>
+            <p class="yzj-top-distance15">
+              游戏开发
+            </p>
+            <p class="yzj-top-distance15">
+              手机应用开发
+            </p>
+            <p class="yzj-top-distance15"></p>
+            <div class="clearfix"></div>
+          </div>
+
+          <div class="col-xs-4 clear-both yzj-size-14" v-for="cate in categorys">
+            <h4 class="text-muted">
+              <strong>Web移动和软件开发</strong>
+            </h4>
+            <p class="yzj-top-distance15">
+              桌面软件开发
+            </p>
+            <p class="yzj-top-distance15">
+              电子商务开发
+            </p>
+            <p class="yzj-top-distance15">
+              游戏开发
+            </p>
+            <p class="yzj-top-distance15">
+              手机应用开发
+            </p>
+            <p class="yzj-top-distance15"></p>
+            <div class="clearfix"></div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

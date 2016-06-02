@@ -1,0 +1,45 @@
+<div class="clearfix"></div>
+<div class="navbar-default nav-sub-column yzj-size-14">
+  <div class="container">
+    <ul>
+      {% if sec_nav=="find_job"%}
+      <li class="active"><a href="/find-work-home">找工作</a></li>
+      <li><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li><a href="/freelancers/proposal">我的投标</a></li>
+      <li><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li><a href="/freelancers/stats">统计</a></li>
+      {% elif sec_nav=="favorite"%}
+      <li><a href="/find-work-home">找工作</a></li>
+      <li class="active"><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li><a href="/freelancers/proposal">我的投标</a></li>
+      <li><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li><a href="/freelancers/stats">统计</a></li>
+      {% elif sec_nav=="proposal"%}
+      <li><a href="/find-work-home">找工作</a></li>
+      <li><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li class="active"><a href="/freelancers/proposal">我的投标</a></li>
+      <li><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li><a href="/freelancers/stats">统计</a></li>
+      {% elif sec_nav=="data"%}
+      <li><a href="/find-work-home">找工作</a></li>
+      <li><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li><a href="/freelancers/proposal">我的投标</a></li>
+      <li class="active"><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li><a href="/freelancers/stats">统计</a></li>
+      {% elif sec_nav=="stats"%}
+      <li><a href="/find-work-home">找工作</a></li>
+      <li><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li><a href="/freelancers/proposal">我的投标</a></li>
+      <li><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li class="active"><a href="/freelancers/stats">统计</a></li>
+      {% else %}
+      <li><a href="/find-work-home">找工作</a></li>
+      <li><a href="/freelancers/favorite">收藏的工作</a></li>
+      <li><a href="/freelancers/proposal">我的投标</a></li>
+      <li><a href="/freelancers/{{user.uuid}}">我的档案</a></li>
+      <li><a href="/freelancers/stats">统计</a></li>
+      {% endif %}
+    </ul>
+  </div>
+</div>
+

@@ -1,0 +1,61 @@
+<div class="modal fade bs-example-modal-lg choose-sort" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" id="modal-cate">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" class="yzj-size-30">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <h3 class="modal-title text-info text-center" id="myModalLabel">选择适合你的信息
+        </h3>
+        <p class="yzj-size-14 yzj-top-distance10 text-center">最多选择10个你擅长的工作类别，认真地选择将大大增加需求方发现您的机会</p>
+        <p class="yzj-size-14 yzj-top-distance10 text-center">您已经选择了<span class="text-warning">{[skills_selected.length]}</span>个分类，还可以选择<span class="text-warning">{[10-skills_selected.length]}</span>个分类</p>
+        <form class="form-horizontal yzj-top-distance50 col-xs-11 col-xs-offset-1">
+          <p class="yzj-size-16">选择类别：</p>
+          <div class="col-xs-4 clear-both yzj-top-distance30 yzj-size-14">
+            <h4 class="text-muted">
+              <strong>{[parent_categories[0].name]}</strong>
+            </h4>
+            <p class="yzj-top-distance15" v-for="cate in one_categories">
+            <input type="checkbox" id="cate-{[cate.category_id]}" name="cate-{[cate.category_id]}" value="{[cate.category_id]}" v-model="skills_selected"/>{[cate.name]}
+            </p>
+            <div class="clearfix"></div>
+          </div>
+          <div class="col-xs-4 clear-both yzj-top-distance30 yzj-size-14">
+            <h4 class="text-muted">
+              <strong>{[parent_categories[1].name]}</strong>
+            </h4>
+            <p class="yzj-top-distance15" v-for="cate in two_categories">
+            <input type="checkbox" id="cate-{[cate.category_id]}" name="cate-{[cate.category_id]}" value="{[cate.category_id]}" v-model="skills_selected"/>{[cate.name]}
+            </p>                  
+            <div class="clearfix"></div>
+          </div>
+          <div class="col-xs-4 clear-both yzj-top-distance30 yzj-size-14">
+            <h4 class="text-muted">
+              <strong>{[parent_categories[2].name]}</strong>
+            </h4>
+            <p class="yzj-top-distance15" v-for="cate in three_categories">
+            <input type="checkbox" id="cate-{[cate.category_id]}" name="cate-{[cate.category_id]}" value="{[cate.category_id]}" v-model="skills_selected"/>{[cate.name]}
+            </p>                  
+            <div class="clearfix"></div>
+          </div>
+          <div class="col-xs-4 clear-both yzj-top-distance30 yzj-size-14">
+            <h4 class="text-muted">
+              <strong>{[parent_categories[3].name]}</strong>
+            </h4>
+            <p class="yzj-top-distance15" v-for="cate in four_categories">
+            <input type="checkbox" id="cate-{[cate.category_id]}" name="cate-{[cate.category_id]}" value="{[cate.category_id]}" v-model="skills_selected"/>{[cate.name]}
+            </p>                  
+            <div class="clearfix"></div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="yzj-top-distance70 text-center">
+            <button type="button" class="btn btn-primary btn-lg yzj-right-distance15" v-on:click="update_user_category">保存</button>
+            <button type="button" class="btn btn-default btn-lg yzj-right-distance15" data-dismiss="modal">取消</button>
+          </div>
+          <div class="yzj-top-distance70"></div>
+        </form>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>

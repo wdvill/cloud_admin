@@ -1,0 +1,40 @@
+.contract-board {
+  padding: 30px;
+  margin-top: 20px;
+  background: #ffffff;
+
+  .header {
+    position: relative;
+    padding-bottom: 60px;
+    font-size: 18px;
+    color: #333333;
+    line-height: 1;
+
+    .btn-add-milestone {
+      position: absolute;
+      top: -5px;
+      right: 0;
+      padding: 11px 20px;
+      font-size: 14px;
+      color: #ff6204;
+      border: 1px solid #ff6204;
+      line-height: 1;
+    }
+  }
+
+  .body {
+
+    tr {
+      border-top: 0;
+      border-bottom: 1px solid #e2e2e2;
+    }
+
+    td {
+      padding: 35px 0;
+      font-size: 14px;
+      color: #666666;
+    }
+
+
+  }
+}

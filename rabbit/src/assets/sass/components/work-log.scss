@@ -1,0 +1,219 @@
+//工作日志组件
+.clearfix:before, .clearfix:after {
+  content:"";
+  display:table;
+}
+.clearfix:after{
+  clear:both;
+  overflow:hidden;
+}
+.work-log-suspend {
+  width: 280px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  position: absolute;
+  margin-top: -335px;
+  z-index: 1;
+  background-color: #fff;
+  font-size: 16px;
+  display:none;
+}
+.arrow {margin-top:-11px; position:absolute;left:20px;}
+.arrow *{display: block; font-family: "SimSun";font-size: 14px;overflow: hidden;}
+.arrow .arrow_line{color:#c8c8c8}
+.ico-checkbox {
+  background: url('../../images/components/checkbox-bg.png') no-repeat;
+  height: 14px;
+  width: 14px;
+  display: inline-block;
+  position: relative;
+  top: 6px;
+}
+.ico-checkbox-checked {
+  background: url('../../images/components/checkbox-bg.png') no-repeat 0 -16px;
+}
+.work-log-component {
+  padding: 30px;
+  margin: 20px auto 0;
+  background: #ffffff;
+  .warp {
+    margin-left: 24px;
+  }
+  .this-no-log {
+    padding: 30px 0;
+    text-align: center;
+    p {
+      display: inline-block;
+      font-size: 0;
+    }
+    img {
+      display: inline-block;
+      margin-right: 45px;
+    }
+    span {
+      font-size: 16px;
+    }
+  }
+  .hour-list {
+    padding: 0;
+    margin: 0 0 30px 0;
+    height: 198px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+    label {
+      float: left;
+      display: block;
+      width: 40px;
+      height: 198px;
+      padding-top: 60px;
+      margin-right: 22px;
+      margin-bottom: 0;
+      background: #f3f3f3;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 400;
+      color: #333333;
+    }
+    input[type="checkbox"] {
+      margin: 20px 0 0 0;
+    }
+  }
+  .log-list {
+    li {
+      float: left;
+      width: 156px;
+      margin-right: 28px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+    
+  }
+  .log-hd {
+    height: 44px;
+    position: relative;
+  }
+  .log-bd {
+    width: 156px;
+    height: 115px;
+  }
+  .log-ft {
+    clear: both;
+    padding-top: 15px;
+    font-size: 0;
+    input[type="checkbox"] {
+      margin-top: 0;
+    }
+    time {
+      padding: 0 5px;
+      font-size: 12px;
+      line-height: 1;
+      vertical-align: middle;
+    }
+    .active-state {
+      display: inline-block;
+      width: 100px;
+      padding-left: 0;
+      vertical-align: middle;
+      font-size: 0;
+      li {
+        display: inline-block;
+        width: 8px;
+        height: 18px;
+        margin-right: 2px;
+        background: #e3e3e3;
+        &:last-child {
+          margin-right: 0;
+        }
+        &.active {
+          background: #48bd29;
+        }
+      }
+    }
+  }
+  .empty-log {
+    .log-bd {
+      background: url('../../images/components/empty-log.png') no-repeat;
+    }
+  }
+  .auto-log, .manual-log {
+    padding-top: 6px;
+    .log-hd {
+      height: 24px;
+      padding: 0 14px;
+      margin-bottom: 14px;
+      background: #48bd29;
+      span {
+        display: block;
+        color: #ffffff;
+        line-height: 24px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+  .auto-log {
+    .log-hd {
+      background: #48bd29;
+    }
+    .note-star:after,
+    .note-end:before {
+      background: #48bd29;
+    }
+    img {
+      display: block;
+      width: 156px;
+      height: 115px;
+    }
+  }
+  .manual-log {
+    .log-hd {
+      background: #ffcc33;
+    }
+    .log-bd{
+      background: #fff7e1;
+      span {
+        display: block;
+        text-align: center;
+        line-height: 115px;
+        font-size: 14px;
+        color: #b48f1e;
+      }
+    }
+    .note-star:after,
+    .note-end:before {
+      background: #ffcc33;
+    }
+  }
+  .note-star {
+    border-top-left-radius:12px;
+    border-bottom-left-radius:12px;
+    &:after {
+      content: '';
+      position: absolute;
+      width: 28px;
+      height: 24px;
+      top: 0;
+      right: -28px;
+    }
+  }
+  .note-end {
+    border-top-right-radius:12px;
+    border-bottom-right-radius:12px;
+    &:before {
+      content: '';
+      position: absolute;
+      width: 28px;
+      height: 24px;
+      top: 0;
+      left: -28px;
+    }
+  }
+  .note-star.note-end {
+    &:before, &:after {
+      display: none;
+    }
+  }
+}

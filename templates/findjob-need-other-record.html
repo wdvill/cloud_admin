@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectize.css">
+  <style type="text/css">
+    .no-data {
+      padding: 41px 0;
+      text-align: center;
+    }
+    
+    .no-data span {
+      padding-left: 55px;
+      font-size: 16px;
+    }
+  </style>
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+  <div id="profile_edit" class="container yzj-top-distance30">
+    <div class="col-xs-9 clear-both">
+      <div class="yzj-box">
+        <div class="col-xs-2 clear-both">
+          <img v-bind:src="profile.avatar" width="100" height="100">
+          <p class="col-xs-11 clear-left yzj-top-distance10">
+            <a class="btn btn-sm btn-default" v-if="!profile.favorite" :click="add_favorite">收藏</a>
+            <a class="btn btn-sm btn-primary" v-if="profile.favorite">已收藏</a>
+          </p>
+        </div>
+        <div class="col-xs-10 clear-both">
+          <div class="col-xs-12 clear-both">
+            <div class="yzj-size-16 text-muted">
+              <p class="pull-left">
+                <span class="yzj-right-distance10">
+                  <strong>{[profile.name]}</strong>
+                </span>
+                <img src="/static/images/v-icon.png" />
+              </p>
+              <h3 class="pull-right">
+                <span class="yzj-right-distance10">{[profile.hourly]}元 / 小时</span>
+              </h3>
+            </div>
+            <div class="clearfix"></div>
+            <div class="yzj-top-distance20 yzj-size-16">{[profile.title]}</div>
+            <div class="yzj-top-distance15 yzj-size-16 text-muted">
+              <div class="col-xs-4 clear-left">
+                <img src="/static/images/address.png" class="yzj-right-distance10"> {[profile.location.parent_name]}，{[profile.location.name]}
+              </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="yzj-top-distance20">
+              <span class="label label-default label-pro-detail pull-left" style="margin:2px 3px" v-for="item in profile.skills">{[item]}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix"></div>
+
+        <div class="yzj-top-distance30 yzj-height30 yzj-size-14">
+          <h4 class="text-muted">
+            <span class="pull-left">
+              <strong>简介</strong>
+            </span>
+          </h4>
+          <div class="clearfix"></div>
+          <p class="yzj-top-distance20">{[profile.overview]}</p>
+        </div>
+      </div>
+
+      <!--工作经历及反馈-->
+      <h4 class="text-muted yzj-top-distance20">
+        <strong>工作经历及反馈</strong>
+      </h4>
+
+      <div class="line"></div>
+
+      <div class="yzj-box yzj-border yzj-size-14">
+        <template v-if="works.length">  
+          <work v-for="work in works" :itemout="work" :index="$index" :islast="$index==works.length-1 ?'yes':'no'"></work>
+          <div class="loadmore text-center yzj-top-distance20">
+            <div class="line"></div>
+            <a href="javascript:;" v-on:click="loadmore_works">加载更多</a>
+          </div>
+        </template>
+        <div v-else class="no-data">
+          <img src="/static/images/icon-no-history.png" alt="">
+          <span>暂无工作历史及反馈</span>
+        </div>
+      </div>
+
+      <h4 class="text-muted yzj-top-distance20">
+        <strong>项目经验</strong>
+      </h4>
+
+      <div class="line"></div>
+
+      <!--有图片-->
+      <div class="col-xs-12 clear-both yzj-box yzj-border">
+        <template v-if="portfolio.length">
+          <experience v-for="item in portfolio" :itemout="item" 
+              :index="$index" 
+              :islast="$index==portfolio.length-1?'yes':'no'" 
+              :ismyself="false">
+          </experience>
+        </template>
+        <div v-else class="no-data">
+          <img src="/static/images/icon-no-experience.png" alt="">
+          <span>没有填写项目经验</span>
+        </div>
+      </div>
+
+      <!--就业经历-->
+      <div class="clearfix"></div>
+
+      <h4 class="text-muted yzj-top-distance20">
+        <strong>就业经历</strong>
+      </h4>
+      <div class="line"></div>
+      <div class="col-xs-12 clear-both yzj-box yzj-border">
+        <template v-if="employment.length">
+          <job v-for="job in employment" :itemout="job" :index="$index" 
+              :islast="$index==employment.length-1 ?'yes':'no'" 
+              :ismyself="false">
+          </job>
+        </template>
+        <div v-else class="no-data">
+          <img src="/static/images/icon-no-work.png" alt="">
+          <span>没有填写工作经历</span>
+        </div>
+      </div>
+
+      <div class="clearfix"></div>
+      <h4 class="text-muted yzj-top-distance20">
+        <strong>教育经历</strong>
+      </h4>
+
+      <div class="line"></div>
+
+      <div class="col-xs-12 clear-both yzj-box yzj-border">
+        <template v-if="education.length">
+          <edu v-for="edu in education" :itemout="edu" :index="$index" 
+              :islast="$index==education.length-1 ?'yes':'no'" 
+              :ismyself="false">
+          </edu>
+        </template>
+        <div v-else class="no-data">
+          <img src="/static/images/icon-no-work.png" alt="">
+          <span>没有填写教育经历</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-3 clear-right text-info">
+      {% if user.identify[0] == "c" %}
+      <p>
+        <a class="btn btn-block btn-primary" onclick="window.open(location.href+'/invite')">邀请他工作</a>
+      </p>
+
+      <p class="yzj-top-distance20">
+        <button class="btn btn-block btn-default" data-toggle="modal" data-target="#employ">立即雇佣他</button>
+      </p>
+      {% endif %}
+      <p class="yzj-size-18 text-muted yzj-top-distance20">
+        <span class="pull-left">可用性</span>
+      </p>
+
+      <div class="clearfix"></div>
+      <div class="line"></div>
+
+      <p class="yzj-size-14" v-if="profile.available">我现在可以工作</p>
+      <p class="yzj-size-14" v-if="profile.available == 'false'">我现在不想工作</p>
+      <p class="yzj-size-14 yzj-top-distance15" v-if="profile.workload==1">
+        工作时长：每周可工作30小时以下
+      </p>
+      <p class="yzj-size-14 yzj-top-distance15" v-if="profile.workload==2">
+        工作时长：每周可工作30小时以上
+      </p>
+      <p class="yzj-size-14 yzj-top-distance15" v-if="profile.workload==3">
+        工作时长：根据需求者需要
+      </p>
+      <div v-if="profile.evaluate_num">
+        <p class="pull-left yzj-top-distance15">
+          <span v-yzj_star="profile.aver_score"></span>
+          <span class="text-warning" style="margin-left: 15px">5.0分</span>
+        </p>
+        <div class="clearfix"></div>
+        <p class="yzj-size-14 yzj-top-distance15" v-text="'共' + profile.evaluate_num + '人评价'">
+        </p>
+      </div>
+      <div v-else>
+        <p class="yzj-top-distance15">
+          <img src="/static/images/new-person.png">
+        </p>
+        <p class="yzj-size-14 yzj-top-distance15">
+          他是个新人，暂无评分数据
+        </p>
+      </div>
+
+      <div class="clearfix"></div>
+
+      <div class="yzj-top-distance30">
+
+        <p class="yzj-size-18 text-muted">
+          <span class="pull-left">语言</span>
+        </p>
+
+        <div class="clearfix"></div>
+        <div class="line"></div>
+
+        <div>
+          <p class="yzj-size-14">
+            <span class="pull-left">英语</span>
+          </p>
+          <div class="clearfix"></div>
+          <p class="yzj-size-14 yzj-top-distance10">
+            <span class="pull-left">{[profile.english | level_str]}</span>
+          </p>
+          <div class="clearfix"></div>
+          <div class="line02"></div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div v-for="language in profile.languages">
+          <p class="yzj-size-14">
+            <span class="pull-left">{[language.name | language]}</span>
+          </p>
+          <div class="clearfix"></div>
+          <p class="yzj-size-14 yzj-top-distance10">
+            <span class="pull-left">{[language.level | level_str]}</span>
+          </p>
+          <div class="clearfix"></div>
+          <div class="line02"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <alert :msg='error_msg'></alert>
+
+  <!-- 合同需求方评价 -->
+  <modal :showmodal.sync="modals.comment_modal">
+    <project_comment :work_detail="work_detail" slot="content"></project_comment>
+  </modal>
+
+  <!-- 合同需求方评价 -->
+  <modal :showmodal.sync="modals.project_modal">
+    <project_detail :project_detail="project_detail" slot="content"></project_detail>
+  </modal>
+
+  <!-- 立即雇佣modal-->
+  <div class="modal fade bs-example-modal-lg choose-sort" id="employ" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog contract-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+            <span aria-hidden="true" class="yzj-size-30">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+          <h3 class="modal-title text-muted text-center">您要为那份项目雇佣？</h3>
+          <div class="yzj-size-16 yzj-top-distance50">
+            <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-1">
+              <p class="text-muted">项目列表</p>
+              <div class="form-group yzj-top-distance40">
+                <label class="control-label col-xs-3 clear-left text-left text-info">选择为哪份项目雇佣</label>
+                <div class="col-xs-9 clear-left">
+                  <div class="yzj-size-14">
+                    <div class="col-xs-12 clear-left">
+                      <select class="form-control" name="job_id" id="job_id" style="margin-top:-15px;" v-model="job_id">
+                      <option value="" selected>请选择要雇佣的项目</option>
+                      <option v-for="item in jobs" value="{[item.id]}">{[item.name]}</option>
+                      </select>
+                    </div>
+                    <div class="clearfix"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+              <div class="form-group yzj-top-distance10" id="job-error">
+                <div class="col-xs-9 col-xs-offset-3 text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> 您没有选中任何项目
+                </div>
+              </div>
+              <div class="form-group yzj-top-distance50">
+                <div class="col-xs-4 clear-right col-xs-offset-1">
+                  <button class="btn btn-primary btn-block yzj-right-distance15" id="btn-hire">雇佣</button>
+                </div>
+                <div class="col-xs-4 clear-right">
+                  <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer yzj-top-distance10"></div>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/jquery.raty.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/production/other_profile_detail.min.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>查看合同</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+          {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+
+  <div id="layout">
+    <div class="container yzj-top-distance50">
+      <div>
+        <a class="text-warning yzj-size-16" href="/freelancers/contracts">&lt;&nbsp;返回确定的合同</a>
+      </div>
+      <h4 class="yzj-top-distance30 text-muted">
+        <strong>查看合同</strong>
+      </h4>
+      <div class="col-xs-9 yzj-top-distance20 yzj-box">
+        <div class="show-contract-base yzj-size-16 yzj-height50">
+          <p>
+            <span>合同标题</span>{[contract.name]}
+          </p>
+          <p>
+            <span>项目名称</span>
+            <a href="/jobs/{[contract.job.id]}" class="text-warning">{[contract.job.name]}</a>
+          </p>
+          <p v-if="job.paymethod=='fixed'">
+            <span>预算</span>¥ {[contract.amount]}
+          </p>
+          <div v-if="job.paymethod=='fixed' && stones.length>0" style="margin-bottom:-50px">
+            <span>里程碑</span>
+            <div class="show-contract-table">
+              <table class="table work-sort">
+                <thead>
+                  <tr>
+                    <td width="50%">名称</td>
+                    <td width="30%">金额</td>
+                    <td width="20%">结束日期</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="item in stones">
+                    <td>{[item.name]}</td>
+                    <td>¥ {[item.amount]}</td>
+                    <td>{[item.end_at]}</td>
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <p v-if="job.paymethod=='hour'">
+            <span>时薪</span>¥ {[contract.hourly]} / 小时
+          </p>
+          <p v-if="job.paymethod=='hour'">
+            <span>可工作时长</span>{[contract.workload]}小时 / 周
+          </p>
+          <p>
+            <span>合同发送日期</span>{[contract.create_at]}
+          </p>
+          <p>
+            <span>开始日期</span>{[contract.start_at]}
+          </p>
+        </div>
+        <div class="col-xs-offset-3 yzj-top-distance30">
+          <div class="col-xs-4 clear-left">
+            <input type="button" value="撤销合同" class="btn btn-primary btn-block" data-toggle="modal" data-target="#cancel-contract">
+          </div>
+          <div class="col-xs-4 clear-left">
+            <input type="button" value="给出一个新的报价" class="btn btn-default btn-block" data-toggle="modal" data-target="#new-bidprice">
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-3 yzj-top-distance20 yzj-box show-contract-right">
+        <h4 class="text-muted">合同方</h4>
+        <div class="line"></div>
+        <div class="yzj-top-distance20 yzj-size-16">
+          <p class="text-muted">合同发送人</p>
+          <div class="yzj-top-distance20">
+              <img width="69" height="69" class="img-circle navbar-header" v-bind:src="client.avatar">
+              <div class="show-contract-photoinfo yzj-size-14">
+                  <p>{[client.name]}</p>
+                  <p>yunwoke</p>
+              </div>
+          </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="yzj-top-distance30 yzj-size-16">
+          <p class="text-muted">合同接收人</p>
+          <div class="yzj-top-distance20">
+            <img width="69" height="69" class="img-circle navbar-header" v-bind:src="freelancer.avatar">
+            <div class="show-contract-photoinfo yzj-size-14">
+                <p>{[freelancer.name]}</p>
+                <p>{[freelancer.title]}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade bs-example-modal-lg choose-sort" 
+      id="cancel-contract" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog contract-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+            <span aria-hidden="true" class="yzj-size-30">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+          <h3 class="modal-title text-muted text-center">撤销合同</h3>
+          <div class="yzj-size-16 yzj-top-distance50" style="padding-left:100px">
+            <p>一旦撤销合同，服务方将不能接受并开始工作</p>
+            <h4 class="text-info yzj-top-distance30">
+              <strong>选择一个撤销的原因</strong>
+            </h4>
+            <div class="text-info yzj-size-14 yzj-top-distance30 yzj-height40">
+              <p v-for="item in questions">
+                <input type="radio" name="reason" value="{[item.question_id]}" v-model="question_id">{[item.name]}</p>
+            </div>
+            <div class="yzj-top-distance30">
+              <p class="yzj-size-16"><span class="text-muted">具体原因可以发消息给服务方</span>（可选）</p>
+              <textarea rows="4" class="bidTextarea yzj-top-distance20" style="width:600px" v-model="reason"></textarea>
+            </div>
+            <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+              <div class="col-xs-4 clear-right">
+                <button type="button" class="btn btn-primary btn-block yzj-right-distance15" v-on:click="revoke">确认</button>
+              </div>
+              <div class="col-xs-4 clear-right">
+                <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="modal fade bs-example-modal-lg choose-sort" 
+      id="new-bidprice" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog contract-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="education_close">
+            <span aria-hidden="true" class="yzj-size-30">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body yzj-box yzj-height20 yzj-top-distance10">
+          <h3 class="modal-title text-muted text-center">给出一个新的报价</h3>
+          <div class="yzj-size-16 yzj-top-distance50 text-info" style="padding-left:100px">
+            <p>您可以给服务方提供一个新的报价，但我们将撤回之前的意见给出的报价。</p>
+            <div class="yzj-top-distance50 yzj-size-14 col-xs-offset-2">
+              <div class="col-xs-4 clear-right">
+                <button type="button" class="btn btn-primary btn-block yzj-right-distance15">确认</button>
+              </div>
+              <div class="col-xs-4 clear-right">
+                <button type="button" class="btn btn-default btn-block yzj-right-distance15" data-dismiss="modal">取消</button>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/frontend/contract.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+</html>

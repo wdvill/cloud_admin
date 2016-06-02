@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>我的投标</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+  <link ref="stylesheet" type="text/css" href="/static/css/hint.min.css" />
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "include/header/freelancer-top.html" %}
+        </div>
+        {% include "include/header/freelancer.html" %}
+      </nav>
+    </header>
+    <div class="container yzj-top-distance50" id="proposals">
+      <div class="alert alert-success yzj-top-distance5" style="display: none"></div>
+      <h4 class="text-muted">我的投标</h4>
+      <div class="yzj-top-distance20 yzj-box text-center yzj-size-18" v-if = "is_null">
+        <p class="text-center yzj-top-distance40">
+        <img src="/static/images/nofavorite-icon.png">
+        </p>
+        <p class="yzj-bot-distance40 text-center yzj-top-distance20 yzj-size-16">您还没有投标--<a href="">找一份工作吧</a></p>
+      </div>
+      <div class="yzj-box yzj-border yzj-top-distance20" v-if = "!is_null">
+
+        <div class="row">
+          <div class="col-xs-12">
+            <ul class="nav nav-tabs-full" role="tablist">
+              <li class="active" role="presentation" data-toggle="tab">
+                <a class="" href="#process" aria-controls="process">进行中的</a>
+              </li>
+              <li role="presentation" data-toggle="tab">
+                <a class="" href="#frozen" aria-controls="frozen">已冻结</a>
+              </li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active" id="process" role="tabpanel">
+
+                <!-- 沟通中 -->
+                <div class="row yzj-top-distance20" v-show="interview_list.length">
+                  <div class="col-xs-12">
+                    <a href="#" class="sub-title">沟通中({[interview_list.length]})</a>
+                    <a href="#" class="tip" data-toggle="tooltip" data-placement="right" title="此处显示您正和需求者沟通中的记录"></a>
+                  </div>
+                </div>
+                <div class="table-responsive yzj-top-distance20" v-show="interview_list.length">
+                  <table class="table table-bordered work-sort">
+                    <thead>
+                      <tr>
+                        <td width="20%">时间</td>
+                        <td>工作名称</td>
+                        <td width="20%">需求方</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in interview_list_show.array">
+                        <td>{[item.create_at]}</td>
+                        <td><a href="/freelancers/proposal/{[item.proposal_id]}">{[item.job.name]}</a></td>
+                        <td>{[item.invite.name]}</td>
+                      </tr>
+                      <tr v-show="interview_list_show.more">
+                        <td colspan="3" style="text-align:center"><a href="javascript:;" v-on:click="more('interview')" data-hint="查看更多" class="hint--bottom">查看更多</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- 沟通中 -->
+                <!-- 邀请 -->
+                <div class="row yzj-top-distance20" v-show="invite_list.length">
+                  <div class="col-xs-12">
+                    <a href="#" class="sub-title">收到的邀请({[invite_list.length]})</a>
+                    <a href="#" class="tip" data-toggle="tooltip" data-placement="right" title="此处显示您收到的邀请"></a>
+                  </div>
+                </div>
+                <div class="table-responsive yzj-top-distance20" v-show="invite_list.length">
+                  <table class="table table-bordered work-sort">
+                    <thead>
+                      <tr>
+                        <td width="20%">时间</td>
+                        <td>工作名称</td>
+                        <td width="20%">需求方</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in invite_list_show.array">
+                        <td>{[item.create_at]}</td>
+                        <td><a href="/freelancers/proposal/{[item.proposal_id]}">{[item.job.name]}</a></td>
+                        <td>{[item.invite.name]}</td>
+                      </tr>
+                      <tr v-show="invite_list_show.more">
+                        <td colspan="3" style="text-align:center"><a href="javascript:;" v-on:click="more('invite')" data-hint="查看更多" class="hint--bottom">查看更多</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- 邀请 -->
+                <!-- 待处理投票 -->
+                <div class="row yzj-top-distance20" v-show="active_list.length">
+                  <div class="col-xs-12">
+                    <a href="#" class="sub-title">待处理投标({[active_list.length]})</a>
+                    <a href="#" class="tip" data-toggle="tooltip" data-placement="right" title="此处是待处理投标"></a>
+                  </div>
+                </div>
+                <div class="table-responsive yzj-top-distance20" v-show="active_list.length">
+                  <table class="table table-bordered work-sort">
+                    <thead>
+                      <tr>
+                        <td width="20%">时间</td>
+                        <td>工作名称</td>
+                        <td width="20%">需求方</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in active_list_show.array ">
+                        <td>{[item.create_at]}</td>
+                        <td><a href="/freelancers/proposal/{[item.proposal_id]}">{[item.job.name]}</a></td>
+                        <td>{[item.invite.name]}</td>
+                      </tr>
+                      <tr v-show="active_list_show.more">
+                        <td colspan="3" style="text-align:center"><a href="javascript:;" v-on:click="more('active')" data-hint="查看更多" class="hint--bottom">查看更多</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- 待处理投标 -->
+
+
+              </div>
+              <div class="tab-pane" id="frozen" role="tabpanel">
+                <!-- 待处理投票 -->
+                <div class="row yzj-top-distance20" v-show="freeze_list.length">
+                  <div class="col-xs-12">
+                    <a href="#" class="sub-title">已冻结投标({[freeze_list.length]})</a>
+                    <a href="#" class="tip" data-toggle="tooltip" data-placement="right" title="此处是已冻结的投标"></a>
+                  </div>
+                </div>
+                <div class="table-responsive yzj-top-distance20" v-show="freeze_list.length">
+                  <table class="table table-bordered work-sort">
+                    <thead>
+                      <tr>
+                        <td width="20%">时间</td>
+                        <td>工作名称</td>
+                        <td width="20%">状态</td>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="item in freeze_list_show.array ">
+                        <td>{[item.create_at]}</td>
+                        <td><a href="/freelancers/proposal/{[item.proposal_id]}">{[item.job.name]}</a></td>
+                        <td>
+                          <span v-if="item.status == 'revoke'"><i class="proposal-revoke"></i>撤回的投标</span>
+                          <span v-if="item.status == 'archive'"><i class="proposal-freeze"></i>冻结</span>
+                          <a v-if="item.status == 'archive'" href="javascript:;" class="text-warning" v-on:click="unfreeze(item.proposal_id)"> 激活</a>
+                          <span v-if="item.status == 'hire'"><i class="proposal-hire"></i>被雇佣</span>
+                          <a v-if="item.status == 'hire' && (item.contract_status == 'carry' || item.contract_status == 'pause' || item.contract_status == 'finish' || item.contract_status == 'dispute' || item.contract_status == 'service' || item.contract_status == 'carry_paid')"
+                            href="/freelancers/contracts/{[item.contract_id]}" class="text-warning">&nbsp;&nbsp;查看合同</a>
+                          <span v-if="item.status == 'refuse' && item.ptype == 'D'"><i class="proposal-refuse"></i>被拒绝</span>
+                          <span v-if="item.status == 'refuse' && item.ptype == 'I'"><i class="proposal-myrefuse"></i>主动拒绝</span>
+                        </td>
+                      </tr>
+                      <tr v-show="freeze_list_show.more">
+                        <td colspan="3" style="text-align:center"><a href="javascript:;" v-on:click="more('freeze')" data-hint="查看更多" class="hint--bottom">查看更多</a></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <!-- 待处理投标 -->
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    {% include "footer.html" %}
+    <script src="/static/js/jquery-2.1.4.min.js"></script>
+    <script src="/static/js/vue.min.js"></script>
+    <script src="/static/js/js.cookie.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/editicon-dis.js"></script>
+    <script>
+      $(function() {
+        $("[data-toggle='tooltip']").tooltip();
+
+        $('[data-toggle="tab"]').click(function() {
+          var selector = $(this).find('a').attr('href');
+          console.log(selector);
+          /*
+          $('[data-toggle="tab"] li').removeClass('active');
+          $(this).addClass('active');
+          $(this).attr('data-dd', '---');
+          console.log($(this), '999');
+          */
+          $('.tab-pane').hide();
+          $(selector).show();
+          $(this).tab('show');
+        });
+      })
+    </script>
+    <script src="/static/production/proposal.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+
+</body>
+
+</html>

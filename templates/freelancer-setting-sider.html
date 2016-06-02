@@ -1,0 +1,101 @@
+      <div class="col-xs-3 clear-left">
+        <!--钱包-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon01.png">钱包
+          </h4>
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "account" %}
+            <a class="active" href="/settings/account">账户信息</a>
+            {% else %}
+            <a href="/settings/account">账户信息</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="cards" %}
+            <a class="active" href="/settings/cards">银行卡</a>
+            {% else %}
+            <a href="/settings/cards">银行卡</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "alipay" %}
+            <a class="active" href="/settings/alipay">支付宝</a>
+            {% else %}
+            <a href="/settings/alipay">支付宝</a>
+            {% endif %}
+          </p>
+        </div>
+        <!--个人信息-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon02.png">个人信息
+          </h4> 
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "concatinfo"%}
+            <a class="active" href="/settings">我的名片</a>
+            {% else %}
+            <a href="/settings">我的名片</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            <a href="/freelancers/{{user.uuid}}">我的档案</a>
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "profile"%}
+            <a class="active" href="/freelancers/settings/profile">档案设置</a>
+            {% else %}
+            <a href="/freelancers/settings/profile">档案设置</a>
+            {% endif %}
+          </p>
+          <!--p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            <a href="/freelancers/settings/teams">我的团队</a>
+          </p-->
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "idverify"%}
+            <a class="active" href="/freelancers/settings/identity">身份认证</a>
+            {% else %}
+            <a href="/freelancers/settings/identity">身份认证</a>
+            {% endif %}
+          </p>
+        </div>
+        <!--个人信息-->
+        <div class="left-small-box yzj-bot-distance40">
+          <h4 class="text-muted">
+            <img class="yzj-right-distance15" src="/static/images/title-icon03.png">账号安全
+          </h4> 
+          <div class="line"></div>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "password"%}
+            <a class="active" href="/settings/password">修改密码</a>
+            {% else %}
+            <a href="/settings/password">修改密码</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav == "question"%}
+            <a class="active" href="/settings/question">修改密保问题</a>
+            {% else %}
+            <a href="/settings/question">修改密保问题</a>
+            {% endif %}
+          </p>
+          <p class="col-xs-offset-2 yzj-top-distance20 yzj-size-16 text-info">
+            {% if sider_nav=="notify" %}
+            <a class="active" href="/clients/settings/notify">通知设置</a>
+            {% else %}
+            <a href="/freelancers/settings/notify">通知设置</a>
+            {% endif %}
+          </p>
+        </div>
+        {% if user.to_req == false %}
+        <div class="line"></div>
+        <p class="yzj-size-14 yzj-height30">
+          如果您想在网站上发布项目，寻找服务方为您工作，您可以添加需求者身份。
+        </p>
+        <p class="col-xs-offset-1 col-xs-10">
+          <a class="btn btn-primary btn-block yzj-top-distance20" href="/freelancers/client/new">创建需求者身份</a>
+        </p>
+        {% endif %}
+      </div>

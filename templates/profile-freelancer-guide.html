@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div>
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+      </nav>
+    </header>
+
+      <div id="layout" class="container yzj-top-distance70">
+        <h3 class="text-center text-muted">创建您的个人资料</h3>
+        <p class="yzj-size-16 text-info yzj-top-distance30 yzj-height30">完整的个人资料是您向潜在需求方展示自己的绝佳机会，详细地介绍你所从事的工作，您的技能类型和工作及教育经历，记住要突出你的特点和优势。
+          
+        </p>
+        <p class="yzj-top-distance30 yzj-bot-distance70 yzj-size-16 text-info">
+          目前您的档案尚未完善，所以先搞定它，这是一切的开始
+          <a href="#" class="text-warning">【了解更多相关资料】</a>
+        </p>
+        <div class="clearfix"></div>
+        <div class="main-form text-info">
+         <a href="/users/profile/step/1" class="btn btn-primary btn-block">创建我的档案</a>
+        </div>
+        <p class="yzj-size-16 yzj-top-distance70 text-info">
+          无从下手？看看这些优秀的介绍吧！
+        </p>
+        <div class="row">
+          <div class="col-xs-4 yzj-top-distance30" v-for="item in freelancers">
+            <div class="yzj-small-box table-sort" onclick="window.open('/freelancers/{[item.id]}')">
+              <div class="media">
+                <div class="media-left">
+                  <a href="javascript:;">
+                    <img class="media-object" v-bind:src="item.avatar" width="64" height="64">
+                  </a>
+                </div>
+                <div class="media-body">
+                  <h4 class="media-heading text-info">{[item.name]}</h4>
+                  <span class="yzj-size-14 text-primary">{[item.title]}</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% include "footer.html" %}
+      <script src="/static/js/jquery-2.1.4.min.js"></script>
+      <script src="/static/js/bootstrap.min.js"></script>
+      <script src="/static/js/editicon-dis.js"></script>
+      <script src="/static/js/vue.min.js"></script>
+      <script src="/static/js/js.cookie.js"></script>
+      <script src="/static/js/common.js"></script>
+      <script src="/static/common/js/yunwork.js"></script>
+      <script src="/static/common/js/service.js"></script>
+      <script src="/static/js/notice.js"></script>
+      <script src="/static/production/freelancer_guide.min.js"></script>
+      </body>
+    </html>

@@ -1,0 +1,33 @@
+.budget-range {
+  position: relative;
+  width: 278px;
+  height: 18px;
+  margin: 20px auto;
+  border: 1px solid #e0e0e0;
+  background: #ffffff;
+
+  .body {
+    position: absolute;
+    right: 0;
+    left: 0;
+    height: 18px;
+    background: #ff6600;
+  }
+
+  .min-handle, .max-handle {
+    position: absolute;
+    top: -2px;
+    width: 22px;
+    height: 22px;
+    cursor: move;
+    background: #e0e0e0;
+  }
+
+  .min-handle {
+    left: -20px;
+  }
+
+  .max-handle {
+    left: 290px;
+  }
+}

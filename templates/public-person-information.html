@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>个人资料</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/common/css/base.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "include/header/freelancer-top.html" %}
+        </div>
+      </nav>
+    </header>
+<div id="layout">
+    <div class="container yzj-top-distance30">
+      <!--左侧-->
+      {% include "freelancer-setting-sider.html" %}
+      <!--右侧-->
+      <div class="col-md-9 clear-both">
+        <!--身份认证-名片信息-->
+        <h4 class="text-muted"><strong>名片信息</strong></h4>
+        <div class="yzj-top-distance20 yzj-box bg_hover" id="person-information">
+          <div class="yzj-size-16">
+            <p class="pull-left yzj-height30">账号信息</p>
+            <p class="pull-right">
+              <a href="javascript:;">
+                <img src="/static/images/edit-btn-icon.png" class="dis_icon hide" v-on:click="edit(profile)">
+              </a>
+            </p>
+          </div>
+          <div class="clearfix"></div>
+          <div class="line"></div>
+          <form class="form-horizontal text-info" id="modify-information">
+            <!--展示状态-->
+            <div v-show="unedit">
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">用户名</div>
+                <div class="col-xs-6 clear-left text-primary">
+                  {[profile.username]}
+                  <i v-if="profile.id_number!=''" class="freelancer-v" title="已认证"></i>
+                  <i v-if="profile.id_number==''" class="noverify" title="未认证"></i>
+                </div>
+              </div>
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">姓名</div>
+                <div class="col-xs-6 clear-left text-primary">
+                  {[profile.name]}
+                </div>
+              </div>
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">头像</div>
+                <div class="col-xs-6 clear-left text-primary">
+                  <img v-bind:src="profile.avatar" width="100" height="100">
+                </div>
+              </div>
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">邮箱</div>
+                <div class="col-xs-6 clear-left text-primary">
+                  {[profile.email]}
+                </div>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+            <!--可编辑状态-->
+            <div v-show="!unedit">
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">用户名</div>
+                <div class="col-xs-6 clear-left text-primary">
+                  {[ profile.username ]}
+                </div>
+              </div>
+              <div class="form-group yzj-size-16">
+                <label class="control-label col-xs-3 text-left">姓名</label>
+                <div class="col-xs-6 clear-left text-primary">
+                  <input type="text" required required-msg="用户名不能为空" data-regular=
+                  "/^[\u4E00-\u9FA5]{2,10}$/" data-msg="姓名在2-10个字符" v-model="pname" name="pname" class="form-control" v-bind:disabled="profile.id_number!=''?true:false" v-bind:value="profile.name"/>
+                </div>
+              </div>
+
+              <div class="form-group error-div" data-name="pname" >
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+
+              <div class="form-group yzj-size-16">
+                <label class="control-label col-xs-3 text-left">头像</label>
+                <div class="col-xs-2 clear-both">
+                  <img v-bind:src="profile.avatar" width="100" height="100">
+                </div>
+                <div class="col-xs-4 clear-left yzj-size-14 text-left text-info">
+                  <p class="yzj-size-14 text-primary yzj-top-distance10">支持JPG,JPEG,GIF,PNG,BMP格式，且不超过
+                    <span class="text-warning">5M</span>
+                  </p>
+                  <!--上传框-->
+                  <div class="inputfileload pull-left yzj-right-distance15 yzj-top-distance15">
+                    <div class="uploadphoto">上传文件</div>
+                    <input type="file" class="inputfile" id="photo" name="photo" accept="image/*" v-on:change="onload_file($event)" />
+                  </div>
+                  <div class="fileloadtext pull-left yzj-right-distance45 hide">文件名称</div>
+                  <div class="fileloadtext pull-left yzj-top-distance15">现在未选择任何文件</div>
+                </div>
+              </div>
+
+              <div class="form-group error-div" name="error" data-name="avatar" >
+                <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                  <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                  <span class="errorMsg"></span>
+                </div>
+              </div>
+
+              <div class="form-group yzj-size-16 yzj-top-distance40">
+                <label class="control-label col-xs-3 text-left">
+                  邮箱</label>
+                  <div class="col-xs-6 clear-left text-primary">
+                    <input type="text" required required-msg="邮箱不能为空" data-regular=
+                    "/^(([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5}){1,25})$/" data-msg="输入正确的邮箱地址" v-model="pemail" name="pemail" class="form-control" v-bind:value="profile.email"/>
+                  </div>
+              </div>
+
+                <div class="form-group error-div" name="error" data-name="email" >
+                  <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+                    <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+                    <span class="errorMsg"></span>
+                  </div>
+                </div>
+
+                <div class="col-xs-offset-3 col-xs-6 clear-left yzj-top-distance50">
+                  <div class="col-xs-6 clear-left">
+                    <a class="btn btn-primary btn-block" v-on:click="update_ca">提交</a>
+                  </div>
+                  <div class="col-xs-6 clear-left">
+                    <a class="btn btn-default btn-block" v-on:click="unedit=true">取消</a>
+                  </div>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            </form>
+            <div class="yzj-top-distance70 yzj-size-16">
+              <p class="pull-left yzj-height30">联系地址</p>
+              <p class="pull-right">
+                <a href="javascript:;">
+                  <img src="/static/images/edit-btn-icon.png" class="dis_icon hide" v-on:click="edit2(profile)">
+                </a>
+              </p>
+            </div>
+            <div class="clearfix"></div>
+            <div class="line"></div>
+            <!--展示状态-->
+            <form  class="form-horizontal text-info" id="modify-address">
+              <div v-show="unedit2">
+                <div class="form-group yzj-size-16 yzj-top-distance40">
+                  <div class="col-xs-3 text-left">城市</div>
+                  <div class="col-xs-6 clear-left" v-if="profile.location.parent_name && profile.location.parent_name!=''">{[profile.location.parent_name]}，{[profile.location.name]}</div>
+                  <div class="col-xs-6 clear-left" v-else>未填写</div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="form-group yzj-size-16 yzj-top-distance40">
+                  <div class="col-xs-3 text-left">地址</div>
+                  <div class="col-xs-6 clear-left" v-if="profile.address!=''">{[profile.address]}</div>
+                  <div class="col-xs-6 clear-left" v-else>未填写</div>
+               </div>
+               <div class="clearfix"></div>
+               <div class="form-group yzj-size-16 yzj-top-distance40">
+                <div class="col-xs-3 text-left">邮编</div>
+                <div class="col-xs-6 clear-left" v-if="profile.postcode!=''">{[profile.postcode]}</div>
+                <div class="col-xs-6 clear-left" v-else>未填写</div>
+             </div>
+             <div class="clearfix"></div>
+           </div>
+           <!--可编辑状态-->
+           <div v-show="!unedit2">
+            <div class="form-group">
+                <label class="control-label col-xs-3 text-left">
+                  <span class="text-warning">*</span> 城市
+                </label>
+                <div class="col-xs-3 clear-left">
+                  <select class="form-control select-control" v-on:change="select_child_address()" v-model="address_pid">
+                    <option value="">选择省份</option>
+                    <option v-for="item in prarent_address" v-bind:value="item.address_id">{[ item.name ]}</option>
+                  </select>
+                </div>
+                <div class="col-xs-3 clear-left">
+                  <select class="form-control select-control" v-model="location_id">
+                    <option value="">选择市/区域</option>
+                    <option v-for="item in child_address" v-bind:value="item.address_id">{[ item.name ]}</option>
+                  </select>
+                </div>
+              </div>
+
+
+            <div class="form-group yzj-size-16">
+              <label class="control-label col-xs-3 text-left">
+                <span class="text-warning">*</span> 地址
+              </label>
+              <div class="col-xs-6 clear-left text-primary">
+               <input type="text" required required-msg="地址不能为空"  v-model="t_address" name="address" class="form-control" v-bind:value="profile.address"/>
+             </div>
+           </div>
+
+           <div class="clearfix"></div>
+
+           <div class="form-group error-div" name="error" data-name="address" >
+            <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+              <span class="errorMsg"></span>
+            </div>
+          </div>
+
+           <div class="form-group yzj-size-16">
+            <label class="control-label col-xs-3 text-left">
+              <span>&nbsp;&nbsp;</span>邮编
+            </label>
+            <div class="col-xs-6 clear-left text-primary">
+             <input type="text" v-model="t_postcode" name="postcode" class="form-control" data-regular=
+             "/^\d{6}$/" data-msg="输入正确的邮编地址" v-bind:value="profile.postcode"/>
+           </div>
+         </div>
+
+         <div class="form-group error-div" name="error" data-name="postcode" >
+          <div class="col-xs-offset-3 col-xs-10 clear-left text-warning yzj-size-14">
+            <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>
+            <span class="errorMsg"></span>
+          </div>
+        </div>
+
+         <div class="form-group yzj-top-distance50">
+          <div class="col-xs-offset-3 col-xs-6 clear-left">
+            <div class="col-xs-6 clear-left">
+              <a class="btn btn-primary btn-block" v-on:click="update_contact">保存</a>
+            </div>
+            <div class="col-xs-6 clear-left">
+              <a class="btn btn-default btn-block" v-on:click="unedit2=true">取消</a>
+            </div>
+          </div>
+        </div>
+      </div>
+     </div>
+    </form>
+  </div>
+
+</div>
+</div>
+{% include "footer.html" %}
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/editicon-dis.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/js/editicon-dis.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/production/person-information.min.js"></script>
+<script src="/static/js/notice.js"></script>
+</body>
+</html>

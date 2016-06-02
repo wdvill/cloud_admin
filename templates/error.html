@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>完善我的个人资料</title>
+	<link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/selectize.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+	<div id="layout">
+		<!--头部-->
+		<header class="header-navbar">
+			<nav class="navbar navbar-default">
+				{% include "header.html" %}
+				{% include "header-my.html" %}
+			</nav>
+		</header>
+
+		<div id="body" class="container yzj-top-distance50">
+			<div class="yzj-top-distance20">
+				<h3 class="text-muted">错误提示</h3>
+				<!--错误代码开始-->
+				<div class="col-xs-offset-2 col-xs-10 clear-left text-warning yzj-size-14">
+					<span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>此字段不能为空              
+				</div>
+				<!--错误代码结束-->
+			</div>
+			
+
+			<h3 class="text-muted yzj-top-distance70">模态框</h3>
+			<div class="yzj-top-distance20">
+				<div class="col-xs-2">
+					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#myModal">警告框</button>
+				</div>
+			</div>
+			<div class="clearfix"></div>
+			<h3 class="text-muted yzj-top-distance70">错误提示</h3>
+			<div class="yzj-top-distance20">
+				<div class="col-xs-2">
+					<button class="btn btn-primary btn-block" data-toggle="modal" data-target="#error">
+						错误框
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include "footer.html" %}
+
+	<!--删除框-->
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-warning" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+					<h4 class="modal-title text-center text-warning" id="myModalLabel"><strong>是否删除</strong></h4>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary btn-sm">是</button>
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">否</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+	<!--错误框开始-->
+	<div class="modal fade" id="error" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog modal-warning" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+					<h4 class="modal-title text-center text-danger" id="myModalLabel"><strong>错误提示</strong></h4>
+				</div>
+				<div class="modal-footer text-center">
+					<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">确定</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<script src="/static/js/jquery-2.1.4.min.js"></script>
+	<script src="/static/js/bootstrap.min.js"></script>
+	<script src="/static/js/vue.min.js"></script>
+	<script src="/static/js/selectize.min.js"></script>
+	<script src="/static/js/js.cookie.js"></script>
+	<script src="/static/js/common.js"></script>
+	<script src="/static/js/profile-create.js"></script>
+    <script src="/static/common/js/yunwork.js"></script>
+    <script src="/static/common/js/service.js"></script>
+    <script src="/static/js/notice.js"></script>
+</body>
+</html>

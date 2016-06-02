@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>发布工作</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css" />
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectize.css" />
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+
+<body>
+
+  <!--头部-->
+  <header class="header-navbar">
+    <nav class="navbar navbar-default">
+      <div class="container">
+        {% include "header.html" %}
+      </div>
+      {% include "header-my.html" %}
+    </nav>
+  </header>
+  <div id="layout">
+    <input type="hidden" id="languages" value="{{languages}}" />
+    <input type="hidden" id="frameworks" value="{{frameworks}}" />
+    <input type="hidden" id="skills" value="{{skills}}" />
+
+    <div class="container yzj-top-distance50" id="project-new">
+      <h4 class="text-muted"><strong>请选择一个项目分类</strong></h4>
+      <form class="form-horizontal">
+        <div class="form-group yzj-top-distance20">
+          <div class="col-xs-3">
+            <select class="form-control select-control" v-model="is_categoryone" id="cat01"></select>
+          </div>
+          <div class="col-xs-3 clear-left">
+            <fieldset v-bind:disabled="is_categoryone == false">
+              <select class="form-control select-control" v-model="category" id="cat02"></select>
+            </fieldset>
+          </div>
+        </div>
+        <div class="form-group" v-show="errCategory">
+          <div class="col-xs-12 text-warning yzj-size-14">
+            <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errCategory]}
+          </div>
+        </div>
+        <div class="yzj-top-distance30 yzj-box">
+          <h4 class="text-muted"><strong>项目描述</strong></h4>
+          <p class="yzj-top-distance40 yzj-size-16 text-info"><span class="text-warning">*</span> 简单描述一下您的项目名称</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-9">
+              <input type="text" class="form-control" placeholder="" v-model="name" />
+            </div>
+          </div>
+          <div class="form-group" v-show="errName">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errName]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info col-xs-9 clear-both"> <span class="pull-left"><span class="text-warning">*</span> 说说您的详细要求</span> <span class="col-xs-3 pull-right text-right text-primary"> 0/3000 </span> </p>
+          <div class="clearfix"></div>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-9">
+              <textarea class="form-control" rows="10" v-model="description"></textarea>
+            </div>
+            <!-- <div class="col-xs-1 clear-left">
+              <button class="btn btn-xs btn-default btn-example">示例</button>
+            </div> -->
+          </div>
+          <div class="form-group" v-show="errDescription">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errDescription]}
+            </div>
+          </div>
+          <p class="yzj-size-16 text-warning" role="tab" id="headingOne">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed text-warning"> <img src="/static/images/panel-title-icon02.png" class="yzj-right-distance10" />上传我的附加文档 <span class="yzj-size-12 text-info">(可选)</span> </a>
+          </p>
+          <div id="collapseOne" class="panel-collapse collapse yzj-top-distance15" role="tabpanel" aria-labelledby="headingOne" aria-expanded="false">
+            <div class="inputfileload pull-left yzj-right-distance15" v-model="attachment">
+              <div class="uploadphoto">
+                上传文件
+              </div>
+              <input type="file" class="inputfile" id="fileupload" name="file" />
+            </div>
+            <div class="fileloadtext pull-left yzj-right-distance45" v-show="filename != '' " v-model="filename">
+              {[ filename ]}
+            </div>
+            <div class="fileloadtext pull-left">
+              文件大小不得超过5MB
+            </div>
+          </div>
+          <div class="clearfix"></div>
+          <div class="form-group" v-show="errFile">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errFile]}
+            </div>
+          </div>
+          <p class="yzj-top-distance40 yzj-size-16" v-show="show_category == 1"><span class="text-warning">*</span> 您想为这份工作雇佣多少开发者</p>
+          <div class="form-group yzj-top-distance15" v-show="show_category == 1">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="radio" name="mostdetail1" value="1" v-model="hires1" />一个就够了
+              <br />
+              <p class="yzj-top-distance20"> <input type="radio" name="mostdetail1" class=" pull-left" v-model="hires1" value="2" /> <span class="pull-left">需要两个或以上</span> <span class="col-xs-2 clear-both pull-left" style="display:inline-block;margin-top:-6px;margin-left:28px" v-show="hires1 &gt;= 2"> <input type="number" class="form-control" style="height:30px" placeholder="请输入您需要的人数" min="2" v-model="hires1_num" /> </span>                <span class="col-xs-1" v-show="hires1 == 2">人</span> </p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errHires1">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errHires1]}
+            </div>
+          </div>
+          <p class="yzj-top-distance40 yzj-size-16" v-show="show_category == 1">开发者需要的技能<span class="yzj-size-12">(可选)</span></p>
+          <div class="form-group yzj-top-distance15" v-show="show_category == 1 ">
+            <div class="col-xs-7">
+              <input type="text" v-model="skills" id="select-skills" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-skills" value="{{skills}}" />
+            </div>
+          </div>
+          <hr />
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="isShowJobType"><span class="text-warning">*</span> 你是否有正在进行的项目或工作</p>
+          <div class="form-group yzj-top-distance15" v-show="isShowJobType">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="radio" name="works" v-model="job_type" value="once" />一次性项目
+              <br />
+              <p class="yzj-top-distance20"> <input type="radio" name="works" v-model="job_type" value="last" />正在进行的工作</p>
+              <p class="yzj-top-distance20"> <input type="radio" name="works" v-model="job_type" value="none" />我不确定</p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errJobType">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errJobType]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="show_working == 31 "><span class="text-warning">*</span> 以下哪个选项可以最好的描述你的工作</p>
+          <div class="form-group yzj-top-distance15" v-show="show_working == 31 ">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="radio" name="mostdetailv" v-model="work_type" value="develope" />开发Excel程序
+              <br />
+              <p class="yzj-top-distance20"> <input type="radio" name="mostdetailv" v-model="work_type" value="software" />安装/集成软件</p>
+              <p class="yzj-top-distance20"> <input type="radio" name="mostdetailv" v-model="work_type" value="browser" />创建浏览器扩展</p>
+              <p class="yzj-top-distance20"> <input type="radio" name="mostdetailv" v-model="work_type" value="others" />其他</p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errWorkType">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errWorkType]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="show_working == 32"><span class="text-warning">*</span> 这个服务方应该做什么样的工作？</p>
+          <div class="form-group yzj-top-distance15" v-show="show_working == 32">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="checkbox" name="mostdetail2" class="bigbox" id="w1" value="design" v-model="work_type2" />设计师
+              <br />
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w2" value="develop" v-model="work_type2" />开发人员</p>
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w3" value="manage" v-model="work_type2" />项目经理</p>
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w3" value="business" v-model="work_type2" />业务分析师</p>
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w4" value="qa" v-model="work_type2" />QA</p>
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w4" value="excel" v-model="work_type2" />Excel专家</p>
+              <p class="yzj-top-distance20"> <input type="checkbox" name="mostdetail2" class="bigbox" id="w6" value="others" v-model="work_type2" />其他</p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errWorkType2">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errWorkType2]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="isShowPlatforms"><span class="text-warning">*</span> 这个过程要在哪些平台应用</p>
+          <div class="form-group yzj-top-distance15" v-show="isShowPlatforms">
+            <div class="col-xs-12 table-border">
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': android == 'android' }" v-on:click="change_platform('android', $event)">
+                <img src="/static/images/send-icon016.png" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Windows</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': ios == 'ios' }" v-on:click="change_platform('ios', $event)">
+                <img src="/static/images/send-icon017.png" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">Mac</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': win == 'win' }" v-on:click="change_platform('win', $event)">
+                <img src="/static/images/send-icon018.png" />
+                <p class="yzj-top-distance20 yzj-size-16 text-info">LINUX/UNIX</p>
+              </div>
+
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="form-group" v-show="errPlatform">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errPlatform]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="isShowJobType"><span class="text-warning">*</span> 您想为这份工作雇佣多少开发者?</p>
+          <div class="form-group yzj-top-distance15" v-show="isShowJobType">
+            <div class="col-xs-12 yzj-size-14">
+              <input type="radio" name="mostdetail3" value="1" v-model="hires2" />一个就够了
+              <br />
+              <p class="yzj-top-distance20"> <input type="radio" name="mostdetail3" class=" pull-left" value="2" v-model="hires2" /> <span class="pull-left">需要两个或以上</span> <span class="col-xs-2 clear-both pull-left" style="display:inline-block;margin-top:-6px;margin-left:28px" v-show="hires2 == 2"> <input type="number" class="form-control" style="height:30px" placeholder="请输入您需要的人数" v-model="hires2_num" min="2" /> </span>                <span class="col-xs-1" v-show="hires2 == 2">人</span> </p>
+            </div>
+          </div>
+          <div class="form-group" v-show="errHires2">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errHires2]}
+            </div>
+          </div>
+          <p class="yzj-top-distance30 yzj-size-16 text-info" v-show="isShowStage"><span class="text-warning">*</span> 项目现在处于什么阶段(帮助我们提供给您更合适的候选人)</p>
+          <div class="yzj-top-distance15 table-border" v-show="isShowStage">
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': stage == 'design' }" v-on:click="change_stage('design', $event)">
+              <img src="/static/images/send-icon019.png" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">
+                我有设计</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': stage == 'introduction' }" v-on:click="change_stage('introduction', $event)">
+              <img src="/static/images/send-icon020.png" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">
+                我有说明书</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': stage == 'none' }" v-on:click="change_stage('none', $event)">
+              <img src="/static/images/send-icon021.png" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">这并不适用</p>
+            </div>
+            <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': stage == 'idea' }" v-on:click="change_stage('idea', $event)">
+              <img src="/static/images/send-icon022.png" class="yzj-top-distance30" />
+              <p class="yzj-top-distance20 yzj-size-16 text-info">我有一个想法</p>
+            </div>
+            <div class="clearfix"></div>
+
+          </div>
+          <div class="form-group" v-show="errStage">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errStage]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="isShowLanguage">对于一个服务方来说最重要的两门语言是什么？ <span class="yzj-size-14 text-primary">(可选)</span> </p>
+          <div class="form-group yzj-top-distance15 table-fix-width" v-show="isShowLanguage">
+            <div class="col-xs-7">
+              <input type="text" v-model="languages" id="select-languages" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-languages" value="{{languages}}" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="show_category == 5 || show_category == 8 || show_category == 6 || show_category == 13">你更喜欢用哪个软件框架？ <span class="yzj-size-14 text-primary">(可选)</span> </p>
+          <div class="form-group yzj-top-distance15 table-fix-width" v-show="show_category == 5 || show_category == 8 || show_category == 6 || show_category == 13">
+            <div class="col-xs-7">
+              <input type="text" v-model="frameworks" id="select-frameworks" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-frameworks" value="{{frameworks}}" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="isShowJobType">一个服务方应该还具备什么其他能力？ <span class="yzj-size-14 text-primary">(可选)</span> </p>
+          <div class="form-group yzj-top-distance15 table-fix-width" v-show="isShowJobType">
+            <div class="col-xs-7">
+              <input type="text" v-model="skills_other" id="select-skills-other" />
+              <input class="selectize-dropdown multi plugin-remove_button" type="hidden" id="project-skills-other" value="{{skills}}" />
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="isShowStage"><span class="text-warning">*</span> 你需要集成什么API吗？ <span class="yzj-size-14 text-primary">(可选)</span> </p>
+          <div class="form-group yzj-top-distance15 table-border" v-show="isShowStage">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': api == 'true' }" v-on:click="change_api('true', $event)">
+                <img src="/static/images/send-icon014.png" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">是</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': api == 'false' }" v-on:click="change_api('false', $event)">
+                <img src="/static/images/send-icon015.png" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">否</p>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group" v-show="errApi">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errApi]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-model="paymethod"><span class="text-warning">*</span> 选择一种付款方式</p>
+          <div class="form-group yzj-top-distance15">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': paymethod == 'hour' }" v-on:click="change_paymethod('hour', $event)">
+                <img src="/static/images/send-icon01.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  按小时付费</p>
+              </div>
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': paymethod == 'fixed' }" v-on:click="change_paymethod('fixed', $event)">
+                <img src="/static/images/send-icon02.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">按固定价格付费</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+          </div>
+          <div class="form-group" v-show="errPaymethod">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errPaymethod]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="paymethod != '' "><span class="text-warning">*</span> 开发者需要的经验水平</p>
+          <div class="form-group yzj-top-distance15" v-show="paymethod != '' ">
+
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': level == 'entry' }" v-on:click="change_level('entry', $event)">
+                <img src="/static/images/send-icon03.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  入门级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="paymethod === 'hour'"> &lt;100元 / 小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">我愿意接受一个经验较少价格较 <br />低的开发者</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': level == 'middle' }" v-on:click="change_level('middle', $event)">
+                <img src="/static/images/send-icon04.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">中间级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="paymethod === 'hour'">100元-300元/小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">需要寻找一个比较有经验的自由
+                  <br />职业者</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': level == 'expert' }" v-on:click="change_level('expert', $event)">
+                <img src="/static/images/send-icon05.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">专业级</p>
+                <p class="yzj-top-distance20 text-info yzj-size-12" v-show="paymethod === 'hour'">&gt;300元/小时</p>
+                <p class="yzj-top-distance20 text-primary yzj-size-12 yzj-height30">我愿意支付更高的费用给与经验 <br />丰富的人</p>
+              </div>
+              <div class="clearfix"></div>
+            </div>
+
+          </div>
+          <div class="form-group" v-show="errLevel">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errLevel]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="paymethod == 'hour' "><span class="text-warning">*</span> 你预期这个工作什么时候结束</p>
+          <div class="form-group yzj-top-distance15" v-show="paymethod == 'hour' ">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': duration == 1 }" v-on:click="change_duration('1', $event)">
+                <img src="/static/images/send-icon06.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  大于6个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': duration == 2 }" v-on:click="change_duration('2', $event)">
+                <img src="/static/images/send-icon07.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  3至6个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': duration == 3 }" v-on:click="change_duration('3', $event)">
+                <img src="/static/images/send-icon08.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  1至3个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': duration == 4 }" v-on:click="change_duration('4', $event)">
+                <img src="/static/images/send-icon09.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  不到1个月</p>
+              </div>
+
+              <div class="pull-left yzj-width220 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': duration == 5 }" v-on:click="change_duration('5', $event)">
+                <img src="/static/images/send-icon010.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">
+                  小于1个周</p>
+              </div>
+
+            </div>
+          </div>
+          <div class="form-group" v-show="errDuration">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errDuration]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="paymethod == 'hour' "><span class="text-warning">*</span> 承诺必须在这个工作上投入多少时间</p>
+          <div class="form-group yzj-top-distance15" v-show="paymethod == 'hour' ">
+            <div class="col-xs-12 table-border">
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': workload == 1 }" v-on:click="change_workload('1', $event)">
+                <img src="/static/images/send-icon013.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">超过30小时/周</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': workload == 2 }" v-on:click="change_workload('2', $event)">
+                <img src="/static/images/send-icon011.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">小于30小时/周</p>
+              </div>
+
+              <div class="pull-left yzj-width240 yzj-box yzj-border text-center yzj-right-distance20 table-sort" v-bind:class="{'active': workload == 3 }" v-on:click="change_workload('3', $event)">
+                <img src="/static/images/send-icon012.png" class="yzj-top-distance30" />
+                <p class="yzj-top-distance20 text-info yzj-size-16">我不知道</p>
+              </div>
+            </div>
+            <div class="clearfix"></div>
+          </div>
+          <div class="form-group" v-show="errWorkload">
+            <div class="col-xs-12 text-warning yzj-size-14">
+              <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errWorkload]}
+            </div>
+          </div>
+          <p class="yzj-size-16 yzj-top-distance30 text-info" v-show="paymethod == 'fixed' "><span class="text-warning">*</span> 预算</p>
+          <div class="form-group yzj-top-distance15" v-show="paymethod == 'fixed' ">
+            <div class="col-xs-3">
+              <input type="number" class="form-control" placeholder="请输入大于1的整数" v-model="budget" min="1" />
+            </div>
+            <label class="control-label yzj-size-16">元</label>
+          </div>
+        </div>
+        <div class="form-group" v-show="errBudget">
+          <div class="col-xs-12 text-warning yzj-size-14">
+            <span class="glyphicon glyphicon-exclamation-sign yzj-right-distance10" aria-hidden="true"></span>{[errBudget]}
+          </div>
+        </div>
+        <div class="yzj-box-special">
+          <button type="button" class="btn btn-primary btn-lg yzj-right-distance15" v-on:click="project_create('normal', $event)">发布项目</button>
+          <button type="button" class="btn btn-default btn-lg yzj-right-distance45" v-on:click="project_create('draft', $event)">保存草稿</button>
+        </div>
+      </form>
+
+      <!--错误框开始-->
+      <div class="modal fade" id="confirm" tabindex="-1">
+        <div class="modal-dialog modal-warning" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+              <h4 class="modal-title text-center text-danger" id="myModalLabel"><strong>{[errRes]}</strong></h4>
+            </div>
+            <div class="modal-footer text-center">
+              <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal">确定</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  {% include "footer.html" %}
+  <script src="/static/js/jquery-2.1.4.min.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
+  <script src="/static/js/selectize.min.js"></script>
+  <script src="/static/js/vue.min.js"></script>
+  <script src="/static/js/js.cookie.js"></script>
+  <script src="/static/js/common.js"></script>
+  <script src="/static/common/js/yunwork.js"></script>
+  <script src="/static/common/js/service.js"></script>
+  <script src="/static/js/project.js"></script>
+  <script src="/static/js/editicon-dis.js"></script>
+  <script src="/static/js/notice.js"></script>
+</body>
+
+</html>

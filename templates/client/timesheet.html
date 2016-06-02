@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>报表-工时表</title>
+  <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/custom.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/redefine.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/yunzujiaicons.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/selectlist.css">
+  <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+</head>
+<body>
+  <div id="layout">
+    <!--头部-->
+    <header class="header-navbar">
+      <nav class="navbar navbar-default">
+        <div class="container">
+          {% include "header.html" %}
+        </div>
+          {% include "include/header/client-report.html" %}
+      </nav>
+    </header>
+    <div id="body" class="container yzj-top-distance50">
+    	<!-- 工时表 -->
+    <div class="yzj-box">
+      <div class="col-xs-9 clear-both">
+        <div style="margin-top:-15px; float: left;">
+          <calendar :x="110" :y="28" :value.sync="start_at" :max="end_at" :is_week="false"></calendar>
+        </div>
+        <div style=" float: left; margin: 0 10px; margin-top:-15px; font-size: 16px; line-height: 31px;">
+          至
+        </div>
+        <div style="margin-top:-15px; float: left;">
+          <calendar :x="110" :y="28" :value.sync="end_at" :min="start_at" :is_week="false"></calendar>
+        </div>
+      </div>
+      <div class="col-xs-3 clear-both">
+        <select class="form-control" v-model='freelancer_id' style="margin-top: -22px">
+          <option value="" selected>所有服务方</option>
+          <option value="{[freelancer.id]}" v-for="freelancer in freelancers" v-text="freelancer.name"></option>
+        </select>
+      </div>
+    </div>
+		<div class="yzj-box yzj-top-distance20">
+			<div class="col-xs-12 clear-both">
+				<table class="table work-sort yzj-border">
+					<thead>
+						<tr class="text-muted text-center">
+							<td>结算日期</td>
+							<td>服务方</td>
+							<td>合同</td>
+							<td>工作时长</td>
+							<td>总金额</td>
+						</tr>
+					</thead>
+					<tbody>
+						<tr class="text-center" v-if="weekstones.length > 0" v-for="weekstone in weekstones">
+							<td width="20%">{[weekstone.audit_at | year_month_day]}</td>
+							<td width="20%"><span v-html="weekstone.freelancer.name"></span></td>
+							<td width="30%"><span v-html="weekstone.contract_name"></span></td>
+							<td width="15%"><span>{[weekstone.shot_times | hourformat]}小时</span></td>
+							<td width="15%"><span v-html="weekstone.actual_amount | substr_money"></span></td>
+						</tr>
+						<tr class="text-center text-muted yzj-size-16" v-if="weekstones.length > 0">
+							<td >总计</td>
+							<td></td>
+							<td></td>
+							<td><span>{[all_time | hourformat]}小时</span></td>
+							<td class="text-warning"><span v-html="'￥' + amount | substr_money"></span></td>
+						</tr>
+						<tr v-if="weekstones.length <= 0">
+							<td colspan="5">
+								<p class="text-center yzj-top-distance40">
+									<img src="/static/images/nofavorite-icon.png">
+								</p>
+								<p class="yzj-bot-distance40 text-center yzj-top-distance20 yzj-size-16">没有找到匹配的记录</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+
+    </div>
+    {% include "footer.html" %}
+</body>
+</html>
+<script src="/static/js/jquery-2.1.4.min.js"></script>
+<script src="/static/js/vue.min.js"></script>
+<script src="/static/js/js.cookie.js"></script>
+<script src="/static/js/bootstrap-datepicker.min.js"></script>
+<script src="/static/js/bootstrap.min.js"></script>
+<script src="/static/production/timesheet.min.js"></script>
+<script src="/static/js/common.js"></script>
+<script src="/static/common/js/yunwork.js"></script>
+<script src="/static/common/js/service.js"></script>
+<script src="/static/js/notice.js"></script>

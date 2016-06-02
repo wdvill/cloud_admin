@@ -5,18 +5,19 @@ from controllers import (
     page, user, sms, job, category, attachment, resume,
     address, margin, question, favorite, proposal,
     contract, freelancer, client, friend, notify,
-    help_center, order, mobile)
+    help_center, order, mobile, system_user)
 
 urls=[
     ("/", page.Index),
-    ("/signin", user.Signin),
-    ("/signout", user.Signout),
-    ("/api/user/signup", user.Register),
-    ("/api/user/signin", user.Login),
-    ("/api/user/signout", user.Logout),
-    ("/api/user/password/reset", user.PasswordReset),
-    ("/api/user/password/change", user.PasswordChange),
-    ("/api/user/password/verify", user.PasswordVerify),
+    ("/signin", system_user.Signin),
+    ("/signout", system_user.Signout),
+    ("api/system_user", system_user.SystemUser)
+    ("/api/user/signup", system_user.Register),
+    ("/api/user/signin", system_user.Login),
+    ("/api/user/signout", system_user.Logout),
+    ("/api/user/password/reset", system_user.PasswordReset),
+    ("/api/user/password/change", system_user.PasswordChange),
+    ("/api/user/password/verify", system_user.PasswordVerify),
     
     
     #before url

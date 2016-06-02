@@ -10,24 +10,44 @@ from backend import system_user
 from config.settings import all_skills, all_languages
 from common import utils
 
-class Register(Base):
+
+class Signup(Base):
+    def get(self):
+        if self.user:
+            if self.user.identify[0] == "f":
+                return self.redirect("/find-work-home")
+            return self.redirect("/clients/jobs")
+            
+        return self.render("signup-freelancer.html")
+
+class SystemUser(Base):
+    @signin_check
+    @freelancer_check
+    def get(self):
+        uname = self.params.get("username", None)
+        result = system_user.get(uname)
+        self.write(result)
+
+    @signin_check
     def post(self):
-
-        ua = self.request.headers.get("User-Agent", "")[:2]
-        if ua == "a/":
-            device = "android"
-        elif ua == "i/":
-            device = "ios"
-        elif ua == "d/":
-            device = "desktop"
-        else:
-            device = "web"
-
         result = user.register(self.params, device)
         if result['error_code'] == 0:
             domain = utils.get_domain(self.request.host)
             self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
             self.set_cookie("cuid", result['identify'][0], expires=result['expire_at'], path="/")
+        return self.send(result)
+    
+    @signin_check
+    def delete(self):
+        result = user.alipay_delete(self.user, self.params)
+        return self.send(result)
+    
+    @signin_check
+    def put(self):
+        if self.user.identify[0] == "f":
+            result = user.user_profile_update(self.user, self.params)
+        else:
+            result = client.client_profile_update(self.user, self.params)
         return self.send(result)
 
 class SignupClient(Base):

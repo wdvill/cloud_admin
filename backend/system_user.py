@@ -30,6 +30,16 @@ logger = logging.getLogger(__name__)
 def generate_token():
     return utils.rand_str(24) + utils.md5(str(utils.now()))[8:24]
 
+def get(uname):
+    if not uname:
+        return {"error_code":20001, "msg":"parameters required"}
+    user = SystemUser.select().where(SystemUser.username == uname).first()
+    if not user:
+        return {"error_code":20002, "msg":"user not exists"}
+    res = {"error_code":0, "msg":"ok"}
+    res['user'] = user
+    return res
+
 def login(uname, password):
     if not uname or not password:
         return {"error_code":20001, "msg":"parameters required"}

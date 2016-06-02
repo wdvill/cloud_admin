@@ -29,7 +29,8 @@ class SystemUser(BaseModel):
 
 class UserRole(BaseModel):
     user = ForeignKeyField(SystemUser)
-    rtype = CharField(verbose_name="身份", max_length=20, null=False, default="")
+    role_name = CharField(verbose_name="角色名", max_length=20, null=False, default="")
+    update_at = DateTimeField(verbose_name="更新时间", null=True, default="")
     create_at = DateTimeField(verbose_name="创建时间", null=False, default=utils.now)
     class Meta:
         db_table = "system_user_role"

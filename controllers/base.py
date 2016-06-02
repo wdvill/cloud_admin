@@ -35,7 +35,7 @@ class Base(tornado.web.RequestHandler):
 
     def render(self, template_path, **kwargs):
         user_all_info(self)
-        kwargs.update(lang=self.lang, user=self.user)
+        kwargs.update(user=self.user)
         tmpl = template.get_template(template_path)
         self.finish(tmpl.render(**kwargs))
 

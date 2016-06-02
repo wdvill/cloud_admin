@@ -6,5 +6,7 @@ CREATE TABLE `system_user` (
   `create_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+ALTER TABLE `system_user` CHANGE `uid` `uid` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+
 ALTER TABLE `system_user`
   ADD PRIMARY KEY (`uid`);

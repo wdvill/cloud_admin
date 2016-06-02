@@ -20,6 +20,7 @@ USER_STATUS = (
 class SystemUser(BaseModel):
     username = CharField(verbose_name="用户名", max_length=30, null=False, default="")
     password = CharField(verbose_name="密码", max_length=100, null=False, default="")
+    salt = CharField(verbose_name="盐", max_length=20, null=False, default="")
     role_id = IntegerField(verbose_name="角色id", null=False, default=0)
     create_at = DateTimeField(verbose_name="创建时间", null=False, default=utils.now)
 

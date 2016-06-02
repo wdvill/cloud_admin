@@ -14,7 +14,7 @@ class Index(Base):
         if not self.user:
             return self.redirect("/signin")
 
-        return self.render("index.html", categorys=category.get_index_category())
+        return self.render("index.html")
 
 class Browse(Base):
     def get(self):

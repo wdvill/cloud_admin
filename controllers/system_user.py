@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, with_statement
 
 from controllers.base import Base, EncryptBase
 from controllers.decorator import signin_check, freelancer_check, client_check
-from backend import user, client
+from backend import user
 from backend import system_user
 from config.settings import all_skills, all_languages
 from common import utils
@@ -22,11 +22,10 @@ class Signup(Base):
 
 class SystemUser(Base):
     @signin_check
-    @freelancer_check
     def get(self):
         uname = self.params.get("username", None)
         result = system_user.get(uname)
-        self.write(result)
+        return self.send(result)
 
     @signin_check
     def post(self):

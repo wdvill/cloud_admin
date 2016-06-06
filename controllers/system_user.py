@@ -22,7 +22,6 @@ class Signup(Base):
 
 class SystemUser(Base):
     @signin_check
-    @freelancer_check
     def get(self):
         uname = self.params.get("username", None)
         result = system_user.get(uname)
@@ -30,24 +29,19 @@ class SystemUser(Base):
 
     @signin_check
     def post(self):
-        result = user.register(self.params, device)
-        if result['error_code'] == 0:
-            domain = utils.get_domain(self.request.host)
-            self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
-            self.set_cookie("cuid", result['identify'][0], expires=result['expire_at'], path="/")
+        result = system_user.create(self.params)
         return self.send(result)
-    
+
     @signin_check
     def delete(self):
-        result = user.alipay_delete(self.user, self.params)
+        result = system_user.delete(self.params)
         return self.send(result)
-    
+
     @signin_check
     def put(self):
-        if self.user.identify[0] == "f":
-            result = user.user_profile_update(self.user, self.params)
-        else:
-            result = client.client_profile_update(self.user, self.params)
+        old_username = self.params.user.username
+        new_username = self.params.username
+        result = system_user.update(old_username, new_username)
         return self.send(result)
 
 class SignupClient(Base):
@@ -97,31 +91,6 @@ class Logout(Base):
         domain = utils.get_domain(self.request.host)
         self.clear_cookie('session_token', domain=domain)
         return self.send(result)
-
-class SettingsRedirect(Base):
-    @signin_check
-    def get(self):
-        if self.user.identify[0] == "f":
-            return self.redirect("/freelancers/settings")
-        return self.redirect("/clients/settings")
-
-class ChangeFreelancer(Base):
-    @signin_check
-    def get(self, uuid):
-        result = user.change_role(self.user, uuid, "f")
-        if result:
-            self.set_cookie("cuid", "f", path="/", expires=utils.timedelta(utils.now(), days=7))
-            return self.redirect("/find-work-home")
-        return self.redirect("/")
-
-class ChangeClient(Base):
-    @signin_check
-    def get(self, uuid):
-        result = user.change_role(self.user, uuid, "c")
-        if result:
-            self.set_cookie("cuid", "c", path="/", expires=utils.timedelta(utils.now(), days=7))
-            return self.redirect("/clients/jobs")
-        return self.redirect("/")
 
 class ForgotPassword(Base):
     def get(self):

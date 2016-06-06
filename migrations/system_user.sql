@@ -8,5 +8,7 @@ CREATE TABLE `system_user` (
 
 ALTER TABLE `system_user` CHANGE `id` `id` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
+ALTER TABLE `system_user` ADD `update_at` DATETIME NOT NULL AFTER `create_at`;
+
 ALTER TABLE `system_user`
   ADD PRIMARY KEY (`id`);

@@ -60,149 +60,73 @@ def login(uname, password):
     return res
 
 
-def register(params, device):
-    rtype = params.get('rtype', None)
-    name = params.get('name', None)
-    phone = params.get('phone', None)
+def create(params):
+    username = params.get('username', None)
     password = params.get('password', None)
-    vcode = params.get('vcode', None)
-    uname = params.get('username', '')
-    cname = params.get('cname', '')
-    notice = params.get('notice', "true")
+    role_id = params.get('role_id', 2)
 
-    if not phone or not password or not vcode or not name or not rtype or not notice or not rtype.isdigit():
+    if not username or not password or not role_id:
         return {"error_code":20021, "msg":"parameters required"}
-
-    rtype = int(rtype)
-    if not validate.is_phone(phone):
-        return {"error_code":20022, "msg":"phone invalid"}
-
-    # freelancer: 1, client: 2, client_person: 3
-    if rtype not in [1, 2, 3]:
-        return {"error_code":20022, "msg":"user type invalid"}
-
-    if rtype == 2 and not cname or len(cname) > 100:
-        return {"error_code":20022, "msg":"user type invalid or cname too long"}
-
-    if not validate.is_verify_code(vcode):
-        return {"error_code":20024, "msg":"verify code invalid"}
     
-    if User.select().where(User.phone == phone).first():
+    if SystemUser.select().where(SystemUser.username == username).first():
         return {"error_code":20025, "msg":"user is exists"}
-
-    if rtype != 1:
-        username = phone
-    else:
-        # freelancer do not use username, just use phone to register
-        # username = uname
-        username = phone
     
     if not utils.is_username(username):
         return {"error_code":20023, "msg":"username invalid"}
-
-    if User.select().where(User.username == username).first():
-        return {"error_code":20025, "msg":"user is exists"}
-
-    res = verify_code(phone=phone, code=vcode)
-    if res['error_code'] != 0:
-        return res
     
-    user_id = GUID.guid()
-    team_id = GUID.guid()
     with database.atomic() as txn:
         try:
             pwd, salt = generate_password(password.encode('utf-8'))
-            user = User()
-            user.id = user_id
+            user = SystemUser()
             user.username = username
             user.password = pwd
             user.salt = salt
-            user.phone = phone
-            #user.verifycode = vcode
-            user.save(force_insert=True)
-
-            profile = Profile()
-            profile.user = user
-            profile.name = name
-            profile.avatar = widget.avatar()
-
-            if notice == "true":
-                profile.is_notice = True
-            profile.save()
-
-            party = Party()
-            party.user = user
-            party.vip = False
-            party.connects = 60
-            party.agency_connects = 60
-            party.save()
-
-            margin = Margin()
-            margin.user = user
-            margin.save()
-
-            if rtype == 1:
-                user.identify = 'f%s' % user.id
-                user.app_identify = 'f%s' % user.id
-                user.status = "unactive"
-                user.to_dev = True
-                user.to_req = False
-                user.save()
-
-                queue.to_queue({"type":"user_register", "user_id":user.id})
-            else:
-                team = Team()
-                team.id = team_id
-                team.user = user
-                if rtype == 2:
-                    team.name = cname
-                else:
-                    team.name = "个人需求方"
-                team.team_type = 'client'
-                team.status = "normal"
-                team.logo = widget.logo()
-                team.save(force_insert=True)
-
-                team_profile = TeamProfile()
-                team_profile.team = team
-                team_profile.phone = phone
-                team_profile.save()
-
-                user.identify = 'c%s' % team.id
-                user.app_identify = 'c%s' % team.id
-                user.status = "active"
-                user.to_req = True
-                user.to_dev = False
-                user.save()
-
-                queue.to_queue({"type":"user_register", "user_id":user.id, "team_id":team.id})
+            user.role_id = role_id
+            user.create_at = utils.now()
+            user.save()
         except Exception, e:
             logger.error(traceback.format_exc())
             txn.rollback()
-            return {"error_code":20026, "msg":"signup error"}
+            return {"error_code":20026, "msg":"create system user error"}
 
-    res = login(username, password, "false", device)
+    res = {"error_code":0, "msg":"ok"}
+    res['user'] = user.__dict__ 
     return res
+
+
+def update(old_username, new_username):
+    if not old_username or not new_username:
+        return {"error_code":20021, "msg":"parameters required"}
+
+    user = SystemUser.select().where(SystemUser.username == old_username).first()
+    if not user:
+        return {"error_code":20002, "msg":"user not exists"}
+
+    user.username = old_username
+    user.save()
+    return {"error_code": 0, "msg": "ok"}
+
+
+def delete(params):
+    username = params.get('username', None)
+
+    if not username:
+        return {"error_code":20021, "msg":"parameters required"}
+
+    SystemUser.delete().where(SystemUser.username == username).execute()
+
+    return {"error_code":0, "msg":"ok"}
 
 
 def password_reset(params):
     uname = params.get('username')
     password = params.get('password')
-    vcode = params.get('vcode')
-    if not uname or not password or not vcode:
+    if not uname or not password:
         return {"error_code":20091, "msg":"parameters required"}
 
-    if not validate.forget_password(username=uname, vcode=vcode):
-        return {"error_code":20092, "msg":"verify code invalid"}
-
-    user = User.select().where(User.username == uname or User.email == uname).first()
+    user = SystemUser.select().where(SystemUser.username == uname).first()
     if not user:
         return {"error_code":20093, "msg":"user not exists"}
-
-    # verity code
-    res = verify_code(phone=user.phone, code=vcode)
-    if res['error_code'] != 0:
-        return res
 
     pw, salt = generate_password(password)
     user.password = pw
@@ -229,9 +153,7 @@ def password_change(user, params):
     user.salt = salt
     user.update_at = utils.now()
     user.save()
-    
-    queue.to_queue({"type":"user_password_change", "user_id":user.id, 
-        "team_id": user.identify[1:] if user.identify[0] != "f" else None})
+
     return logout(user)
 
 def user_all_info(cls):
@@ -940,17 +862,6 @@ def alipay_create(user, params):
     profile.alipay = alipay
     profile.save()
     return {"error_code": 0, "msg": "ok"}
-
-
-def alipay_delete(user, params):
-    profile = user.profile.first()
-    if not profile:
-        return {"error_code": 20486, "msg": "alipay not exists"}
-
-    profile.alipay = ""
-    profile.save()
-    return {"error_code": 0, "msg": "ok"}
-
 
 def password_verify(user, params):
     password = params.get("password")

@@ -10,73 +10,19 @@ from backend import system_user
 from config.settings import all_skills, all_languages
 from common import utils
 
-class Register(Base):
+class Create(Base):
     def post(self):
-
-        ua = self.request.headers.get("User-Agent", "")[:2]
-        if ua == "a/":
-            device = "android"
-        elif ua == "i/":
-            device = "ios"
-        elif ua == "d/":
-            device = "desktop"
-        else:
-            device = "web"
-
+        device = "web"
         result = user.register(self.params, device)
         if result['error_code'] == 0:
             domain = utils.get_domain(self.request.host)
             self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
             self.set_cookie("cuid", result['identify'][0], expires=result['expire_at'], path="/")
         return self.send(result)
-
-class SignupClient(Base):
+    
+class UserList(Base):
     def get(self):
-        if self.user:
-            if self.user.identify[0] == "f":
-                return self.redirect("/find-work-home")
-            return self.redirect("/clients/jobs")
-
-        return self.render("signup-client.html")
-
-class SignupRole(Base):
-    def get(self):
-        if self.user:
-            if self.user.identify[0] == "f":
-                return self.redirect("/find-work-home")
-            return self.redirect("/clients/jobs")
-        return self.render("signup-role.html")
-
-class Signin(Base):
-    def get(self):
-        if self.user:
-            return self.redirect("/")
-        return self.render("signin.html")
-
-class Login(Base):
-    def post(self):
-        uname = self.params.get("username", None)
-        password = self.params.get("password", None)
-
-        result = system_user.login(uname, password)
-        if result['error_code'] == 0:
-            domain = utils.get_domain(self.request.host)
-            self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
-        return self.send(result)
-
-class Signout(Base):
-    def get(self):
-        result = user.logout(self.user)
-        domain = utils.get_domain(self.request.host)
-        self.clear_cookie('session_token', domain=domain)
-        return self.redirect("/")
-
-class Logout(Base):
-    def post(self):
-        result = user.logout(self.user)
-        domain = utils.get_domain(self.request.host)
-        self.clear_cookie('session_token', domain=domain)
-        return self.send(result)
+        pass
 
 class SettingsRedirect(Base):
     @signin_check

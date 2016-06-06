@@ -174,7 +174,12 @@ def register(params, device):
     res = login(username, password, "false", device)
     return res
 
-
+def user_list(params):
+    page = params['page']
+    count = params.get('count', 20)
+    user = User.select().where(User.username == uname or User.email == uname).first()
+    userlist = User.select().join(Profile).where(UserCategory.user == user).paginate(page, count)
+    
 def password_reset(params):
     uname = params.get('username')
     password = params.get('password')

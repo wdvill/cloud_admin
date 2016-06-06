@@ -34,7 +34,7 @@ def get(uname):
     if not user:
         return {"error_code":20002, "msg":"user not exists"}
     res = {"error_code":0, "msg":"ok"}
-    res['user'] = user
+    res['user'] = {'username': user.username, 'role_id': user.role_id}
     return res
 
 def login(uname, password):

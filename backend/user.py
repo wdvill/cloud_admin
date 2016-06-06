@@ -177,27 +177,26 @@ def register(params, device):
 def user_list(params):
     page = params['page']
     count = params.get('count', 20)
-    user = User.select().where(User.username == uname or User.email == uname).first()
-    userlist = User.select().join(Profile).where(UserCategory.user == user).paginate(page, count)
-    
+    userlist = User.select().join(Profile).paginate(page, count)
+    return {"error_code":0, "msg":"ok", "userlist": userlist}
+
+def change_status(params):
+    status = params['status']
+    uname = params['uname']
+    user = User.select().where(User.username == uname).first()
+    user.status = status
+    user.save()
+    return {"error_code":0, "msg":"ok"}
+
 def password_reset(params):
     uname = params.get('username')
     password = params.get('password')
-    vcode = params.get('vcode')
-    if not uname or not password or not vcode:
+    if not uname or not password:
         return {"error_code":20091, "msg":"parameters required"}
 
-    if not validate.forget_password(username=uname, vcode=vcode):
-        return {"error_code":20092, "msg":"verify code invalid"}
-
-    user = User.select().where(User.username == uname or User.email == uname).first()
+    user = User.select().where(User.username == uname).first()
     if not user:
         return {"error_code":20093, "msg":"user not exists"}
-
-    # verity code
-    res = verify_code(phone=user.phone, code=vcode)
-    if res['error_code'] != 0:
-        return res
 
     pw, salt = generate_password(password)
     user.password = pw
@@ -205,29 +204,6 @@ def password_reset(params):
     user.update_at = utils.now()
     user.save()
     return {"error_code":0, "msg":"ok"}
-
-
-def password_change(user, params):
-    password_old = params.get("password_old")
-    password = params.get("password")
-    if not password_old or not password:
-        return {"error_code": 80002, "msg": "no enough parameters"}
-
-    if not validate.is_password(password_old) or not validate.is_password(password):
-        return {"error_code": 80003, "msg": "parameters illegal"}
-
-    if not check_password(password_old, user.password, user.salt):
-        return {"error_code": 20094, "msg": "password invalid"}
-
-    pw, salt = generate_password(password)
-    user.password = pw
-    user.salt = salt
-    user.update_at = utils.now()
-    user.save()
-    
-    queue.to_queue({"type":"user_password_change", "user_id":user.id, 
-        "team_id": user.identify[1:] if user.identify[0] != "f" else None})
-    return logout(user)
 
 def user_all_info(cls):
     if cls.user:

@@ -16,7 +16,10 @@ urls=[
     ("/api/user/password/reset", system_user.PasswordReset),
     ("/api/user/password/change", system_user.PasswordChange),
     ("/api/user/password/verify", system_user.PasswordVerify),
-    
+
+
+    ("/api/user/status", user.ChangeStatus),
+    ("/api/user/list", user.UserList),
     
     ("/(.*)", page.NotFound)
 ]

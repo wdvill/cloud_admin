@@ -175,10 +175,31 @@ def register(params, device):
     return res
 
 def user_list(params):
-    page = params['page']
+    page = params.get('page', 1)
     count = params.get('count', 20)
-    userlist = User.select().join(Profile).paginate(page, count)
-    return {"error_code":0, "msg":"ok", "userlist": userlist}
+    userlist = User.select(User.username,User.phone,User.status,User.to_dev,User.to_req,
+                           Profile.name,Profile.skills,Profile.address,Profile.alipay).\
+                join(Profile).paginate(page, count)
+    user_arr = []
+    for user in userlist:
+        temp = {}
+        temp['username'] = user.username
+        temp['phone']    = user.phone
+        temp['status']   = user.status
+        temp['to_dev']   = user.to_dev
+        temp['to_req']   = user.to_req
+        temp['name'] = user.profile.name
+        temp['skills'] = user.profile.skills
+        temp['address'] = user.profile.address
+        temp['alipay'] = user.profile.alipay
+        user_arr.append( temp)
+
+    return {"error_code":0, "msg":"ok", "userlist": user_arr}
+
+def user_info(params):
+    uname = params['uname']
+    user = User.select().where(User.username == uname).first()
+    return user_profile(user, params, "zh_CN")
 
 def change_status(params):
     status = params['status']

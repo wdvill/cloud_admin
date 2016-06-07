@@ -19,10 +19,20 @@ class Create(Base):
             self.set_cookie("session_token", result["session_token"], expires=result['expire_at'], path="/", domain=domain)
             self.set_cookie("cuid", result['identify'][0], expires=result['expire_at'], path="/")
         return self.send(result)
-    
+
+class Delete(Base):
+    def get(self):
+        result = {}
+        return self.send( result)
+
 class UserList(Base):
     def get(self):
         user_list = user.user_list(self.params)
+        return self.send( user_list)
+
+class UserInfo(Base):
+    def get(self):
+        user_list = user.user_info( self.params)
         return self.send( user_list)
 
 class ChangeStatus(Base):

@@ -20,6 +20,8 @@ urls=[
 
     ("/api/user/status", user.ChangeStatus),
     ("/api/user/list", user.UserList),
-    
+    ("/api/user/delete", user.Delete),
+    ("/api/user/info", user.UserList),
+
     ("/(.*)", page.NotFound)
 ]
